@@ -1,10 +1,11 @@
+import Signin from "./pages/Sigin"
 
 function App() {
  
 
   return (
     <>
-      <h1 className="text-6xl">TESTE</h1>
+      <Signin/>
     </>
   )
 }
