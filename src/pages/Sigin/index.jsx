@@ -27,7 +27,7 @@ export default function Signin() {
       <div className=" absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-primary-color w-[600px] h-[350px] backdrop-blur-md
                         border-2 border-border-color rounded-lg flex justify-center items-center">
 
-        <button onClick={signInWithGoogle} className="bg-button-color text-2xl font-medium font-popp tracking-wider p-4 px-5 rounded-full flex justify-center items-center gap-4 shadow-shadow-button hover:bg-button-hover
+        <button onClick={signInWithGoogle} className="bg-button-color text-xl font-medium font-popp tracking-widest p-4 px-4 rounded-full flex justify-center items-center gap-4 shadow-shadow-button hover:bg-button-hover
                             transition duration-300 ease-in-out hover:translate-y-1 hover:border-2 hover:border-border-color hover:shadow-shadow-button-hover">
             <img className="w-[45px]" src={logoGoogle} alt="logo Google"/>Login com Google</button>                            
       </div>
