@@ -8,6 +8,13 @@ import logoGoogle from '../../../public/google.png'
 
 export default function Signin() {
 
+  function getEmail(email){
+    const parts = email.split('@')
+    return parts.length === 2 ? parts[1] : null
+
+  }
+
+
   const navigate = useNavigate()
 
     function signInWithGoogle(){
@@ -16,9 +23,16 @@ export default function Signin() {
         signInWithPopup(auth, provider)
         .then((result) =>{
 
-            console.log(result.user)
-            navigate('/register')
+            const email = result.user.email
+            const domain = getEmail(email)
+
+            console.log(email)
+            console.log(domain)
+
+            domain === "anota.ai" ? navigate('/register') : window.alert("Dominío inválido!")
+
             
+
         }).catch((error) =>{
             console.log(error)
         })
