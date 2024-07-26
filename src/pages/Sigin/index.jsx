@@ -1,5 +1,6 @@
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth } from '../../services/firebase'
+import { useNavigate } from 'react-router-dom'
 
 import logoGoogle from '../../../public/google.png'
 
@@ -7,12 +8,17 @@ import logoGoogle from '../../../public/google.png'
 
 export default function Signin() {
 
+  const navigate = useNavigate()
 
     function signInWithGoogle(){
         const provider = new GoogleAuthProvider
 
-        signInWithPopup(auth, provider).then((result) =>{
+        signInWithPopup(auth, provider)
+        .then((result) =>{
+
             console.log(result.user)
+            navigate('/register')
+            
         }).catch((error) =>{
             console.log(error)
         })
