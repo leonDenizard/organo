@@ -10,7 +10,7 @@ export default {
         'backgound': '#302F2F',
         'bubble-blue': '#23A8F2',
         'bubble-red': '#FA6262',
-        'primary-color': 'rgba(255,255,255, 0.07)',
+        'primary-color': 'rgba(255,255,255, 0.02)',
         'border-color': 'rgba(255,255,255, 0.2)',
         'button-color': 'rgba(255,255,255, 0.12)',
         'button-hover': 'rgba(0,0,0, 0.12)'
