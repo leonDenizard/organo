@@ -21,7 +21,7 @@ export default function Register() {
     setSelectedManager(selectedManager === id ? null : id)
   }
   return (
-    <div className="relative min-h-screen flex items-center">
+    <form className="relative min-h-screen flex items-center">
       <div className="border-2 border-border-color w-[90%] h-[600px] m-auto">
 
         <h1 className="text-2xl">Informações pessoais</h1>
@@ -71,6 +71,7 @@ export default function Register() {
           <CheckBox isChecked={selectedManager === "teteu"} onChange={() => handleChangeManager("teteu")} disabled={selectedManager && selectedManager !== "teteu"} title="Mateus Silva" id="teteu" />
         </div>
       </div>
-    </div>
+      {console.log(selectedTime, selectedRole, selectedManager)}
+    </form>
   );
 }
