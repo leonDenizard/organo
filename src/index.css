@@ -79,6 +79,14 @@
   transition: all 0.6s ease;
 }
 
+.span-disabled{
+  color: rgba(255,255,255,0.5);
+}
+
+.checkbox-wrapper-46 .cbx:hover .border-disabled:first-child {
+  border-color: rgba(255,255,255,0.5);
+}
+
 @keyframes wave-46 {
   50% {
     transform: scale(0.9);

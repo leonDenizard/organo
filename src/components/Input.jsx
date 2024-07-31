@@ -1,9 +1,11 @@
-export default function Input({ title }) {
+export default function Input({ title, onChange, value }) {
   return (
     <div className="relative top-4">
       <input
+        onChange={onChange}
         type="text"
         placeholder={title}
+        value={value}
         className="peer bg-button-hover outline-none border-2 border-border-color
         h-9 p-5 w-1/2 rounded-md"
       />
