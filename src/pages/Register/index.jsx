@@ -73,5 +73,5 @@ export default function Register() {
       </div>
       {console.log(selectedTime, selectedRole, selectedManager)}
     </form>
-  );
+  )
 }
