@@ -3,29 +3,40 @@ import { auth } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 
 import logoGoogle from "../../../public/google.png";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function Signin() {
+
+  const { setUser } = useAuth()
+  const navigate = useNavigate();
+
   function getEmail(email) {
     const parts = email.split("@");
     return parts.length === 2 ? parts[1] : null;
+
   }
 
-  const navigate = useNavigate();
+  let email = ''
+  let domain =  ''
 
   function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
 
     signInWithPopup(auth, provider)
       .then((result) => {
-        const email = result.user.email;
-        const domain = getEmail(email);
 
-        console.log(email);
-        console.log(domain);
+        const user = result.user
+        email = result.user.email;
+        domain = getEmail(email);
 
-        domain === "anota.ai"
-          ? navigate("/register")
-          : window.alert("Dominío inválido!");
+
+        if(domain === "anota.ai"){
+          setUser(user)
+          navigate('/register')
+        }else{
+          window.alert("Dominío inválido")       
+        }
+
       })
       .catch((error) => {
         console.log(error);

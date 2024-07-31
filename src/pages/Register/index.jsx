@@ -3,10 +3,13 @@ import ButtonUpload from "../../components/ButtonUpload";
 import CheckBox from "../../components/Checkbox";
 import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function Register() {
 
-  const [name, setName] = useState('leon')
+  const { user } = useAuth()
+
+  const [name, setName] = useState(user.displayName)
   const [whatsApp, setWhatsApp] = useState('')
   const [slack, setSlack] = useState('')
 
@@ -40,7 +43,12 @@ export default function Register() {
     setSelectedManager(selectedManager === id ? null : id)
   }
 
-  const user = {
+
+  
+
+  console.log("User Autenticad: ", user)
+
+  const userRegistered = {
     name: name,
     whatsapp: whatsApp,
     slack: slack,
@@ -110,7 +118,7 @@ export default function Register() {
 
           </div>
         </div>
-        <ButtonSubmit submit={() => console.log(user)} text="Cadastrar"/>
+        <ButtonSubmit submit={() => console.log(userRegistered)} text="Cadastrar"/>
       </div>
 
       

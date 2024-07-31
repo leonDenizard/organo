@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import Signin from "./pages/Sigin";
 import {
   BrowserRouter as Router,
@@ -7,26 +6,15 @@ import {
   Navigate,
 } from "react-router-dom";
 import Register from "./pages/Register";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./services/firebase";
+import { useAuth } from "./context/AuthProvider";
 
 function App() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-  }, []);
+  const { user } = useAuth()
 
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Register />} />
+        <Route path="/" element={<Signin />} />
         <Route
           path="/register"
           element={user ? <Register /> : <Navigate to="/" />}
