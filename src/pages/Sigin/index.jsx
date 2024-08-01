@@ -16,8 +16,6 @@ export default function Signin() {
 
   }
 
-  let email = ''
-  let domain =  ''
 
   function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
@@ -26,8 +24,9 @@ export default function Signin() {
       .then((result) => {
 
         const user = result.user
-        email = result.user.email;
-        domain = getEmail(email);
+        const email = user.email;
+        const domain = getEmail(email);
+        
 
 
         if(domain === "anota.ai"){

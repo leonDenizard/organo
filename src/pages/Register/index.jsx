@@ -4,10 +4,14 @@ import CheckBox from "../../components/Checkbox";
 import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
+import { db, collection, addDoc } from "../../services/firebase"
 
 export default function Register() {
 
   const { user } = useAuth()
+
+  const email = user.email
+  const uid = user.uid
 
   const [name, setName] = useState(user.displayName)
   const [whatsApp, setWhatsApp] = useState('')
@@ -46,17 +50,30 @@ export default function Register() {
 
   
 
-  console.log("User Autenticad: ", user)
-
   const userRegistered = {
+    uid: uid,
     name: name,
     whatsapp: whatsApp,
     slack: slack,
+    email: email,
     time: selectedTime,
     role: selectedRole,
     manager: selectedManager
 
   }
+
+  console.log(user)
+
+  const handleSubmit = async () => {
+    try {
+      await addDoc(collection(db, 'users'), userRegistered);
+      console.log("Usuário registrado com sucesso");
+    } catch (error) {
+      console.error("Erro ao registrar usuário: ", error);
+    }
+  }
+
+
   return (
     <form onSubmit={(e) => e.preventDefault()} className="relative flex items-center justify-center">
       <div className="w-[90%] m-auto">
@@ -118,7 +135,7 @@ export default function Register() {
 
           </div>
         </div>
-        <ButtonSubmit submit={() => console.log(userRegistered)} text="Cadastrar"/>
+        <ButtonSubmit submit={handleSubmit} text="Cadastrar"/>
       </div>
 
       
