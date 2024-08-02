@@ -62,7 +62,7 @@ export default function Register() {
 
   }
 
-  console.log(user)
+  // console.log(user)
 
   const handleSubmit = async () => {
     try {
