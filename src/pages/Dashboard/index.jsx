@@ -42,20 +42,20 @@ export default function Dashboard() {
 
                   setUserData(allUserData)
 
-                  // const userUIDSnapshot = await getDocs(userUIDQuery)
-                  // if(!userUIDSnapshot.empty){
-                  //   const userDoc = userUIDSnapshot.docs[0]
-                  //   const userData = userDoc.data()
+                  const userUIDSnapshot = await getDocs(userUIDQuery)
+                  if(!userUIDSnapshot.empty){
+                    const userDoc = userUIDSnapshot.docs[0]
+                    const userData = userDoc.data()
 
-                  //   if(userData.photoUrl){
-                  //     setUserImg(userData.photoUrl)
-                  //   }
-                  //   else{
-                  //     console.log("Photo not found")
-                  //   }
+                    if(userData.photoUrl){
+                      setUserImg(userData.photoUrl)
+                    }
+                    else{
+                      console.log("Photo not found")
+                    }
 
-                  //   console.log(userData)
-                  // }
+                    console.log(userData)
+                  }
 
                 }else{
                   console.log("Nenhum documento encontrado")
@@ -77,7 +77,7 @@ export default function Dashboard() {
 
   return (
     <div className="container w-[90%] m-auto">
-      <Header name="Leon" img={null}></Header>
+      <Header name="Leon" img={userImg}></Header>
       <h1 className="text-3xl">Dashboard</h1>
 
       {/* {userData.map((user, index) =>(

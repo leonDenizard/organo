@@ -25,7 +25,7 @@ function App() {
     verifyUser();
   }, [user]);
   
-  
+  //console.log(user)
 
   return (
     <Router>

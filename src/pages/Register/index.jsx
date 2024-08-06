@@ -15,6 +15,7 @@ export default function Register() {
 
   const email = user.email
   const uid = user.uid
+  const photoUrl = user.photoURL
 
   const [name, setName] = useState(user.displayName)
   const [whatsApp, setWhatsApp] = useState('')
@@ -61,7 +62,8 @@ export default function Register() {
     email: email,
     time: selectedTime,
     role: selectedRole,
-    manager: selectedManager
+    manager: selectedManager,
+    photoUrl: photoUrl
 
   }
 
