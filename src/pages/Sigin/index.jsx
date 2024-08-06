@@ -29,7 +29,7 @@ export default function Signin() {
         
 
 
-        if(domain === "anota.ai"){
+        if(user){
           setUser(user)
           navigate('/register')
         }else{

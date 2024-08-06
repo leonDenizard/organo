@@ -5,7 +5,7 @@ import { db } from "../../services/firebase";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
 
 
   useEffect(() => {
@@ -16,7 +16,10 @@ export default function Dashboard() {
 
             // console.log("Fetching data for users: ", user.uid)
 
-            const q = query(collection(db, "users"), where("uid", "==", user.uid))
+            //Retorna somente 1 usuário
+            //const q = query(collection(db, "users"), where("uid", "==", user.uid))
+            
+            const q = collection(db, "users")
             // console.log("Query created", q)
             
             try {
@@ -25,11 +28,16 @@ export default function Dashboard() {
                 // console.log("Query snapshot: ", querySnapshot)
 
                 if(!querySnapshot.empty){
-                    querySnapshot.forEach((doc) => {
-                        console.log(" => ", doc.data())
 
-                        setUserData(doc.data())
+                  const allUserData = []
+
+                    querySnapshot.forEach((doc) => {
+                        //console.log(" => ", doc.data())
+
+                        allUserData.push(doc.data())
                     })
+
+                    setUserData(allUserData)
                 }else{
                     console.log("Nenhum documento encontrado")
                 }
@@ -45,15 +53,16 @@ export default function Dashboard() {
 
     fetchUserData();
   }, [user]);
+
+  console.log(userData)
+
   return (
     <div>
       <h1 className="text-3xl">Dashboard</h1>
 
-      {userData ? (
-        <pre>{JSON.stringify(userData, null, 2)}</pre>
-      ) : (
-        <p>Loading...</p>
-      )}
+      {/* {userData.map((user, index) =>(
+        <pre key={index}>{JSON.stringify(user, null, 2)}</pre>
+      ))} */}
     </div>
   );
 }

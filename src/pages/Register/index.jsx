@@ -5,8 +5,11 @@ import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
 import { db, collection, addDoc } from "../../services/firebase"
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+
+  const navigate = useNavigate()
 
   const { user } = useAuth()
 
@@ -64,10 +67,15 @@ export default function Register() {
 
   // console.log(user)
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+
+    event.preventDefault()
     try {
       await addDoc(collection(db, 'users'), userRegistered);
       console.log("Usuário registrado com sucesso");
+
+      navigate("/dashboard")
+      console.log("Redirecionando para o dashboard");
     } catch (error) {
       console.error("Erro ao registrar usuário: ", error);
     }
