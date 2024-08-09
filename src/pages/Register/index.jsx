@@ -19,6 +19,8 @@ export default function Register() {
   const [name, setName] = useState(user.displayName);
   const [whatsApp, setWhatsApp] = useState("");
   const [slack, setSlack] = useState("");
+  const [surname, setSurname] = useState("");
+  const [birthday, setBirthday] = useState("")
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -32,9 +34,19 @@ export default function Register() {
     setSlack(e.target.value);
   };
 
+  const handleSurname = (e) => {
+    setSurname(e.target.value)
+  }
+
+  const handleBirthday = (e) => {
+    setBirthday(e.target.value)
+  }
+
   const [selectedTime, setSelectedTime] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedManager, setSelectedManager] = useState(null);
+  const [selectedChild, setSelectedChild] = useState(null)
+  const [selectedPhoto, setSelectedPhoto] = useState(photoUrl)
 
   const handleChangeTime = (id) => {
     setSelectedTime(selectedTime === id ? null : id);
@@ -48,7 +60,22 @@ export default function Register() {
     setSelectedManager(selectedManager === id ? null : id);
   };
 
+  const handleChangeChildOption = (id) => {
+    setSelectedChild(selectedChild === id ? null : id)
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+
+    if(file){
+      const fileUrl = URL.createObjectURL(file)
+
+      setSelectedPhoto(fileUrl)
+    }
+  }
+
   const userRegistered = {
+
     uid: uid,
     name: name,
     whatsapp: whatsApp,
@@ -57,7 +84,11 @@ export default function Register() {
     time: selectedTime,
     role: selectedRole,
     manager: selectedManager,
-    photoUrl: photoUrl,
+    photoUrl: selectedPhoto,
+    surname: surname,
+    birthday: birthday,
+    child: selectedChild,
+
   };
 
   // console.log(user)
@@ -82,14 +113,16 @@ export default function Register() {
     >
       <div className="w-[90%] m-auto">
         <h1 className="text-3xl font-semibold">Informações pessoais</h1>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} />
           <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" />
           <Input onChange={handleSlack} title="@slack" />
-          <Input onChange={handleSlack} title="Aniversário (dia/mês/ano)" />
+          <Input onChange={handleSurname} title="Apelido" />
+          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" />
 
           <div>
-            <ButtonUpload />
+            <ButtonUpload onChange={handleFileChange}/>
+            <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full"/>
           </div>
         </div>
 
@@ -241,16 +274,16 @@ export default function Register() {
           <div className="flex mt-5 justify-between -mr-8 gap-10">
             <div>
               <CheckBox
-                //isChecked={selectedManager === "guto"}
-                //onChange={() => handleChangeManager("guto")}
-                //disabled={selectedManager && selectedManager !== "guto"}
+                isChecked={selectedChild === "yes"}
+                onChange={() => handleChangeChildOption("yes")}
+                disabled={selectedChild && selectedChild !== "yes"}
                 title="Sim"
                 id="yes"
               />
               <CheckBox
-                //isChecked={selectedManager === "guto"}
-                //onChange={() => handleChangeManager("guto")}
-                //disabled={selectedManager && selectedManager !== "guto"}
+                isChecked={selectedChild === "no"}
+                onChange={() => handleChangeChildOption("no")}
+                disabled={selectedChild && selectedChild !== "no"}
                 title="Não"
                 id="no"
               />

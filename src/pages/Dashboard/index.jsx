@@ -6,9 +6,10 @@ import Header from "../../components/Header";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const [userData, setUserData] = useState([]);
+  
+  const [userDataLogged, setUserDataLogged] = useState(null);
+  const [allUsers, setAllUser] = useState([]);
 
-  const [userImg, setUserImg] = useState("")
 
 
   useEffect(() => {
@@ -16,9 +17,6 @@ export default function Dashboard() {
     const fetchUserData = async () => {
 
         if (user) {
-
-            // console.log("Fetching data for users: ", user.uid)
-
             //Retorna somente 1 usuário
             const userUIDQuery = query(collection(db, "users"), where("uid", "==", user.uid))
             
@@ -40,21 +38,14 @@ export default function Dashboard() {
                     allUserData.push(doc.data())
                   })
 
-                  setUserData(allUserData)
+                  setAllUser(allUserData)
 
                   const userUIDSnapshot = await getDocs(userUIDQuery)
                   if(!userUIDSnapshot.empty){
                     const userDoc = userUIDSnapshot.docs[0]
                     const userData = userDoc.data()
-
-                    if(userData.photoUrl){
-                      setUserImg(userData.photoUrl)
-                    }
-                    else{
-                      console.log("Photo not found")
-                    }
-
-                    console.log(userData)
+                 
+                    setUserDataLogged(userData)
                   }
 
                 }else{
@@ -73,11 +64,24 @@ export default function Dashboard() {
     fetchUserData();
   }, [user]);
 
-  console.log(userData)
+
+  let firstName = "";
+  let profilePhoto = "";
+
+  // Verificação se os dados foram carregados antes de acessar
+  if (userDataLogged && userDataLogged.name) {
+    firstName = userDataLogged.name.split(' ')[0];
+  }
+
+  if (userDataLogged && userDataLogged.photoUrl) {
+    profilePhoto = userDataLogged.photoUrl;
+  }
+
+  console.log("User logged", userDataLogged);
 
   return (
     <div className="container w-[90%] m-auto">
-      <Header name="Leon" img={userImg}></Header>
+      <Header name={firstName} img={profilePhoto}></Header>
       <h1 className="text-3xl">Dashboard</h1>
 
       {/* {userData.map((user, index) =>(
