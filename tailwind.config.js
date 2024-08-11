@@ -11,6 +11,7 @@ export default {
         'bubble-blue': '#23A8F2',
         'bubble-red': '#FA6262',
         'primary-color': 'rgba(255,255,255, 0.02)',
+        'secundary-color': 'rgba(0,0,0, 0.2)',
         'border-color': 'rgba(255,255,255, 0.2)',
         'button-color': 'rgba(255,255,255, 0.12)',
         'button-hover': 'rgba(0,0,0, 0.12)',
@@ -24,6 +25,9 @@ export default {
         'shadow-button': '15px 15px 20px 0 rgba(0, 0, 0, 0.3)',
         'shadow-button-hover': '5px 5px 10px 0 rgba(0, 0, 0, 0.3)',
         'shadow-button-upload': '0, 0, 50px 10px rgba(250, 98, 98, 1)'
+      },
+      cursor: {
+        'thick': 'caret-width: 3px;',
       }
     },
   },

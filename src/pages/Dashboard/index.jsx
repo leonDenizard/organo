@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthProvider";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import Header from "../../components/Header";
+import SearchBar from "../../components/SearchBar";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -82,7 +83,8 @@ export default function Dashboard() {
   return (
     <div className="container w-[90%] m-auto">
       <Header name={firstName} img={profilePhoto}></Header>
-      <h1 className="text-3xl">Dashboard</h1>
+
+      <SearchBar/>
 
       {/* {userData.map((user, index) =>(
         <pre key={index}>{JSON.stringify(user, null, 2)}</pre>
