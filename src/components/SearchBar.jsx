@@ -1,6 +1,6 @@
 export default function SearchBar() {
   return (
-    <div className="relative top-10 w-full flex justify-center">
+    <div className="relative top-8 w-full flex justify-center">
       <div className="relative w-[60vw]">
         <div className="absolute top-[10px] right-[24px]">
           <svg

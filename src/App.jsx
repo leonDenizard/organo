@@ -15,17 +15,17 @@ function App() {
   const { user } = useAuth()
   const [userExists, setUserExists] = useState(null)
 
-  // useEffect(() => {
-  //   const verifyUser = async () => {
-  //     if (user && user.uid) {
-  //       const exists = await checkUserExists(user.uid)
-  //       setUserExists(exists);
-  //     }
-  //   };
-  //   verifyUser();
-  // }, [user]);
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (user && user.uid) {
+        const exists = await checkUserExists(user.uid)
+        setUserExists(exists);
+      }
+    };
+    verifyUser();
+  }, [user]);
   
-  //console.log(user)
+  console.log(user)
 
   return (
     <Router>
