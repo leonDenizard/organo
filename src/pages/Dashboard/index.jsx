@@ -11,6 +11,7 @@ import Gmail from "../../components/icons/Gmail"
 import Clock from "../../components/icons/Clock"
 import Check from "../../components/icons/Check"
 import Conffeti from "../../components/icons/Conffeti"
+import ChildIcon from "../../components/icons/ChildIcon";
 
 
 export default function Dashboard() {
@@ -96,7 +97,7 @@ export default function Dashboard() {
 
       <SearchBar />
 
-      <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-4 2xl:grid-cols-5">
+      <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
         {allUsers.map((user, index) => (
           <Card
             key={index}
@@ -121,6 +122,9 @@ export default function Dashboard() {
 
             iconBirthday={<Conffeti/>}
             birthday={user.birthday}
+
+            iconChild={<ChildIcon/>}
+            child={user.child}
           />
         ))}
       </div>

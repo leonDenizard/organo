@@ -38,39 +38,40 @@ function Card({
         <h2 className="relative top-3 text-xl uppercase font-semibold text-fourthy-color">{role}</h2>
       </div>
 
-      <div className="relative flex flex-col gap-1 top-6 text-fourthy-color text-lg tracking-wide">
-        <div className="w-full flex gap-2">
+      <div className="relative flex flex-col gap-1 top-6 text-fourthy-color tracking-wide">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconSlack}</div>
           <p>{slack}</p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconWhats}</div>
           <p>{whats}</p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconMail}</div>
           <p>{mail}</p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconHour}</div>
           <p>{hour}</p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconSuper}</div>
           <p>{supe}</p>
         </div>
 
-        <div className="w-full flex gap-2">
+        <div className="w-full flex gap-2 items-center">
           <div>{iconBirthday}</div>
           <p>{birthday}</p>
         </div>
 
-        <div className="w-full flex gap-2">
-          <div>{iconChild}</div>
+        <div className="w-full flex gap-2 items-center">
+
+          {child && <div>{iconChild}</div>}
           {child && <p>{child}</p>}
         </div>
       </div>
