@@ -69,16 +69,23 @@ export default function Dashboard() {
 
   let firstName = "";
   let profilePhoto = "";
+  let nameFormated = ""
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
     firstName = userDataLogged.name.split(" ")[0];
+    nameFormated = userDataLogged.name.split(" "). slice(0, 2).join(" ");
   }
 
   if (userDataLogged && userDataLogged.photoUrl) {
     profilePhoto = userDataLogged.photoUrl;
   }
 
+  // let nameFormated = []
+  // for(let i = 0; i <= 1; i++){
+  //   nameFormated.push(userDataLogged.name.split(" ")[i])
+  // }
+  // nameFormated = nameFormated.toString().replace(",", " ")
   console.log("User logged", userDataLogged);
   console.log(allUsers);
 
@@ -89,12 +96,12 @@ export default function Dashboard() {
 
       <SearchBar />
 
-      <div className="relative flex gap-4 top-28 flex-wrap">
+      <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-4 2xl:grid-cols-5">
         {allUsers.map((user, index) => (
           <Card
             key={index}
             imgProfile={user.photoUrl}
-            name={user.name}
+            name={nameFormated}
             surname={user.surname}
             role={user.role}
             iconSlack={<Slack/>}
