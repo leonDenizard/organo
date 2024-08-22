@@ -6,11 +6,13 @@ import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
 import { db, collection, addDoc } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
+import { formatWhatsApp } from "../../functions/functions";
 
 export default function Register() {
   const navigate = useNavigate();
 
   const { user } = useAuth();
+  
 
   const email = user.email;
   const uid = user.uid;
@@ -27,7 +29,10 @@ export default function Register() {
   };
 
   const handleWhatsApp = (e) => {
-    setWhatsApp(e.target.value);
+    const formattedValue = formatWhatsApp(e.target.value);
+    console.log(formatWhatsApp(e.target.value))
+    
+    setWhatsApp(formattedValue);
   };
 
   const handleSlack = (e) => {
@@ -95,6 +100,8 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    
     try {
       await addDoc(collection(db, "users"), userRegistered);
       console.log("Usuário registrado com sucesso");
@@ -115,7 +122,7 @@ export default function Register() {
         <h1 className="text-3xl font-semibold">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} />
-          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" />
+          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16}/>
           <Input onChange={handleSlack} title="@slack" />
           <Input onChange={handleSurname} title="Apelido" />
           <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" />

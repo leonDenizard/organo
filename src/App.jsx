@@ -30,7 +30,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<Signin />} />
         <Route
           path="/register"
           element={userExists ? <Navigate to="/dashboard" /> : <Register />}

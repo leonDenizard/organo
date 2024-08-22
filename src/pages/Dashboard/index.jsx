@@ -5,14 +5,14 @@ import { db } from "../../services/firebase";
 import Header from "../../components/Header";
 import SearchBar from "../../components/SearchBar";
 import Card from "../../components/Card";
-import Slack from "../../components/icons/Slack"
-import Whats from "../../components/icons/Whats"
-import Gmail from "../../components/icons/Gmail"
-import Clock from "../../components/icons/Clock"
-import Check from "../../components/icons/Check"
-import Conffeti from "../../components/icons/Conffeti"
+import Slack from "../../components/icons/Slack";
+import Whats from "../../components/icons/Whats";
+import Gmail from "../../components/icons/Gmail";
+import Clock from "../../components/icons/Clock";
+import Check from "../../components/icons/Check";
+import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
-
+import Loader from "../../components/Loader";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -70,12 +70,12 @@ export default function Dashboard() {
 
   let firstName = "";
   let profilePhoto = "";
-  let nameFormated = ""
+  let nameFormated = "";
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
     firstName = userDataLogged.name.split(" ")[0];
-    nameFormated = userDataLogged.name.split(" "). slice(0, 2).join(" ");
+    nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
   }
 
   if (userDataLogged && userDataLogged.photoUrl) {
@@ -92,42 +92,41 @@ export default function Dashboard() {
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
-      <Header name={firstName} img={profilePhoto}></Header>
-      
+      {userDataLogged ? (
+        <>
+          <Header name={firstName} img={profilePhoto}></Header>
 
-      <SearchBar />
+          <SearchBar />
 
-      <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-        {allUsers.map((user, index) => (
-          <Card
-            key={index}
-            imgProfile={user.photoUrl}
-            name={nameFormated}
-            surname={user.surname}
-            role={user.role}
-            iconSlack={<Slack/>}
-            slack={user.slack}
-
-            iconWhats={<Whats/>}
-            whats={user.whats}
-
-            iconMail={<Gmail/>}
-            mail={user.email}
-
-            iconHour={<Clock/>}
-            hour={user.time}
-
-            iconSuper={<Check/>}
-            supe={user.manager}
-
-            iconBirthday={<Conffeti/>}
-            birthday={user.birthday}
-
-            iconChild={<ChildIcon/>}
-            child={user.child}
-          />
-        ))}
-      </div>
+          <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
+            {allUsers.map((user, index) => (
+              <Card
+                key={index}
+                imgProfile={user.photoUrl}
+                name={nameFormated}
+                surname={user.surname}
+                role={user.role}
+                iconSlack={<Slack />}
+                slack={user.slack}
+                iconWhats={<Whats />}
+                whats={user.whats}
+                iconMail={<Gmail />}
+                mail={user.email}
+                iconHour={<Clock />}
+                hour={user.time}
+                iconSuper={<Check />}
+                supe={user.manager}
+                iconBirthday={<Conffeti />}
+                birthday={user.birthday}
+                iconChild={<ChildIcon />}
+                child={user.child}
+              />
+            ))}
+          </div>
+        </>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }
