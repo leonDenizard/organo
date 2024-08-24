@@ -6,7 +6,7 @@ import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
 import { db, collection, addDoc } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
-import { formatWhatsApp } from "../../functions/functions";
+import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -29,14 +29,13 @@ export default function Register() {
   };
 
   const handleWhatsApp = (e) => {
-    const formattedValue = formatWhatsApp(e.target.value);
-    console.log(formatWhatsApp(e.target.value))
-    
-    setWhatsApp(formattedValue);
+    const formatedWhatsApp = formatWhatsApp(e.target.value);    
+    setWhatsApp(formatedWhatsApp);
   };
 
   const handleSlack = (e) => {
-    setSlack(e.target.value);
+    const formatedSlack = formatSlackHandle(e.target.value)
+    setSlack(formatedSlack);
   };
 
   const handleSurname = (e) => {
@@ -44,7 +43,9 @@ export default function Register() {
   }
 
   const handleBirthday = (e) => {
-    setBirthday(e.target.value)
+    const birthdayFormated = formatDate(e.target.value)
+    console.log(birthdayFormated)
+    setBirthday(birthdayFormated)
   }
 
   const [selectedTime, setSelectedTime] = useState(null);
@@ -115,17 +116,17 @@ export default function Register() {
 
   return (
     <form
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={handleSubmit}
       className="relative flex items-center justify-center"
     >
       <div className="w-[90%] m-auto">
         <h1 className="text-3xl font-semibold">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
-          <Input onChange={handleName} title="Digite seu nome" value={name} />
-          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16}/>
-          <Input onChange={handleSlack} title="@slack" />
+          <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
+          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true}/>
+          <Input onChange={handleSlack} title="@slack" value={slack} required={true}/>
           <Input onChange={handleSurname} title="Apelido" />
-          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" />
+          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true}/>
 
           <div>
             <ButtonUpload onChange={handleFileChange}/>
@@ -297,7 +298,7 @@ export default function Register() {
             </div>
           </div>
         </div>
-        <ButtonSubmit submit={handleSubmit} text="Cadastrar" />
+        <ButtonSubmit text="Cadastrar" />
       </div>
     </form>
   );

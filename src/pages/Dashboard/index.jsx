@@ -100,6 +100,7 @@ export default function Dashboard() {
 
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {allUsers.map((user, index) => (
+              
               <Card
                 key={index}
                 imgProfile={user.photoUrl}
@@ -109,7 +110,7 @@ export default function Dashboard() {
                 iconSlack={<Slack />}
                 slack={user.slack}
                 iconWhats={<Whats />}
-                whats={user.whats}
+                whats={user.whatsapp}
                 iconMail={<Gmail />}
                 mail={user.email}
                 iconHour={<Clock />}
@@ -121,7 +122,9 @@ export default function Dashboard() {
                 iconChild={<ChildIcon />}
                 child={user.child}
               />
+              
             ))}
+            
           </div>
         </>
       ) : (

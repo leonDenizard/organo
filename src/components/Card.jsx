@@ -1,3 +1,5 @@
+import { formatWhatsAppLink } from "../functions/regex";
+
 function Card({
   imgProfile,
   name,
@@ -18,6 +20,9 @@ function Card({
   iconChild,
   child,
 }) {
+
+  const link = formatWhatsAppLink(whats)
+  
   return (
     <div className="pt-2 pb-6 px-10 bg-card-bg">
       <div className="w-full flex justify-center">
@@ -46,7 +51,7 @@ function Card({
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconWhats}</div>
-          <p>{whats}</p>
+          <a href={`https://wa.me/${link}`} target="_blank"><p>{whats}</p></a>
         </div>
 
         <div className="w-full flex gap-2 items-center">
