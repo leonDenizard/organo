@@ -29,13 +29,18 @@ export const formatWhatsAppLink = (value) => {
 };
 
 export const formatSlackHandle = (value) => {
-  // Remove qualquer caractere não alfabético antes do nome e garante o @ inicial
-  let formattedValue = value.replace(/[^a-z.]/gi, "");
+  // Remove qualquer caractere não alfabético, exceto '@' e '.'
+  let formattedValue = value.replace(/[^a-z@.]/gi, "");
 
-  if (!formattedValue.startsWith('@')) {
-    formattedValue = '@' + formattedValue;
+  // Garante que o '@' esteja no início
+  if (formattedValue.length > 0 && !formattedValue.startsWith('@')) {
+    formattedValue = '@' + formattedValue.replace(/@/g, '');
   }
 
-  // Formata para garantir 3 letras antes do ponto, e uma ou mais após
-  return formattedValue.replace(/^(@[a-z]{3})[^.]*\.?/i, '$1.');
+  // Adiciona o '.' após as três primeiras letras se ainda não houver um
+  if (formattedValue.length > 4 && !formattedValue.includes('.')) {
+    formattedValue = formattedValue.slice(0, 4) + '.' + formattedValue.slice(4);
+  }
+
+  return formattedValue;
 };

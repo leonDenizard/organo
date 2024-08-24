@@ -13,7 +13,7 @@ export default {
         'primary-color': 'rgba(255,255,255, 0.02)',
         'secundary-color': 'rgba(0,0,0, 0.2)',
         'tertiary-color': 'rgba(255,255,255, 0.5)',
-        'fourthy-color': 'rgba(255,255,255, 0.9)',
+        'fourthy-color': 'rgba(255,255,255, 0.7)',
         'border-color': 'rgba(255,255,255, 0.2)',
         'button-color': 'rgba(255,255,255, 0.12)',
         'button-hover': 'rgba(0,0,0, 0.12)',

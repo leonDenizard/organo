@@ -23,8 +23,40 @@ function Card({
 
   const link = formatWhatsAppLink(whats)
   
+  const schedules = {
+    morning: "10:00 às 19:00",
+    afternoon: "13:00 às 22:00",
+    night: "15:00 às 00:00"
+  }
+  const formatSchedules = (value) =>{
+    
+    console.log(schedules[value])
+    if(schedules[value]){
+      return schedules[value]
+    }else{
+      return
+    }
+
+  }
+  const formatHour = formatSchedules(hour)
+
+  const supers = {
+    diogo: "Diogo",
+    greice: "Greice",
+    teteu: "Matheus Silva",
+    duda: "Duda"
+  }
+  const formatSuper = (value) =>{
+    if(supers[value]){
+      return supers[value]
+    }
+  }
+  const formattedSuper = formatSuper(supe)
+  console.log(formattedSuper)
+  
+
   return (
-    <div className="pt-2 pb-6 px-10 bg-card-bg">
+    <div className="pt-2 pb-12 px-10 bg-card-bg">
       <div className="w-full flex justify-center">
         <img
           src={imgProfile}
@@ -40,7 +72,7 @@ function Card({
       </div>
 
       <div className="">
-        <h2 className="relative top-3 text-xl uppercase font-semibold text-fourthy-color">{role}</h2>
+        <h2 className="relative top-3 text-xl uppercase font-semibold text-white">{role}</h2>
       </div>
 
       <div className="relative flex flex-col gap-1 top-6 text-fourthy-color tracking-wide">
@@ -61,12 +93,12 @@ function Card({
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconHour}</div>
-          <p>{hour}</p>
+          <p>{formatHour}</p>
         </div>
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconSuper}</div>
-          <p>{supe}</p>
+          <p>{formattedSuper}</p>
         </div>
 
         <div className="w-full flex gap-2 items-center">
