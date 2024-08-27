@@ -30,7 +30,7 @@ function Card({
   }
   const formatSchedules = (value) =>{
     
-    console.log(schedules[value])
+    //console.log(schedules[value])
     if(schedules[value]){
       return schedules[value]
     }else{
@@ -52,7 +52,7 @@ function Card({
     }
   }
   const formattedSuper = formatSuper(supe)
-  console.log(formattedSuper)
+  //console.log(formattedSuper)
   
 
   return (

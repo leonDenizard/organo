@@ -13,12 +13,15 @@ import Check from "../../components/icons/Check";
 import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
+import { Navigate } from "react-router-dom";
 
 export default function Dashboard() {
   const { user } = useAuth();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
   const [allUsers, setAllUser] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
+
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -59,6 +62,11 @@ export default function Dashboard() {
           }
         } catch (error) {
           console.error("Error fetching user data: ", error);
+
+        } finally{
+
+          setIsLoading(false)
+
         }
       } else {
         console.log("No user authenticated");
@@ -82,15 +90,19 @@ export default function Dashboard() {
     profilePhoto = userDataLogged.photoUrl;
   }
 
-  // let nameFormated = []
-  // for(let i = 0; i <= 1; i++){
-  //   nameFormated.push(userDataLogged.name.split(" ")[i])
-  // }
-  // nameFormated = nameFormated.toString().replace(",", " ")
+  
   console.log("User logged", userDataLogged);
   console.log(allUsers);
 
+  if(isLoading){
+    return <Loader/>
+  }
+
+  if(!userDataLogged){
+    return <Navigate to={"/register"}/>
+  }
   return (
+    
     <div className="container w-[90%] m-auto min-h-screen">
       {userDataLogged ? (
         <>

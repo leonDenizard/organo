@@ -5,13 +5,14 @@ import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
 import { db, collection, addDoc } from "../../services/firebase";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
+import Loader from "../../components/Loader";
 
 export default function Register() {
   const navigate = useNavigate();
 
-  const { user } = useAuth();
+  const { user, isUserRegistered, isLoading } = useAuth();
   
 
   const email = user.email;
@@ -114,6 +115,14 @@ export default function Register() {
     }
   };
 
+  console.log("User Registered", isUserRegistered)
+
+  if(isLoading){
+    return <Loader/>
+  }
+  if(isUserRegistered){
+    return <Navigate to={"/dashboard"}/>
+  }
   return (
     <form
       onSubmit={handleSubmit}

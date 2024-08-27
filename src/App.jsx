@@ -10,6 +10,7 @@ import { useAuth } from "./context/AuthProvider";
 import Dashboard from "./pages/Dashboard";
 import { useEffect, useState } from "react";
 import { checkUserExists } from "./services/firebase";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   const { user } = useAuth()
@@ -30,12 +31,14 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        <Route
-          path="/register"
-          element={userExists ? <Navigate to="/dashboard" /> : <Register />}
-        />
-        <Route path="/dashboard" element={user ? (userExists ? <Dashboard /> : <Navigate to="/register" />) : <Navigate to="/" />}/>
+        <Route path={"/"} element={<Signin />} />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            path="/register"
+            element={<Register />}
+          />
+          <Route path="/dashboard" element={<Dashboard />}/>
+        </Route>
       </Routes>
     </Router>
   );
@@ -43,3 +46,4 @@ function App() {
 
 
 export default App;
+
