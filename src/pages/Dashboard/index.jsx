@@ -14,6 +14,7 @@ import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
 import { Navigate } from "react-router-dom";
+import FilterBar from "../../components/FilterBar";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -112,7 +113,7 @@ export default function Dashboard() {
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-
+          <FilterBar/>
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {allUsers.map((user, index) => (
               
