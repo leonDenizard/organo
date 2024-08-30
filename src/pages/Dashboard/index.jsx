@@ -78,21 +78,24 @@ export default function Dashboard() {
 
   let firstName = "";
   let profilePhoto = "";
-  let nameFormated = "";
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
-    firstName = userDataLogged.name.split(" ")[0];
-    nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
+       firstName = userDataLogged.name.split(" ")[0];
+  //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
   }
 
   if (userDataLogged && userDataLogged.photoUrl) {
     profilePhoto = userDataLogged.photoUrl;
   }
 
-  
-  console.log("User logged", userDataLogged);
-  console.log(allUsers);
+
+  const nameCardFormatted = (names) =>{
+    return names = names.split(" ").slice(0, 2).join(" ")
+  }
+
+  // console.log("User logged", userDataLogged);
+  //console.log("todos user",allUsers)
 
   if(isLoading){
     return <Loader/>
@@ -116,7 +119,10 @@ export default function Dashboard() {
               <Card
                 key={index}
                 imgProfile={user.photoUrl}
-                name={nameFormated}
+
+                name={nameCardFormatted(user.name)}
+
+
                 surname={user.surname}
                 role={user.role}
                 iconSlack={<Slack />}

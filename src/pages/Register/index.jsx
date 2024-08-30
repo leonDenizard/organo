@@ -138,7 +138,7 @@ export default function Register() {
           <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true}/>
 
           <div>
-            <ButtonUpload onChange={handleFileChange}/>
+            <ButtonUpload onChange={handleFileChange} disabled={true}/>
             <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full"/>
           </div>
         </div>
