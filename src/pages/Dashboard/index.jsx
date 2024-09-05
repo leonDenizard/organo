@@ -21,8 +21,8 @@ export default function Dashboard() {
 
   const [userDataLogged, setUserDataLogged] = useState(null);
   const [allUsers, setAllUser] = useState([]);
-  const [isLoading, setIsLoading] = useState(true)
-
+  const [isLoading, setIsLoading] = useState(true);
+  const [sortedUsers, setSortedUsers] = useState(allUsers);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -50,6 +50,7 @@ export default function Dashboard() {
             });
 
             setAllUser(allUserData);
+            setSortedUsers(allUserData);
 
             const userUIDSnapshot = await getDocs(userUIDQuery);
             if (!userUIDSnapshot.empty) {
@@ -63,11 +64,8 @@ export default function Dashboard() {
           }
         } catch (error) {
           console.error("Error fetching user data: ", error);
-
-        } finally{
-
-          setIsLoading(false)
-
+        } finally {
+          setIsLoading(false);
         }
       } else {
         console.log("No user authenticated");
@@ -82,48 +80,48 @@ export default function Dashboard() {
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
-       firstName = userDataLogged.name.split(" ")[0];
-  //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
+    firstName = userDataLogged.name.split(" ")[0];
+    //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
   }
 
   if (userDataLogged && userDataLogged.photoUrl) {
     profilePhoto = userDataLogged.photoUrl;
   }
 
+  const nameCardFormatted = (names) => {
+    return (names = names.split(" ").slice(0, 2).join(" "));
+  };
 
-  const nameCardFormatted = (names) =>{
-    return names = names.split(" ").slice(0, 2).join(" ")
+  if (isLoading) {
+    return <Loader />;
   }
 
-  // console.log("User logged", userDataLogged);
-  //console.log("todos user",allUsers)
-
-  if(isLoading){
-    return <Loader/>
+  if (!userDataLogged) {
+    return <Navigate to={"/register"} />;
   }
 
-  if(!userDataLogged){
-    return <Navigate to={"/register"}/>
-  }
+  const sortName = () => {
+    const usersOrder = [...allUsers].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+
+    setSortedUsers(usersOrder);
+  };
+
   return (
-    
     <div className="container w-[90%] m-auto min-h-screen">
       {userDataLogged ? (
         <>
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-          <FilterBar/>
+          <FilterBar order={sortName} />
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
-            {allUsers.map((user, index) => (
-              
+            {sortedUsers.map((user, index) => (
               <Card
                 key={index}
                 imgProfile={user.photoUrl}
-
                 name={nameCardFormatted(user.name)}
-
-
                 surname={user.surname}
                 role={user.role}
                 iconSlack={<Slack />}
@@ -141,9 +139,7 @@ export default function Dashboard() {
                 iconChild={<ChildIcon />}
                 child={user.child}
               />
-              
             ))}
-            
           </div>
         </>
       ) : (
