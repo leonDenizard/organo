@@ -1,10 +1,10 @@
 import ButtonFilter from "./ButtonFilter";
 
-export default function FilterBar({ order }) {
+export default function FilterBar({ orderByName }) {
   return (
     <div className="flex justify-center gap-10 relative top-14 ">
         <h4 className="font-bold text-xl tracking-wide">Filtrar por:</h4>
-        <ButtonFilter name={"A-Z"} order={order}/>
+        <ButtonFilter name={"A-Z"} orderByName={orderByName}/>
         <ButtonFilter name={"Cargo"}/>
         <ButtonFilter name={"Horário"}/>
         <ButtonFilter name={"Gestor"}/>

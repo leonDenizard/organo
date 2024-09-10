@@ -115,7 +115,7 @@ export default function Dashboard() {
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-          <FilterBar order={sortName} />
+          <FilterBar orderByName={sortName} />
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card

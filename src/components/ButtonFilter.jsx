@@ -1,6 +1,6 @@
-function ButtonFilter({ name, color, textColor, borderColor, border, order }) {
+function ButtonFilter({ name, color, textColor, borderColor, border, orderByName }) {
   return (
-    <button onClick={order} type="button" className="bg-card-bg font-semibold p-1 px-12 rounded-full" style={{ backgroundColor: color, color: textColor, borderColor: borderColor, border: border}}>{name}</button>
+    <button onClick={orderByName} type="button" className="bg-card-bg font-semibold p-1 px-12 rounded-full" style={{ backgroundColor: color, color: textColor, borderColor: borderColor, border: border}}>{name}</button>
   )
 }
 

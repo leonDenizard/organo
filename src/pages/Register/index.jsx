@@ -45,7 +45,6 @@ export default function Register() {
 
   const handleBirthday = (e) => {
     const birthdayFormated = formatDate(e.target.value)
-    console.log(birthdayFormated)
     setBirthday(birthdayFormated)
   }
 
@@ -272,6 +271,13 @@ export default function Register() {
                     disabled={selectedManager && selectedManager !== "duda"}
                     title="Duda"
                     id="duda"
+                  />
+                  <CheckBox
+                    isChecked={selectedManager === "luan"}
+                    onChange={() => handleChangeManager("luan")}
+                    disabled={selectedManager && selectedManager !== "duda"}
+                    title="Luan"
+                    id="luan"
                   />
                   <CheckBox
                     isChecked={selectedManager === "teteu"}

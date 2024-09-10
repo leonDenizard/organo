@@ -42,7 +42,8 @@ function Card({
     greice: "Greice",
     teteu: "Matheus Silva",
     duda: "Duda",
-    guto: "Augusto Cezar"
+    guto: "Augusto Cezar",
+    luan: "Luan"
   };
   const formatSuper = (value) => {
     if (supers[value]) {
