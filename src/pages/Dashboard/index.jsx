@@ -23,6 +23,7 @@ export default function Dashboard() {
   const [allUsers, setAllUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortedUsers, setSortedUsers] = useState(allUsers);
+  const [isAscending, setIsAscending] = useState(true)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -100,13 +101,43 @@ export default function Dashboard() {
     return <Navigate to={"/register"} />;
   }
 
-  const sortName = () => {
+  const sortByName = () => {
     const usersOrder = [...allUsers].sort((a, b) =>
-      a.name.localeCompare(b.name)
+      isAscending ? (a.name.localeCompare(b.name)) : (b.name.localeCompare(a.name))
     );
 
     setSortedUsers(usersOrder);
+    setIsAscending(!isAscending)
   };
+
+  const priorityRole = {
+    1: "gerente",
+    2: "super",
+    3: "pleno",
+    4: "jriv",
+    5: "jriii",
+    6: "jrii",
+    7: "jri",
+    8: "trial"
+  }
+
+  const sortByRule = () => {
+    const priorityMap = Object.fromEntries(
+      Object.entries(priorityRole).map(([key, value]) => [value, key])
+    )
+
+    const sortedUsers = [...allUsers].sort((a, b) => {
+      const priorityA = parseInt(priorityMap[a.role] || 9)
+      const priorityB = parseInt(priorityMap[b.role] || 9)
+
+      return isAscending ? (priorityA - priorityB) : (priorityB - priorityA)
+    })
+
+    setSortedUsers(sortedUsers)
+    setIsAscending(!isAscending)
+  }
+
+
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
@@ -115,7 +146,7 @@ export default function Dashboard() {
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-          <FilterBar orderByName={sortName} />
+          <FilterBar orderByName={sortByName} orderByRule={sortByRule}/>
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
