@@ -1,4 +1,4 @@
-export default function SearchBar() {
+export default function SearchBar({handleInputName}) {
   return (
     <div className="relative top-8 w-full flex justify-center">
       <div className="relative w-[60vw]">
@@ -17,7 +17,7 @@ export default function SearchBar() {
             />
           </svg>
         </div>
-        <input className="bg-secundary-color h-[60px] p-3 px-8 w-full rounded-full outline-none border-2 border-border-color text-lg leading-none caret-custom
+        <input onChange={handleInputName} className="bg-secundary-color h-[60px] p-3 px-8 w-full rounded-full outline-none border-2 border-border-color text-lg leading-none caret-custom
             placeholder:text-white placeholder:font-semibold placeholder:tracking-wider placeholder:text-lg placeholder:px-3" type="text" placeholder="Pesquisa Ai..." />
       </div>
     </div>

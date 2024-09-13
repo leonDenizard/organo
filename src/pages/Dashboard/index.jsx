@@ -148,10 +148,6 @@ export default function Dashboard() {
   }
 
  
-
-  const handleSchedule = () => {
-    navigate('/schedule');
-  }
   const sortByManager = () =>{
     const priorityMap = Object.fromEntries(
       Object.entries(priorityManager).map(([key, value]) => [value, key])
@@ -170,7 +166,20 @@ export default function Dashboard() {
     setIsAscending(!isAscending)
   }
 
+  const handleSchedule = () => {
+    navigate('/schedule');
+  }
 
+
+  const handleInputName = (event) =>{
+    const inputName = event.target.value.toLowerCase();
+
+    const matchingUsers = allUsers.filter(user =>
+      user.name.toLowerCase().includes(inputName)
+    )
+
+    setSortedUsers(matchingUsers)
+  }
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
@@ -178,7 +187,7 @@ export default function Dashboard() {
         <>
           <Header name={firstName} img={profilePhoto}></Header>
 
-          <SearchBar />
+          <SearchBar handleInputName={handleInputName}/>
           <FilterBar orderByName={sortByName} orderByRule={sortByRule} orderByManager={sortByManager} handleSchedule={handleSchedule}/>
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
