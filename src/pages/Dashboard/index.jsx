@@ -13,11 +13,12 @@ import Check from "../../components/icons/Check";
 import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
   const [allUsers, setAllUser] = useState([]);
@@ -137,6 +138,11 @@ export default function Dashboard() {
     setIsAscending(!isAscending)
   }
 
+ 
+
+  const handleSchedule = () => {
+    navigate('/schedule');
+  }
 
 
   return (
@@ -146,7 +152,7 @@ export default function Dashboard() {
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-          <FilterBar orderByName={sortByName} orderByRule={sortByRule}/>
+          <FilterBar orderByName={sortByName} orderByRule={sortByRule} handleSchedule={handleSchedule}/>
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
