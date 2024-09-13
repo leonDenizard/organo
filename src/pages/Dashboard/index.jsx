@@ -122,6 +122,15 @@ export default function Dashboard() {
     8: "trial"
   }
 
+  const priorityManager = {
+    1: "guto",
+    2: "greice",
+    3: "diogo",
+    4: "luan",
+    5: "duda",
+    6: "teteu"
+  }
+
   const sortByRule = () => {
     const priorityMap = Object.fromEntries(
       Object.entries(priorityRole).map(([key, value]) => [value, key])
@@ -143,6 +152,24 @@ export default function Dashboard() {
   const handleSchedule = () => {
     navigate('/schedule');
   }
+  const sortByManager = () =>{
+    const priorityMap = Object.fromEntries(
+      Object.entries(priorityManager).map(([key, value]) => [value, key])
+    )
+
+    const sortedUsers = [...allUsers].sort((a, b) =>{
+      const priorityA = parseInt(priorityMap[a.manager] || 7)
+      const priorityB = parseInt(priorityMap[b.manager] || 7)
+
+      
+      return isAscending ? (priorityA - priorityB) : (priorityB - priorityA)
+    })
+
+
+    setSortedUsers(sortedUsers)
+    setIsAscending(!isAscending)
+  }
+
 
 
   return (
@@ -152,7 +179,7 @@ export default function Dashboard() {
           <Header name={firstName} img={profilePhoto}></Header>
 
           <SearchBar />
-          <FilterBar orderByName={sortByName} orderByRule={sortByRule} handleSchedule={handleSchedule}/>
+          <FilterBar orderByName={sortByName} orderByRule={sortByRule} orderByManager={sortByManager} handleSchedule={handleSchedule}/>
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
