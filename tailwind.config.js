@@ -20,6 +20,7 @@ export default {
         'card-bg': 'rgba(0,0,0, 0.2)',
         'text-color': 'rgba(255,255,255,0.9)',
         'button-register': '#506eec',
+        'modal-color': 'rgba(0,0,0, 0.1)',
       },
       fontFamily:{
         'popp': ['poppins']

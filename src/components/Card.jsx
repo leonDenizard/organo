@@ -73,6 +73,7 @@ function Card({
           src={imgProfile}
           alt="photo profile"
           className="rounded-full w-22 border-2 border-border-color"
+          loading="lazy"
         />
       </div>
 

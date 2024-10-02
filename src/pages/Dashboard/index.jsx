@@ -15,6 +15,7 @@ import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
 import { Navigate, useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
+import PopUpMenu from "../../components/PopUpMenu";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -24,7 +25,8 @@ export default function Dashboard() {
   const [allUsers, setAllUser] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [sortedUsers, setSortedUsers] = useState(allUsers);
-  const [isAscending, setIsAscending] = useState(true)
+  const [isAscending, setIsAscending] = useState(true);
+  const [isOpenModal, setIsOpenModal] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -104,23 +106,12 @@ export default function Dashboard() {
 
   const sortByName = () => {
     const usersOrder = [...allUsers].sort((a, b) =>
-      isAscending ? (a.name.localeCompare(b.name)) : (b.name.localeCompare(a.name))
+      isAscending ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
     );
 
     setSortedUsers(usersOrder);
-    setIsAscending(!isAscending)
+    setIsAscending(!isAscending);
   };
-
-  const priorityRole = {
-    1: "gerente",
-    2: "super",
-    3: "pleno",
-    4: "jriv",
-    5: "jriii",
-    6: "jrii",
-    7: "jri",
-    8: "trial"
-  }
 
   const priorityManager = {
     1: "guto",
@@ -128,58 +119,58 @@ export default function Dashboard() {
     3: "diogo",
     4: "luan",
     5: "duda",
-    6: "teteu"
-  }
+    6: "teteu",
+  };
 
-  const sortByRule = () => {
-    const priorityMap = Object.fromEntries(
-      Object.entries(priorityRole).map(([key, value]) => [value, key])
-    )
 
-    const sortedUsers = [...allUsers].sort((a, b) => {
-      const priorityA = parseInt(priorityMap[a.role] || 9)
-      const priorityB = parseInt(priorityMap[b.role] || 9)
 
-      return isAscending ? (priorityA - priorityB) : (priorityB - priorityA)
-    })
+  const openModal = () => {
+    setIsOpenModal(true);
+  };
 
-    setSortedUsers(sortedUsers)
-    setIsAscending(!isAscending)
-  }
+  // Função para fechar o modal
+  const closeModal = () => {
+    setIsOpenModal(false);
+  };
 
- 
-  const sortByManager = () =>{
+  const roles = ["gerente", "super", "pleno", "jriv", "jriii", "jrii", "jri", "trial"];
+  const sortByRule = (selectedRole) => {
+    const sortedUsers = [...allUsers].filter(
+      (user) => user.role === selectedRole
+    );
+    setSortedUsers(sortedUsers);
+    closeModal(); 
+  };
+
+  const sortByManager = () => {
     const priorityMap = Object.fromEntries(
       Object.entries(priorityManager).map(([key, value]) => [value, key])
-    )
+    );
 
-    const sortedUsers = [...allUsers].sort((a, b) =>{
-      const priorityA = parseInt(priorityMap[a.manager] || 7)
-      const priorityB = parseInt(priorityMap[b.manager] || 7)
+    const sortedUsers = [...allUsers].sort((a, b) => {
+      const priorityA = parseInt(priorityMap[a.manager] || 7);
+      const priorityB = parseInt(priorityMap[b.manager] || 7);
 
-      
-      return isAscending ? (priorityA - priorityB) : (priorityB - priorityA)
-    })
+      return isAscending ? priorityA - priorityB : priorityB - priorityA;
+    });
 
-
-    setSortedUsers(sortedUsers)
-    setIsAscending(!isAscending)
-  }
+    setSortedUsers(sortedUsers);
+    setIsAscending(!isAscending);
+  };
 
   const handleSchedule = () => {
-    navigate('/schedule');
-  }
+    navigate("/schedule");
+  };
 
-
-  const handleInputName = (event) =>{
+  const handleInputName = (event) => {
     const inputName = event.target.value.toLowerCase();
 
-    const matchingUsers = allUsers.filter(user =>
+    const matchingUsers = allUsers.filter((user) =>
       user.name.toLowerCase().includes(inputName)
-    )
+    );
 
-    setSortedUsers(matchingUsers)
-  }
+    setSortedUsers(matchingUsers);
+  };
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
@@ -187,8 +178,13 @@ export default function Dashboard() {
         <>
           <Header name={firstName} img={profilePhoto}></Header>
 
-          <SearchBar handleInputName={handleInputName}/>
-          <FilterBar orderByName={sortByName} orderByRule={sortByRule} orderByManager={sortByManager} handleSchedule={handleSchedule}/>
+          <SearchBar handleInputName={handleInputName} />
+          <FilterBar
+            orderByName={sortByName}
+            orderByRule={openModal}
+            orderByManager={sortByManager}
+            handleSchedule={handleSchedule}
+          />
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
@@ -214,6 +210,10 @@ export default function Dashboard() {
               />
             ))}
           </div>
+          {/* Renderizar o modal se estiver aberto */}
+          {isOpenModal && <PopUpMenu roles={roles}
+          onSelectRole={sortByRule}
+          closeModal={closeModal} />}
         </>
       ) : (
         <Loader />

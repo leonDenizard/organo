@@ -1,6 +1,7 @@
 import ButtonFilter from "./ButtonFilter";
 
 export default function FilterBar({ orderByName, orderByRule, orderByManager, handleSchedule }) {
+
   return (
     <div className="flex justify-center gap-10 relative top-14 ">
         <h4 className="font-bold text-xl tracking-wide">Filtrar por:</h4>
