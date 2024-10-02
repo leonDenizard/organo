@@ -27,6 +27,8 @@ export default function Dashboard() {
   const [sortedUsers, setSortedUsers] = useState(allUsers);
   const [isAscending, setIsAscending] = useState(true);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [modalOptions, setModalOptions] = useState([]);
+  const [onSelectFunction, setOnSelectFunction] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -113,22 +115,14 @@ export default function Dashboard() {
     setIsAscending(!isAscending);
   };
 
-  const priorityManager = {
-    1: "guto",
-    2: "greice",
-    3: "diogo",
-    4: "luan",
-    5: "duda",
-    6: "teteu",
-  };
 
 
-
-  const openModal = () => {
+  const openModal = (options, onSelect) => {
+    setModalOptions(options);
+    setOnSelectFunction(() => onSelect);
     setIsOpenModal(true);
   };
 
-  // Função para fechar o modal
   const closeModal = () => {
     setIsOpenModal(false);
   };
@@ -142,21 +136,20 @@ export default function Dashboard() {
     closeModal(); 
   };
 
-  const sortByManager = () => {
-    const priorityMap = Object.fromEntries(
-      Object.entries(priorityManager).map(([key, value]) => [value, key])
-    );
+  const times = ["afternoon", "morning", "night"]
+  const sortByTime = (selectedTime) => {
+    const sortedUsers = [...allUsers].filter((user) => user.time === selectedTime)
 
-    const sortedUsers = [...allUsers].sort((a, b) => {
-      const priorityA = parseInt(priorityMap[a.manager] || 7);
-      const priorityB = parseInt(priorityMap[b.manager] || 7);
+    setSortedUsers(sortedUsers)
+    closeModal(); 
+  }
 
-      return isAscending ? priorityA - priorityB : priorityB - priorityA;
-    });
-
-    setSortedUsers(sortedUsers);
-    setIsAscending(!isAscending);
-  };
+  const manager = ["guto", "greice", "diogo", "luan","duda","teteu"]
+  const sortByManager = (selectedManager) => {
+    const sortedUsers = [...allUsers].filter((user) => user.manager === selectedManager)
+    setSortedUsers(sortedUsers)
+    closeModal();
+  }
 
   const handleSchedule = () => {
     navigate("/schedule");
@@ -181,8 +174,9 @@ export default function Dashboard() {
           <SearchBar handleInputName={handleInputName} />
           <FilterBar
             orderByName={sortByName}
-            orderByRule={openModal}
-            orderByManager={sortByManager}
+            orderByRole={() => openModal(roles, sortByRule)}
+            orderByManager={() => openModal(manager, sortByManager)}
+            orderByTime={() => openModal(times, sortByTime)}
             handleSchedule={handleSchedule}
           />
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
@@ -211,9 +205,12 @@ export default function Dashboard() {
             ))}
           </div>
           {/* Renderizar o modal se estiver aberto */}
-          {isOpenModal && <PopUpMenu roles={roles}
-          onSelectRole={sortByRule}
-          closeModal={closeModal} />}
+          {isOpenModal && (
+          <PopUpMenu
+            options={modalOptions}
+            onSelect={onSelectFunction}
+            closeModal={closeModal}
+          />)}
         </>
       ) : (
         <Loader />
