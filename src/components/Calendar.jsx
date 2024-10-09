@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import ButtonsSendSchedule from "./ButtonsSendSchedule";
 
-const Calendar = () => {
+const Calendar = ({ workedDays  }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
 
@@ -38,6 +38,10 @@ const Calendar = () => {
 
     setDaysInMonth(days);
   }, [currentDate]);
+
+  useEffect(()=> {
+
+  }) 
 
   // Mudar mês
   const changeMonth = (direction) => {
@@ -78,7 +82,7 @@ const Calendar = () => {
           {daysInMonth.map((day, index) => (
             <div
               key={index}
-              className={`day ${day ? "" : "empty"} border border-border-color`}
+              className={`day ${day ? '' : 'empty'} border border-border-color ${workedDays.includes(day) ? 'bg-green-500' : ''}`}
             >
               {day}
             </div>
