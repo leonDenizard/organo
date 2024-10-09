@@ -43,6 +43,7 @@ export default function Schedule() {
     fetchUserData();
   }, [user]);
 
+  //console.log(userDataLogged.uid)
   return (
     <div>
       {userDataLogged ? (
