@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import ButtonsSendSchedule from "./ButtonsSendSchedule";
 
-const Calendar = ({ workedDays  }) => {
+const Calendar = ({ workedDays }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
-
 
   useEffect(() => {
     const year = currentDate.getFullYear();
@@ -39,9 +38,7 @@ const Calendar = ({ workedDays  }) => {
     setDaysInMonth(days);
   }, [currentDate]);
 
-  useEffect(()=> {
-
-  }) 
+  useEffect(() => {});
 
   // Mudar mês
   const changeMonth = (direction) => {
@@ -51,18 +48,19 @@ const Calendar = ({ workedDays  }) => {
   };
 
   return (
-    <div className="calendar-container relative m-auto w-4/5 h-screen flex flex-col items-center justify-center border border-border-color">
+    <div className="calendar-container relative m-auto w-4/5 h-screen flex flex-col items-center justify-center">
+      <div className="h-[600px]">
       <div className="calendar-header flex gap-2">
         <button onClick={() => changeMonth(-1)}>Anterior</button>
-        <h2>
-          {currentDate.toLocaleString("default", { month: "long" })} /{" "}
+        <h2 className="text-6xl font-bold">
+          {currentDate.toLocaleString("default", { month: "2-digit" })} /{" "}
           {currentDate.getFullYear()}
         </h2>
         <button onClick={() => changeMonth(1)}>Próximo</button>
       </div>
 
-      <div className="calendar-body border border-border-color">
-        <div className="calendar-weekdays grid grid-cols-7 border border-border-color">
+      <div className="calendar-body relative top-8">
+        <div className="calendar-weekdays grid grid-cols-7">
           {[
             "Segunda",
             "Terça",
@@ -72,24 +70,35 @@ const Calendar = ({ workedDays  }) => {
             "Sábado",
             "Domingo",
           ].map((day, index) => (
-            <div key={index} className="weekday">
-              {day}
-            </div>
-          ))}
-        </div>
-
-        <div className="calendar-days grid grid-cols-7 border border-border-color">
-          {daysInMonth.map((day, index) => (
             <div
               key={index}
-              className={`day ${day ? '' : 'empty'} border border-border-color ${workedDays.includes(day) ? 'bg-green-500' : ''}`}
+              className="weekday text-2xl flex items-center justify-center p-2 text-white"
             >
               {day}
             </div>
           ))}
         </div>
+
+        <div className="calendar-days grid grid-cols-7 border border-border-color relative top-4">
+          {daysInMonth.map((day, index) => {
+            const isWekeend = index % 7 === 5 || index % 7 === 6;
+
+            return (
+              <div
+                key={index}
+                className={`day ${day ? "" : "empty"} 
+                ${workedDays.includes(day) ? "bg-day-worked-week" : ""}
+                ${workedDays.includes(day) && isWekeend ? 'bg-weekend' : ''}
+              border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold`}
+              >
+                {day}
+              </div>
+            );
+          })}
+        </div>
       </div>
-      <ButtonsSendSchedule/>
+      <ButtonsSendSchedule />
+      </div>
     </div>
   );
 };

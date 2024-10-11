@@ -17,7 +17,7 @@ export default function Schedule() {
     const fetchUserData = async () => {
       if (user) {
         try {
-          // Busca os dados do usuário logado (já existe no seu código)
+          // Busca os dados do usuário logado 
           const userUIDQuery = query(
             collection(db, "users"),
             where("uid", "==", user.uid)
@@ -46,11 +46,10 @@ export default function Schedule() {
                 return parseInt(day, 10); // Converte para número
               });
 
-              console.log(daysWorked)
+              
               setWorkedDays(daysWorked);
             });
 
-            // Salva os dias trabalhados no estado
           }
         } catch (error) {
           console.error("Error fetching user data: ", error);
@@ -69,7 +68,7 @@ export default function Schedule() {
   return (
     <div>
       {!isLoading ? (
-        <Calendar workedDays={workedDays} /> // Passa os dias trabalhados para o Calendar
+        <Calendar workedDays={workedDays} /> 
       ) : (
         <Loader />
       )}
