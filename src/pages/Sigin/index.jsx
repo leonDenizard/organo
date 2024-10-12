@@ -42,15 +42,15 @@ export default function Signin() {
       });
   }
   return (
-    <div className="relative flex items-center justify-center min-h-screen">
+    <div className="relative flex items-center justify-center md:min-h-screen">
       <div className="relative">
-        <div className="relative w-[830px] h-[560px]">
-          <div className="absolute w-[250px] h-[250px] bg-bubble-red rounded-full bottom-0"></div>
-          <div className="absolute w-[250px] h-[250px] bg-bubble-blue rounded-full top-0 right-0"></div>
+        <div className="relative w-screen h-svh lg:w-[830px] lg:h-[560px] overflow-hidden">
+          <div className="absolute w-[10rem] h-[10rem] lg:w-[250px] lg:h-[250px] bg-bubble-red rounded-full bottom-0"></div>
+          <div className="absolute w-[10rem] h-[10rem] lg:w-[250px] lg:h-[250px] bg-bubble-blue rounded-full top-0 right-0"></div>
         </div>
 
         <div
-          className=" absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-primary-color w-[600px] h-[350px] backdrop-blur-md
+          className=" absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 bg-primary-color w-11/12 h-3/4 lg:w-[600px] lg:h-[350px] backdrop-blur-md
                         border-2 border-border-color rounded-lg flex justify-center items-center"
         >
           <button

@@ -78,7 +78,7 @@ function Card({
       </div>
 
       <div className="relative w-full flex flex-col justify-center">
-        <h1 className="text-3xl font-bold tracking-wider text-nowrap relative w-full flex justify-center">
+        <h1 className="text-3xl font-bold tracking-wider  text-nowrap break-words relative w-full flex justify-center">
           {name}
         </h1>
 
