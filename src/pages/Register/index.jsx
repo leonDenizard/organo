@@ -125,10 +125,10 @@ export default function Register() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="relative flex items-center justify-center"
+      className="relative"
     >
-      <div className="lg:w-[90%] border-2 lg:m-auto">
-        <h1 className="text-3xl font-semibold">Informações pessoais</h1>
+      <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden">
+        <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
           <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true}/>
@@ -173,7 +173,7 @@ export default function Register() {
           <div className="">
             <div>
               <h1 className="text-3xl font-semibold mt-4">Cargo Atual</h1>
-              <div className="flex lg:flex mt-5 gap-7">
+              <div className="flex mt-5 gap-7">
                 <div>
                   <CheckBox
                     isChecked={selectedRole === "trial"}
