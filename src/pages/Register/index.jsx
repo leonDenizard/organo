@@ -127,7 +127,7 @@ export default function Register() {
       onSubmit={handleSubmit}
       className="relative"
     >
-      <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden h-dvh">
+      <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
@@ -142,7 +142,7 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xl:gap-4">
           <div className="mt-4">
           <h1 className="text-3xl font-semibold mb-5">
             Horário de expediente
@@ -242,7 +242,7 @@ export default function Register() {
           </div>
           <div>
               <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
-              <div className="lg:flex mt-5 -mr-8 gap-10">
+              <div className="lg:flex mt-5 gap-10">
                 <div>
                   <CheckBox
                     isChecked={selectedManager === "guto"}
