@@ -18,7 +18,7 @@ import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
   const navigate = useNavigate();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
@@ -165,11 +165,16 @@ export default function Dashboard() {
     setSortedUsers(matchingUsers);
   };
 
+  const handleLogOut = async() =>{
+    await logOut()
+    navigate("/")
+  }
+
   return (
     <div className="container w-[90%] m-auto min-h-screen">
       {userDataLogged ? (
         <>
-          <Header name={firstName} img={profilePhoto}></Header>
+          <Header name={firstName} img={profilePhoto} logout={handleLogOut}></Header>
 
           <SearchBar handleInputName={handleInputName} />
           <FilterBar

@@ -4,7 +4,7 @@ import { auth, checkUserExists } from "../services/firebase"
 
 const AuthContext = createContext()
 
-function AuthProvider( {children } ) {
+function AuthProvider( { children } ) {
 
 
 
@@ -12,8 +12,8 @@ function AuthProvider( {children } ) {
     const [isLoading, setIsLoading] = useState(true)
     const [isUserRegistered, setIsUserRegistered] = useState(null)
 
-    console.log("USEAuth", user)
-    console.log("loading", isLoading)
+    //console.log("USEAuth", user)
+    //console.log("loading", isLoading)
 
     useEffect (() => {
         const unsubscribe = onAuthStateChanged( auth, (currentUser) => {
@@ -38,8 +38,12 @@ function AuthProvider( {children } ) {
     }, [user])
 
 
+    const logOut = async () => {
+      await auth.signOut()
+      setUser(null)
+    }
   return (
-    <AuthContext.Provider value={{user, setUser, isLoading, isUserRegistered}}>
+    <AuthContext.Provider value={{user, setUser, isLoading, isUserRegistered, logOut}}>
       {children}
     </AuthContext.Provider>
   )
