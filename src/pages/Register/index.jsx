@@ -127,7 +127,7 @@ export default function Register() {
       onSubmit={handleSubmit}
       className="relative"
     >
-      <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden">
+      <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden h-dvh">
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
