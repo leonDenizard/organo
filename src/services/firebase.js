@@ -4,7 +4,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, doc, getDoc, query, getDocs, where } from "firebase/firestore"
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBHkQ7m1aejMhybac9kbExQYbzo2iL4lXM",
+  apiKey: "AIzaSyCc6zuUNj--SnfmYHhqYMe0L_Zf9x3OxMY",
   authDomain: "organo-support.firebaseapp.com",
   projectId: "organo-support",
   storageBucket: "organo-support.appspot.com",

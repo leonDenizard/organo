@@ -127,7 +127,7 @@ export default function Register() {
       onSubmit={handleSubmit}
       className="relative flex items-center justify-center"
     >
-      <div className="w-[90%] m-auto">
+      <div className="lg:w-[90%] border-2 lg:m-auto">
         <h1 className="text-3xl font-semibold">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
@@ -142,11 +142,11 @@ export default function Register() {
           </div>
         </div>
 
-        <div className="relative">
-          <h1 className="text-3xl font-semibold mt-10">
+        <div className="relative grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4">
+          <h1 className="text-3xl font-semibold mb-5">
             Horário de expediente
           </h1>
-          <div className="mt-5">
             <CheckBox
               isChecked={selectedTime === "morning"}
               onChange={() => handleChangeTime("morning")}
@@ -170,10 +170,10 @@ export default function Register() {
             />
           </div>
 
-          <div className="flex justify-between">
+          <div className="">
             <div>
               <h1 className="text-3xl font-semibold mt-4">Cargo Atual</h1>
-              <div className="flex mt-5 justify-between gap-7">
+              <div className="flex lg:flex mt-5 gap-7">
                 <div>
                   <CheckBox
                     isChecked={selectedRole === "trial"}
@@ -237,10 +237,12 @@ export default function Register() {
                 </div>
               </div>
             </div>
+            
 
-            <div>
+          </div>
+          <div>
               <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
-              <div className="flex mt-5 justify-between -mr-8 gap-10">
+              <div className="lg:flex mt-5 -mr-8 gap-10">
                 <div>
                   <CheckBox
                     isChecked={selectedManager === "guto"}
@@ -289,7 +291,6 @@ export default function Register() {
                 </div>
               </div>
             </div>
-          </div>
         </div>
 
         <div>
