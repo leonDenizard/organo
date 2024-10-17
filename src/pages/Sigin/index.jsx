@@ -45,8 +45,8 @@ export default function Signin() {
     <div className="relative flex items-center justify-center md:min-h-screen">
       <div className="relative">
         <div className="relative w-screen h-svh lg:w-[830px] lg:h-[560px] overflow-hidden">
-          <div className="absolute w-[10rem] h-[10rem] lg:w-[250px] lg:h-[250px] bg-bubble-red rounded-full bottom-0"></div>
-          <div className="absolute w-[10rem] h-[10rem] lg:w-[250px] lg:h-[250px] bg-bubble-blue rounded-full top-0 right-0"></div>
+          <div className="absolute w-[12rem] h-[12rem] lg:w-[250px] lg:h-[250px] bg-bubble-red rounded-full bottom-0"></div>
+          <div className="absolute w-[12rem] h-[12rem] lg:w-[250px] lg:h-[250px] bg-bubble-blue rounded-full top-0 right-0"></div>
         </div>
 
         <div
