@@ -171,7 +171,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container w-[90%] m-auto min-h-screen">
+    <div className="container w-[95%] lg:w-[90%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
         <>
           <Header name={firstName} img={profilePhoto} logout={handleLogOut}></Header>

@@ -1,8 +1,8 @@
 export default function SearchBar({handleInputName}) {
   return (
     <div className="relative top-8 w-full flex justify-center">
-      <div className="relative w-[60vw]">
-        <div className="absolute top-[15px] right-[24px]">
+      <div className="relative  lg:w-[60vw]">
+        <div className="absolute top-[10px] lg:top-[15px] right-[24px]">
           <svg
             width={25}
             height={30}
@@ -17,7 +17,7 @@ export default function SearchBar({handleInputName}) {
             />
           </svg>
         </div>
-        <input onChange={handleInputName} className="bg-secundary-color h-[60px] p-3 px-8 w-full rounded-full outline-none border-2 border-border-color text-lg leading-none caret-custom
+        <input onChange={handleInputName} className="bg-secundary-color lg:h-[60px] p-3 px-8 w-full rounded-full outline-none border-2 border-border-color text-lg leading-none caret-custom
             placeholder:text-white placeholder:font-semibold placeholder:tracking-wider placeholder:text-lg placeholder:px-3" type="text" placeholder="Pesquisa Ai..." />
       </div>
     </div>
