@@ -74,9 +74,16 @@ export default function Register() {
     const file = e.target.files[0]
 
     if(file){
-      const fileUrl = URL.createObjectURL(file)
 
-      setSelectedPhoto(fileUrl)
+      const render = new FileReader()
+
+      render.onload = () => {
+        const base64String = render.result
+        setSelectedPhoto(base64String)
+      }
+
+
+      render.readAsDataURL(file)
     }
   }
 
@@ -137,7 +144,7 @@ export default function Register() {
           <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true}/>
 
           <div>
-            <ButtonUpload onChange={handleFileChange} disabled={true}/>
+            <ButtonUpload onChange={handleFileChange} disabled={false}/>
             <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full"/>
           </div>
         </div>
