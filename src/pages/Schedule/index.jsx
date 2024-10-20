@@ -4,9 +4,12 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../services/firebase";
 import Loader from "../../components/Loader";
 import Calendar from "../../components/Calendar";
+import Header from "../../components/Header";
+import { useNavigate } from "react-router-dom";
 
 export default function Schedule() {
-  const { user } = useAuth();
+  const { user, logOut } = useAuth();
+  const navigate = useNavigate();
   
   const [isLoading, setIsLoading] = useState(true);
   const [userDataLogged, setUserDataLogged] = useState(null);
@@ -65,10 +68,33 @@ export default function Schedule() {
   }, [user]);
 
   //console.log(userDataLogged.uid)
+
+  let firstName = "";
+  let profilePhoto = "";
+
+  // Verificação se os dados foram carregados antes de acessar
+  if (userDataLogged && userDataLogged.name) {
+    firstName = userDataLogged.name.split(" ")[0];
+    //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
+  }
+
+  if (userDataLogged && userDataLogged.photoUrl) {
+    profilePhoto = userDataLogged.photoUrl;
+  }
+  const handleLogOut = async() =>{
+    await logOut()
+    navigate("/")
+  }
+
   return (
-    <div>
+    <div className="container w-[90%] m-auto min-h-screenwd">
       {!isLoading ? (
+        <>
+        <Header name={firstName} img={profilePhoto} logout={handleLogOut}></Header>
         <Calendar workedDays={workedDays} /> 
+        
+        </>
+        
       ) : (
         <Loader />
       )}
