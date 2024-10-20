@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import ButtonsSendSchedule from "./ButtonsSendSchedule";
+import LegendSchedule from "./LegendSchedule";
 
 const Calendar = ({ workedDays }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -40,23 +41,18 @@ const Calendar = ({ workedDays }) => {
 
   useEffect(() => {});
 
-  // Mudar mês
-  const changeMonth = (direction) => {
-    setCurrentDate(
-      new Date(currentDate.setMonth(currentDate.getMonth() + direction))
-    );
-  };
+  
 
   return (
     <div className="calendar-container relative m-auto w-4/5 h-screen flex flex-col items-center justify-center">
       <div className="h-[600px]">
       <div className="calendar-header flex gap-2">
-        <button onClick={() => changeMonth(-1)}>Anterior</button>
+        
         <h2 className="text-6xl font-bold">
           {currentDate.toLocaleString("default", { month: "2-digit" })} /{" "}
           {currentDate.getFullYear()}
         </h2>
-        <button onClick={() => changeMonth(1)}>Próximo</button>
+        
       </div>
 
       <div className="calendar-body relative top-8">
@@ -98,6 +94,7 @@ const Calendar = ({ workedDays }) => {
         </div>
       </div>
       <ButtonsSendSchedule />
+      <LegendSchedule/>
       </div>
     </div>
   );
