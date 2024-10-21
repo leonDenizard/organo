@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonUpload from "../../components/ButtonUpload";
 import CheckBox from "../../components/Checkbox";
 import Input from "../../components/Input";
@@ -8,6 +8,7 @@ import { db, collection, addDoc } from "../../services/firebase";
 import { Navigate, useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 import Loader from "../../components/Loader";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -104,18 +105,41 @@ export default function Register() {
 
   };
 
-  // console.log(user)
+  useEffect(() => {
+    // Busca a foto do banco de dados ao carregar o componente
+    const fetchUserData = async () => {
+      const userDocRef = doc(db, "users", uid);
+      const userDoc = await getDoc(userDocRef);
 
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        if (userData.photoUrl) {
+          setSelectedPhoto(userData.photoUrl); // Usa a foto do banco se disponível
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [uid]);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const userDocRef = doc(db, "users", uid)
+    const userDoc = await getDoc(userDocRef)
+
     
     try {
-      await addDoc(collection(db, "users"), userRegistered);
-      console.log("Usuário registrado com sucesso");
 
-      navigate("/dashboard");
-      console.log("Redirecionando para o dashboard");
+      if(userDoc.exists()){
+        await updateDoc(userDocRef, userRegistered, { merge: true })
+       
+        console.log("Perfil atualizado")
+      }else{
+        await setDoc(userDocRef, userRegistered);
+        console.log("Usuário registrado com sucesso");
+      }
+      navigate("/dashboard")
     } catch (error) {
       console.error("Erro ao registrar usuário: ", error);
     }
@@ -126,9 +150,7 @@ export default function Register() {
   if(isLoading){
     return <Loader/>
   }
-  if(isUserRegistered){
-    return <Navigate to={"/dashboard"}/>
-  }
+  
   return (
     <form
       onSubmit={handleSubmit}

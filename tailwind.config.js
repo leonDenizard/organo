@@ -21,7 +21,7 @@ export default {
         'text-color': 'rgba(255,255,255,0.9)',
         'button-register': '#506eec',
         'modal-color': 'rgba(0,0,0, 0.1)',
-        'day-worked-week' : 'rgba(0,71,255, 0.2)',
+        'day-worked-week' : 'rgba(10, 38, 67, .7)',
         'weekend': 'rgba(250,98,98, 0.7)'
       },
       fontFamily:{
