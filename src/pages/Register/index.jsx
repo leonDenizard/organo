@@ -4,8 +4,8 @@ import CheckBox from "../../components/Checkbox";
 import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
-import { db, collection, addDoc } from "../../services/firebase";
-import { Navigate, useNavigate } from "react-router-dom";
+import { db} from "../../services/firebase";
+import { useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 import Loader from "../../components/Loader";
 import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
@@ -13,7 +13,7 @@ import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 export default function Register() {
   const navigate = useNavigate();
 
-  const { user, isUserRegistered, isLoading } = useAuth();
+  const { user, isLoading, setIsLoading } = useAuth();
   
 
   const email = user.email;
@@ -104,29 +104,35 @@ export default function Register() {
     child: selectedChild,
 
   };
-
   useEffect(() => {
     // Busca a foto do banco de dados ao carregar o componente
     const fetchUserData = async () => {
+      
+  
       const userDocRef = doc(db, "users", uid);
       const userDoc = await getDoc(userDocRef);
-
+  
       if (userDoc.exists()) {
         const userData = userDoc.data();
         if (userData.photoUrl) {
           setSelectedPhoto(userData.photoUrl); // Usa a foto do banco se disponível
+        } else {
+          setSelectedPhoto(user.photoURL); // Usa a foto do Google se não houver foto no Firestore
         }
       }
+      setIsLoading(false);
     };
-
+  
     fetchUserData();
   }, [uid]);
-  
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const userDocRef = doc(db, "users", uid)
     const userDoc = await getDoc(userDocRef)
+
 
     
     try {
@@ -145,7 +151,7 @@ export default function Register() {
     }
   };
 
-  console.log("User Registered", isUserRegistered)
+
 
   if(isLoading){
     return <Loader/>

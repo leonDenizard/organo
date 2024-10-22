@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import Register from "./pages/Register";
 import { useAuth } from "./context/AuthProvider";
@@ -34,10 +33,7 @@ function App() {
       <Routes>
         <Route path={"/"} element={<Signin />} />
         <Route element={<ProtectedRoute />}>
-          <Route
-            path="/register"
-            element={<Register />}
-          />
+          <Route path="/register" element={<Register />}/>
           <Route path="/dashboard" element={<Dashboard />}/>
           <Route path="/schedule" element={<Schedule />}/>
         </Route>

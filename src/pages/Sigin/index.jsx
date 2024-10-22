@@ -31,7 +31,7 @@ export default function Signin() {
 
         if(user){
           setUser(user)
-          navigate('/register')
+          navigate('/dashboard')
         }else{
           window.alert("Dominío inválido")       
         }
