@@ -1,28 +1,44 @@
-import { db } from "./firebase";
-import { setDoc, doc, collection, getDocs } from "firebase/firestore";
-
-export const uploadScheduleToFirestore = async (collectionName, scheduleData) => {
+export const uploadScheduleToBD = async (json) => {
   try {
-    // Verifica se a coleção já contém documentos
-    const collectionRef = collection(db, collectionName);
-    const querySnapshot = await getDocs(collectionRef);
+    const schedule = await fetch('http://localhost:3000/api/schedule/', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
 
-    if (!querySnapshot.empty) {
-      console.error(`A coleção ${collectionName} já existe.`);
-      return { success: false, message: `A coleção ${collectionName} já existe.` };
+    const response = await schedule.json()
+
+    console.log(response)
+
+    
+    if(response.length === 0){
+      const uploadSchedule = await fetch(`http://localhost:3000/api/schedule/`, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json'
+        },
+        body: JSON.stringify(json)
+       })
+
+       const response = await uploadSchedule.json()
+
+       if (!response.ok) {
+        console.log(response)
+
+        return
+      }
+
+      const data = await response.json()
+      console.log(data)
+    }else{
+      return console.log("Já existe uma escala cadastrada")
+
     }
-
-    // Se a coleção não existe, continua com o upload dos dados
-    for (const [date, userIds] of Object.entries(scheduleData)) {
-      const docRef = doc(db, collectionName, date);
-      await setDoc(docRef, { userIds });
-    }
-
-    console.log("Escala enviada com sucesso para o Firestore!");
-    return { success: true, message: "Escala enviada com sucesso para o Firestore!" };
+   
 
   } catch (error) {
-    console.error("Erro ao enviar a escala para o Firestore: ", error);
+    console.error("Erro ao enviar a escala para o banco de dados: ", error);
     return { success: false, message: `Erro: ${error.message}` };
   }
 };

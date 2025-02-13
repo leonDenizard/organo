@@ -4,21 +4,22 @@ import CheckBox from "../../components/Checkbox";
 import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
-import { db} from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 import Loader from "../../components/Loader";
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { checkUserExists } from "../../services/firebase";
 
 export default function Register() {
   const navigate = useNavigate();
 
   const { user, isLoading, setIsLoading } = useAuth();
-  
+
 
   const email = user.email;
   const uid = user.uid;
   const photoUrl = user.photoURL;
+
+  
 
   const [name, setName] = useState(user.displayName);
   const [whatsApp, setWhatsApp] = useState("");
@@ -31,7 +32,7 @@ export default function Register() {
   };
 
   const handleWhatsApp = (e) => {
-    const formatedWhatsApp = formatWhatsApp(e.target.value);    
+    const formatedWhatsApp = formatWhatsApp(e.target.value);
     setWhatsApp(formatedWhatsApp);
   };
 
@@ -53,8 +54,9 @@ export default function Register() {
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedManager, setSelectedManager] = useState(null);
   const [selectedChild, setSelectedChild] = useState(null)
-  const [selectedPhoto, setSelectedPhoto] = useState(photoUrl)
+  const [selectedPhoto, setSelectedPhoto] = useState(null)
 
+  
   const handleChangeTime = (id) => {
     setSelectedTime(selectedTime === id ? null : id);
   };
@@ -74,7 +76,7 @@ export default function Register() {
   const handleFileChange = (e) => {
     const file = e.target.files[0]
 
-    if(file){
+    if (file) {
 
       const render = new FileReader()
 
@@ -104,59 +106,104 @@ export default function Register() {
     child: selectedChild,
 
   };
+
   useEffect(() => {
-    // Busca a foto do banco de dados ao carregar o componente
-    const fetchUserData = async () => {
-      
-  
-      const userDocRef = doc(db, "users", uid);
-      const userDoc = await getDoc(userDocRef);
-  
-      if (userDoc.exists()) {
-        const userData = userDoc.data();
-        if (userData.photoUrl) {
-          setSelectedPhoto(userData.photoUrl); // Usa a foto do banco se disponível
-        } else {
-          setSelectedPhoto(user.photoURL); // Usa a foto do Google se não houver foto no Firestore
+
+    const searchPhoto = async () => {
+
+      const response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
         }
+      })
+
+      const data = await response.json()
+
+      if (data.photoUrl) {
+        setSelectedPhoto(data.photoUrl);
+      } else {
+        setSelectedPhoto(photoUrl)
+      }
+
+      const exists = await checkUserExists(uid)
+
+      if(exists){
+        setName(exists.name)
+        setWhatsApp(exists.whatsapp)
+        setSlack(exists.slack)
+        setSurname(exists.surname)
+        setBirthday(exists.birthday)
+        setSelectedTime(exists.time)
+        setSelectedManager(exists.manager)
+        setSelectedRole(exists.role)
+        setSelectedChild(exists.child)
       }
       setIsLoading(false);
-    };
+      
+    }
+
+    searchPhoto()
+
+  }, [uid])
+
   
-    fetchUserData();
-  }, [uid]);
-
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const userDocRef = doc(db, "users", uid)
-    const userDoc = await getDoc(userDocRef)
-
-
-    
     try {
 
-      if(userDoc.exists()){
-        await updateDoc(userDocRef, userRegistered, { merge: true })
-       
-        console.log("Perfil atualizado")
-      }else{
-        await setDoc(userDocRef, userRegistered);
-        console.log("Usuário registrado com sucesso");
+      const exists = await checkUserExists(uid)
+
+
+      let response
+      if (exists) {
+
+        response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userRegistered)
+
+        })
+
+        navigate("/dashboard")
+      } else {
+        
+        response = await fetch('http://localhost:3000/api/user', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userRegistered)
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json()
+          console.log(errorData)
+
+          return
+        }
+
+        const data = await response.json()
+        console.log(data)
+
+        navigate("/dashboard")
       }
-      navigate("/dashboard")
+
+
     } catch (error) {
-      console.error("Erro ao registrar usuário: ", error);
+      console.error("Erro na requisição:", error)
     }
   };
 
 
 
-  if(isLoading){
-    return <Loader/>
+  if (isLoading) {
+    return <Loader />
   }
-  
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -166,22 +213,22 @@ export default function Register() {
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
-          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true}/>
-          <Input onChange={handleSlack} title="@slack" value={slack} required={true}/>
-          <Input onChange={handleSurname} title="Apelido" />
-          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true}/>
+          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true} />
+          <Input onChange={handleSlack} title="@slack" value={slack} required={true} />
+          <Input onChange={handleSurname} title="Apelido" value={surname}/>
+          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true} />
 
           <div>
-            <ButtonUpload onChange={handleFileChange} disabled={false}/>
-            <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full"/>
+            <ButtonUpload onChange={handleFileChange} disabled={false} />
+            <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full object-cover" />
           </div>
         </div>
 
         <div className="relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xl:gap-4">
           <div className="mt-4">
-          <h1 className="text-3xl font-semibold mb-5">
-            Horário de expediente
-          </h1>
+            <h1 className="text-3xl font-semibold mb-5">
+              Horário de expediente
+            </h1>
             <CheckBox
               isChecked={selectedTime === "morning"}
               onChange={() => handleChangeTime("morning")}
@@ -242,13 +289,6 @@ export default function Register() {
 
                 <div>
                   <CheckBox
-                    isChecked={selectedRole === "jriv"}
-                    onChange={() => handleChangeRole("jriv")}
-                    disabled={selectedRole && selectedRole !== "jriv"}
-                    title="JR IV"
-                    id="jriv"
-                  />
-                  <CheckBox
                     isChecked={selectedRole === "pleno"}
                     onChange={() => handleChangeRole("pleno")}
                     disabled={selectedRole && selectedRole !== "pleno"}
@@ -272,60 +312,60 @@ export default function Register() {
                 </div>
               </div>
             </div>
-            
+
 
           </div>
           <div>
-              <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
-              <div className="lg:flex mt-5 gap-10">
-                <div>
-                  <CheckBox
-                    isChecked={selectedManager === "guto"}
-                    onChange={() => handleChangeManager("guto")}
-                    disabled={selectedManager && selectedManager !== "guto"}
-                    title="Augusto Cezar"
-                    id="guto"
-                  />
-                  <CheckBox
-                    isChecked={selectedManager === "greice"}
-                    onChange={() => handleChangeManager("greice")}
-                    disabled={selectedManager && selectedManager !== "greice"}
-                    title="Greice Marques"
-                    id="greice"
-                  />
-                  <CheckBox
-                    isChecked={selectedManager === "diogo"}
-                    onChange={() => handleChangeManager("diogo")}
-                    disabled={selectedManager && selectedManager !== "diogo"}
-                    title="Diogo Nunes"
-                    id="diogo"
-                  />
-                </div>
-                <div>
-                  <CheckBox
-                    isChecked={selectedManager === "duda"}
-                    onChange={() => handleChangeManager("duda")}
-                    disabled={selectedManager && selectedManager !== "duda"}
-                    title="Duda"
-                    id="duda"
-                  />
-                  <CheckBox
-                    isChecked={selectedManager === "luan"}
-                    onChange={() => handleChangeManager("luan")}
-                    disabled={selectedManager && selectedManager !== "duda"}
-                    title="Luan"
-                    id="luan"
-                  />
-                  <CheckBox
-                    isChecked={selectedManager === "teteu"}
-                    onChange={() => handleChangeManager("teteu")}
-                    disabled={selectedManager && selectedManager !== "teteu"}
-                    title="Mateus Silva"
-                    id="teteu"
-                  />
-                </div>
+            <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
+            <div className="lg:flex mt-5 gap-10">
+              <div>
+                <CheckBox
+                  isChecked={selectedManager === "guto"}
+                  onChange={() => handleChangeManager("guto")}
+                  disabled={selectedManager && selectedManager !== "guto"}
+                  title="Augusto Cezar"
+                  id="guto"
+                />
+                <CheckBox
+                  isChecked={selectedManager === "greice"}
+                  onChange={() => handleChangeManager("greice")}
+                  disabled={selectedManager && selectedManager !== "greice"}
+                  title="Greice Marques"
+                  id="greice"
+                />
+                <CheckBox
+                  isChecked={selectedManager === "diogo"}
+                  onChange={() => handleChangeManager("diogo")}
+                  disabled={selectedManager && selectedManager !== "diogo"}
+                  title="Diogo Nunes"
+                  id="diogo"
+                />
+              </div>
+              <div>
+                <CheckBox
+                  isChecked={selectedManager === "duda"}
+                  onChange={() => handleChangeManager("duda")}
+                  disabled={selectedManager && selectedManager !== "duda"}
+                  title="Duda"
+                  id="duda"
+                />
+                <CheckBox
+                  isChecked={selectedManager === "luan"}
+                  onChange={() => handleChangeManager("luan")}
+                  disabled={selectedManager && selectedManager !== "luan"}
+                  title="Luan"
+                  id="luan"
+                />
+                <CheckBox
+                  isChecked={selectedManager === "teteu"}
+                  onChange={() => handleChangeManager("teteu")}
+                  disabled={selectedManager && selectedManager !== "teteu"}
+                  title="Mateus Silva"
+                  id="teteu"
+                />
               </div>
             </div>
+          </div>
         </div>
 
         <div>

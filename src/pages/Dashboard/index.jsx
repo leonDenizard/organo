@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../services/firebase";
 import Header from "../../components/Header";
 import SearchBar from "../../components/SearchBar";
 import Card from "../../components/Card";
@@ -13,7 +11,7 @@ import Check from "../../components/icons/Check";
 import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
 
@@ -30,40 +28,49 @@ export default function Dashboard() {
   const [modalOptions, setModalOptions] = useState([]);
   const [onSelectFunction, setOnSelectFunction] = useState(null);
 
+
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
         //Retorna somente 1 usuário
-        const userUIDQuery = query(
-          collection(db, "users"),
-          where("uid", "==", user.uid)
-        );
+        const userUIDQuery = await fetch(`http://localhost:3000/api/user/${user.uid}`, {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
 
-        const allUserQuery = collection(db, "users");
-        // console.log("Query created", q)
-
+        
+        const userUIDResponse = await userUIDQuery.json()
+        
+        const allUserQuery = await fetch('http://localhost:3000/api/user/', {
+          method: "GET",
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const allUserResponse = await allUserQuery.json()
+    
         try {
-          const querySnapshot = await getDocs(allUserQuery);
-          // console.log("Query snapshot: ", querySnapshot)
+          
+          if (!allUserResponse.empty) {
+            let allUserData = [];
 
-          if (!querySnapshot.empty) {
-            const allUserData = [];
-
-            querySnapshot.forEach((doc) => {
-              //console.log(" => ", doc.data())
-
-              allUserData.push(doc.data());
-            });
+            allUserData = [...allUserResponse]
 
             setAllUser(allUserData);
+            
             setSortedUsers(allUserData);
 
-            const userUIDSnapshot = await getDocs(userUIDQuery);
-            if (!userUIDSnapshot.empty) {
-              const userDoc = userUIDSnapshot.docs[0];
-              const userData = userDoc.data();
+            
+            if (!userUIDQuery.empty) {
+              
+              const userData = userUIDResponse
 
               setUserDataLogged(userData);
+
+              //console.log("USUARIO logado", userData)
             }
           } else {
             console.log("Nenhum documento encontrado");
@@ -102,8 +109,10 @@ export default function Dashboard() {
     return <Loader />;
   }
 
-  if (!userDataLogged) {
-    return <Navigate to={"/register"} />;
+  //console.log(userDataLogged)
+
+  if(!userDataLogged){
+    navigate('/register')
   }
 
   const sortByName = () => {

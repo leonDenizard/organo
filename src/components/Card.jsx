@@ -72,7 +72,7 @@ function Card({
         <img
           src={imgProfile}
           alt="photo profile"
-          className="rounded-full w-28 h-28 border-2 border-border-color"
+          className="rounded-full w-28 h-28 border-2 border-border-color object-cover"
           loading="lazy"
         />
       </div>

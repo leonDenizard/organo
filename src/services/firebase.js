@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getFirestore, collection, addDoc, doc, getDoc, query, getDocs, where } from "firebase/firestore"
+import { getFirestore, collection, addDoc } from "firebase/firestore"
 
 const firebaseConfig = {
   apiKey: "AIzaSyCc6zuUNj--SnfmYHhqYMe0L_Zf9x3OxMY",
@@ -21,25 +21,40 @@ export const auth = getAuth(app);
 export { db, collection, addDoc }
 
 
+
 export const checkUserExists = async (uid) => {
+
   if (!uid) {
-    console.error("UID is null or undefined")
     return false;
   }
 
-  const userQuery = query(collection(db, "users"), where("uid", "==", uid))
-  console.log("Query created:", userQuery);
-  
+  //console.log("UID", uid)
   try {
+    const response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
 
-    const querySnapshot = await getDocs(userQuery)
-    console.log("Query snapshot size:", querySnapshot.size)
-    return !querySnapshot.empty
+    if (response.ok) {
+
+      const data = await response.json()
+      console.log("Usuario encontrado funcao checkUserExists", data)
+      return data
+
+    }else{
+      //console.log("Usuário não encontrado funcao checkUserExists")
+      return false
+    }
+
 
   } catch (error) {
-    console.error("Error fetching documents:", error)
-    return false;
+    console.error("Erro ao encontrar usuário", error)
+    return false
   }
+
+
 };
 
 const analytics = getAnalytics(app);

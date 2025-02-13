@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { db } from "../../services/firebase";
 import Loader from "../../components/Loader";
 import Calendar from "../../components/Calendar";
 import Header from "../../components/Header";
@@ -21,29 +19,40 @@ export default function Schedule() {
       if (user) {
         try {
           // Busca os dados do usuário logado 
-          const userUIDQuery = query(
-            collection(db, "users"),
-            where("uid", "==", user.uid)
-          );
-          const userUIDSnapshot = await getDocs(userUIDQuery);
-          if (!userUIDSnapshot.empty) {
-            const userDoc = userUIDSnapshot.docs[0];
-            const userData = userDoc.data();
-            setUserDataLogged(userData);
+          const userUIDQuery = await fetch(`http://localhost:3000/api/user/${user.uid}`, {
+            method: "GET",
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+  
+          const userUIDResponse = await userUIDQuery.json()
+          if (!userUIDResponse.empty) {
+            setUserDataLogged(userUIDResponse);
             
             // Depois de buscar o userDataLogged, buscar a escala
-            const scheduleCollection = collection(db, "october2024");
-            const scheduleSnapshot = await getDocs(scheduleCollection);
+            const scheduleResponse = await fetch(`http://localhost:3000/api/schedule/${userUIDResponse.uid}`,{
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+
+            const schedule = await scheduleResponse.json()
+
+           
             const workedDaysArray = [];
 
             // Verifica cada documento (dia) na coleção de outubro2024
-            scheduleSnapshot.forEach((doc) => {
-              const dayData = doc.data();
+            schedule.forEach((item) => {
+              const dayData = item.schedule
               // Verifica se o uid do usuário logado está nos userIds da escala
-              if (dayData.userIds.includes(userData.uid)) {
-                workedDaysArray.push(doc.id); // Adiciona o dia se o usuário trabalhou
-              }
 
+
+              for (const [date, uids] of Object.entries(dayData)){
+                if(uids.includes(userUIDResponse.uid))
+                  workedDaysArray.push(date)
+              }
               const daysWorked = workedDaysArray.map(date => {
                 const day = date.split("-")[0]; // Extrai o dia do formato "DD-MM-AAAA"
                 return parseInt(day, 10); // Converte para número

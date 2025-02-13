@@ -11,9 +11,7 @@ function AuthProvider( { children } ) {
     const [user, setUser] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
     const [isUserRegistered, setIsUserRegistered] = useState(null)
-
-    //console.log("USEAuth", user)
-    //console.log("loading", isLoading)
+    
 
     useEffect (() => {
         const unsubscribe = onAuthStateChanged( auth, (currentUser) => {
