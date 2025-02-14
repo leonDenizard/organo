@@ -20,15 +20,13 @@ const db = getFirestore(app);
 export const auth = getAuth(app);
 export { db, collection, addDoc }
 
-
-
 export const checkUserExists = async (uid) => {
 
   if (!uid) {
     return false;
   }
 
-  //console.log("UID", uid)
+  //console.log("UID firebase.js checkUserExists", uid)
   try {
     const response = await fetch(`http://localhost:3000/api/user/${uid}`, {
       method: "GET",

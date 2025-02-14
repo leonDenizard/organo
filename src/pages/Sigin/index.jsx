@@ -1,5 +1,5 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../services/firebase";
+import { auth, checkUserExists } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 
 import logoGoogle from "../../../public/google.png";
@@ -17,29 +17,30 @@ export default function Signin() {
   }
 
 
-  function signInWithGoogle() {
-    const provider = new GoogleAuthProvider();
-
-    signInWithPopup(auth, provider)
-      .then((result) => {
-
-        const user = result.user
-        const email = user.email;
-        const domain = getEmail(email);
-        
 
 
-        if(user){
-          setUser(user)
+  async function signInWithGoogle() {
+
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider)
+
+      const user = result.user
+      const email = user.email;
+      const domain = getEmail(email);
+
+      const exists = await checkUserExists(user.uid)
+
+        if(exists){
           navigate('/dashboard')
         }else{
-          window.alert("Dominío inválido")       
+          navigate('/register')  
         }
 
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    } catch (error) {
+      console.log("Erro ao fazer login com Google:", error);
+    }
+
   }
   return (
     <div className="relative flex items-center justify-center md:min-h-screen">

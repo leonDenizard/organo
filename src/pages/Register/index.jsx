@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 import Loader from "../../components/Loader";
 import { checkUserExists } from "../../services/firebase";
+import resizeImage from "../../functions/resizeImage";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -74,21 +75,20 @@ export default function Register() {
   }
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0]
-
+    const file = e.target.files[0];
+  
     if (file) {
-
-      const render = new FileReader()
-
-      render.onload = () => {
-        const base64String = render.result
-        setSelectedPhoto(base64String)
-      }
-
-
-      render.readAsDataURL(file)
+      resizeImage(file, 300, (blob) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64String = reader.result;
+          setSelectedPhoto(base64String);
+        };
+        reader.readAsDataURL(blob);
+      });
+  
     }
-  }
+  };
 
   const userRegistered = {
 
@@ -188,6 +188,10 @@ export default function Register() {
 
         const data = await response.json()
         console.log(data)
+
+        if (isLoading) {
+          return <Loader />
+        }
 
         navigate("/dashboard")
       }

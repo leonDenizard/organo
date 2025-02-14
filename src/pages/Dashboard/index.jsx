@@ -14,6 +14,7 @@ import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
+import { checkUserExists } from "../../services/firebase";
 
 export default function Dashboard() {
   const { user, logOut } = useAuth();
@@ -41,6 +42,12 @@ export default function Dashboard() {
           }
         })
 
+        const exists = await checkUserExists(user.uid)
+
+        console.log(exists)
+        if(!exists){
+          navigate("/register")
+        }
         
         const userUIDResponse = await userUIDQuery.json()
         
@@ -69,9 +76,8 @@ export default function Dashboard() {
               const userData = userUIDResponse
 
               setUserDataLogged(userData);
-
-              //console.log("USUARIO logado", userData)
             }
+
           } else {
             console.log("Nenhum documento encontrado");
           }
