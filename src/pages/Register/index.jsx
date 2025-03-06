@@ -13,6 +13,7 @@ import resizeImage from "../../functions/resizeImage";
 export default function Register() {
 
   const API_URL = import.meta.env.VITE_API_URL;
+  console.log("API_URL no frontend:", API_URL);
 
   const navigate = useNavigate();
 
