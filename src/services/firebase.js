@@ -20,6 +20,8 @@ const db = getFirestore(app);
 export const auth = getAuth(app);
 export { db, collection, addDoc }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const checkUserExists = async (uid) => {
 
   if (!uid) {
@@ -28,7 +30,7 @@ export const checkUserExists = async (uid) => {
 
   //console.log("UID firebase.js checkUserExists", uid)
   try {
-    const response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+    const response = await fetch(`${API_URL}/user/${uid}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'
