@@ -19,6 +19,8 @@ function Card({
   birthday,
   iconChild,
   child,
+
+  onClick
 }) {
   const link = formatWhatsAppLink(whats);
 
@@ -67,7 +69,8 @@ function Card({
   };
 
   return (
-    <div className="pt-2 pb-12 px-10 bg-card-bg">
+  
+    <div className="pt-2 pb-12 px-10 bg-card-bg" onClick={onClick}>
       <div className="w-full flex justify-center">
         <img
           src={imgProfile}

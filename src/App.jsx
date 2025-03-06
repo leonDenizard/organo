@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { checkUserExists } from "./services/firebase";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import Schedule from "./pages/Schedule";
+import UserDetail from "./pages/UserDetail"
 
 function App() {
   const { user } = useAuth()
@@ -36,6 +37,7 @@ function App() {
           <Route path="/register" element={<Register />}/>
           <Route path="/dashboard" element={<Dashboard />}/>
           <Route path="/schedule" element={<Schedule />}/>
+          <Route path="/user/:uid" element={<UserDetail />}/>
         </Route>
       </Routes>
     </Router>

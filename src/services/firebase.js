@@ -38,7 +38,7 @@ export const checkUserExists = async (uid) => {
     if (response.ok) {
 
       const data = await response.json()
-      console.log("Usuario encontrado funcao checkUserExists", data)
+      //console.log("Usuario encontrado funcao checkUserExists", data)
       return data
 
     }else{

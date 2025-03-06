@@ -11,6 +11,9 @@ import { checkUserExists } from "../../services/firebase";
 import resizeImage from "../../functions/resizeImage";
 
 export default function Register() {
+
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
 
   const { user, isLoading, setIsLoading } = useAuth();
@@ -20,7 +23,7 @@ export default function Register() {
   const uid = user.uid;
   const photoUrl = user.photoURL;
 
-  
+
 
   const [name, setName] = useState(user.displayName);
   const [whatsApp, setWhatsApp] = useState("");
@@ -57,7 +60,7 @@ export default function Register() {
   const [selectedChild, setSelectedChild] = useState(null)
   const [selectedPhoto, setSelectedPhoto] = useState(null)
 
-  
+
   const handleChangeTime = (id) => {
     setSelectedTime(selectedTime === id ? null : id);
   };
@@ -76,9 +79,9 @@ export default function Register() {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-  
+
     if (file) {
-      resizeImage(file, 300, (blob) => {
+      resizeImage(file, 200, (blob) => {
         const reader = new FileReader();
         reader.onload = () => {
           const base64String = reader.result;
@@ -86,9 +89,10 @@ export default function Register() {
         };
         reader.readAsDataURL(blob);
       });
-  
+
     }
   };
+
 
   const userRegistered = {
 
@@ -104,52 +108,65 @@ export default function Register() {
     surname: surname,
     birthday: birthday,
     child: selectedChild,
+    admin: false,
 
-  };
+  }
 
-  useEffect(() => {
 
-    const searchPhoto = async () => {
 
-      const response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+  const fetchImage = async (uid, photoUrl, setSelectedPhoto) => {
+
+    try {
+      const response = await fetch(`${API_URL}/user/${uid}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
+
 
       if (data.photoUrl) {
-        setSelectedPhoto(data.photoUrl);
+        setSelectedPhoto(data.photoUrl)
       } else {
-        setSelectedPhoto(photoUrl)
-      }
+        setSelectedPhoto(photoUrl);
 
-      const exists = await checkUserExists(uid)
-
-      if(exists){
-        setName(exists.name)
-        setWhatsApp(exists.whatsapp)
-        setSlack(exists.slack)
-        setSurname(exists.surname)
-        setBirthday(exists.birthday)
-        setSelectedTime(exists.time)
-        setSelectedManager(exists.manager)
-        setSelectedRole(exists.role)
-        setSelectedChild(exists.child)
       }
-      setIsLoading(false);
-      
+    } catch (error) {
+      console.error("Erro ao buscar a foto:", error);
+      setSelectedPhoto(photoUrl);
     }
 
-    searchPhoto()
 
-  }, [uid])
+    const exists = await checkUserExists(uid)
 
-  
+    if (exists) {
+      setName(exists.name)
+      setWhatsApp(exists.whatsapp)
+      setSlack(exists.slack)
+      setSurname(exists.surname)
+      setBirthday(exists.birthday)
+      setSelectedTime(exists.time)
+      setSelectedManager(exists.manager)
+      setSelectedRole(exists.role)
+      setSelectedChild(exists.child)
+    }
+  };
+
+  useEffect(() => {
+
+    fetchImage(uid, photoUrl, setSelectedPhoto)
+  }, [uid, photoUrl])
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (!selectedTime) return alert("Selecione seu horário.")
+    if (!selectedRole) return alert("Selecione seu cargo.")
+    if (!selectedManager) return alert("Selecione seu gestor(a).")
+    if (!selectedChild) return alert("Selecione se possui filhos.")
 
     try {
 
@@ -159,7 +176,7 @@ export default function Register() {
       let response
       if (exists) {
 
-        response = await fetch(`http://localhost:3000/api/user/${uid}`, {
+        response = await fetch(`${API_URL}/user/${uid}`, {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -167,11 +184,11 @@ export default function Register() {
           body: JSON.stringify(userRegistered)
 
         })
-
         navigate("/dashboard")
+
       } else {
-        
-        response = await fetch('http://localhost:3000/api/user', {
+
+        response = await fetch('${API_URL}/user', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -219,7 +236,7 @@ export default function Register() {
           <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
           <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true} />
           <Input onChange={handleSlack} title="@slack" value={slack} required={true} />
-          <Input onChange={handleSurname} title="Apelido" value={surname}/>
+          <Input onChange={handleSurname} title="Apelido" value={surname} />
           <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true} />
 
           <div>

@@ -2,8 +2,9 @@ export default function resizeImage(file, maxWidth, callback) {
     const reader = new FileReader();
     
     reader.readAsDataURL(file);
-    reader.onload = function(event) {
+    reader.onloadend = function(event) {
       const img = new Image();
+      img.crossOrigin = "anonymous";
       img.src = event.target.result;
   
       img.onload = function() {

@@ -30,12 +30,13 @@ export default function Dashboard() {
   const [onSelectFunction, setOnSelectFunction] = useState(null);
 
 
+  const API_URL = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     const fetchUserData = async () => {
       if (user) {
         //Retorna somente 1 usuário
-        const userUIDQuery = await fetch(`http://localhost:3000/api/user/${user.uid}`, {
+        const userUIDQuery = await fetch(`${API_URL}/user/${user.uid}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json'
@@ -51,7 +52,7 @@ export default function Dashboard() {
         
         const userUIDResponse = await userUIDQuery.json()
         
-        const allUserQuery = await fetch('http://localhost:3000/api/user/', {
+        const allUserQuery = await fetch(`${API_URL}/user/`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json'
@@ -142,7 +143,7 @@ export default function Dashboard() {
     setIsOpenModal(false);
   };
 
-  const roles = ["gerente", "super", "pleno", "jriv", "jriii", "jrii", "jri", "trial"];
+  const roles = ["gerente", "super", "pleno", "jriii", "jrii", "jri", "trial"];
   const sortByRule = (selectedRole) => {
     const sortedUsers = [...allUsers].filter(
       (user) => user.role === selectedRole
@@ -185,6 +186,9 @@ export default function Dashboard() {
     navigate("/")
   }
 
+  const isAdmin = userDataLogged.admin
+  console.log(isAdmin)
+
   return (
     <div className="container w-[95%] lg:w-[90%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
@@ -221,6 +225,7 @@ export default function Dashboard() {
                 birthday={user.birthday}
                 iconChild={<ChildIcon />}
                 child={user.child}
+                onClick={() => isAdmin && navigate(`/user/${user.uid}`)}
               />
             ))}
           </div>

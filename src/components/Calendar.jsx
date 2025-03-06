@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ButtonsSendSchedule from "./ButtonsSendSchedule";
 import LegendSchedule from "./LegendSchedule";
 
-const Calendar = ({ workedDays }) => {
+const Calendar = ({ workedDays, onDayClick }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
 
@@ -46,56 +46,46 @@ const Calendar = ({ workedDays }) => {
   return (
     <div className="calendar-container relative m-auto w-4/5 h-screen flex flex-col items-center justify-center">
       <div className="h-[600px]">
-      <div className="calendar-header flex gap-2">
+        <div className="calendar-header flex gap-2">
+        <ButtonsSendSchedule/>
         
-        <h2 className="text-6xl font-bold">
-          {currentDate.toLocaleString("default", { month: "2-digit" })} /{" "}
-          {currentDate.getFullYear()}
-        </h2>
-        
-      </div>
-
-      <div className="calendar-body relative top-8">
-        <div className="calendar-weekdays grid grid-cols-7">
-          {[
-            "Segunda",
-            "Terça",
-            "Quarta",
-            "Quinta",
-            "Sexta",
-            "Sábado",
-            "Domingo",
-          ].map((day, index) => (
-            <div
-              key={index}
-              className="weekday text-2xl flex items-center justify-center p-2 text-white"
-            >
-              {day}
-            </div>
-          ))}
+          <h2 className="text-6xl font-bold">
+            {new Date().toLocaleString("default", { month: "2-digit" })} /{" "}
+            {new Date().getFullYear()}
+          </h2>
         </div>
 
-        <div className="calendar-days grid grid-cols-7 border border-border-color relative top-4">
-          {daysInMonth.map((day, index) => {
-            const isWekeend = index % 7 === 5 || index % 7 === 6;
-
-            return (
-              <div
-                key={index}
-                className={`day ${day ? "" : "empty"} 
-                ${workedDays.includes(day) ? "bg-day-worked-week" : ""}
-                ${workedDays.includes(day) && isWekeend ? 'bg-weekend' : ''}
-              border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold`}
-              >
+        <div className="calendar-body relative top-8">
+          <div className="calendar-weekdays grid grid-cols-7">
+            {["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"].map((day, index) => (
+              <div key={index} className="weekday text-2xl flex items-center justify-center p-2 text-white">
                 {day}
               </div>
-            );
-          })}
+            ))}
+          </div>
+
+          <div className="calendar-days grid grid-cols-7 border border-border-color relative top-4">
+            {daysInMonth.map((day, index) => {
+              const isWeekend = index % 7 === 5 || index % 7 === 6;
+              const isWorked = workedDays.includes(day);
+
+              return (
+                <div
+                  key={index}
+                  className={`day ${day ? "" : "empty"} 
+                    ${isWorked ? "bg-day-worked-week" : ""}
+                    ${isWorked && isWeekend ? "bg-weekend" : ""}
+                    border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold cursor-pointer`}
+                  onClick={() => onDayClick(day)}
+                >
+                  {day}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <ButtonsSendSchedule />
       <LegendSchedule/>
-      </div>
     </div>
   );
 };
