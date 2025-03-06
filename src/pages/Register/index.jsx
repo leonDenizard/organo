@@ -189,7 +189,7 @@ export default function Register() {
 
       } else {
 
-        response = await fetch('${API_URL}/user', {
+        response = await fetch(`${API_URL}/user`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -198,6 +198,7 @@ export default function Register() {
         })
 
         if (!response.ok) {
+          console.log(`Erro na requisição: ${response.status}`);
           const errorData = await response.json()
           console.log(errorData)
 
