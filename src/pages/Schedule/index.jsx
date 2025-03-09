@@ -10,6 +10,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [loadindDay, setLoadingDay] = useState(null)
   const [userDataLogged, setUserDataLogged] = useState(null);
   const [workedDays, setWorkedDays] = useState([]);
 
@@ -61,6 +62,10 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     fetchUserData();
   }, [uid, user]);
 
+  if(isLoading){
+    <Loader/>
+  }
+
   // 🔄 Função para atualizar a escala
   const handleDayClick = async (day) => {
     if (!loggedUserData?.admin) {
@@ -71,6 +76,9 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     const formattedDate = `${String(day).padStart(2, "0")}-${String(currentMonth).padStart(2, "0")}-${currentYear}`;
   
     try {
+
+      //setIsLoading(true)
+      setLoadingDay(day)
       // 🔄 Busca a escala do usuário
       const scheduleResponse = await fetch(`${API_URL}/schedule/${selectedUserData.uid}`);
   
@@ -131,6 +139,9 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
   
     } catch (error) {
       console.error("❌ Erro ao atualizar escala:", error);
+    }finally{
+      //setIsLoading(false)
+      setLoadingDay(null)
     }
   };
   
@@ -158,7 +169,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
       {!isLoading ? (
         <>
           {showHeader && <Header name={firstName} img={profilePhoto} logout={handleLogOut} />}
-          <Calendar workedDays={workedDays} onDayClick={handleDayClick} />
+          <Calendar workedDays={workedDays} onDayClick={handleDayClick} loadindDay={loadindDay}/>
 
         </>
 

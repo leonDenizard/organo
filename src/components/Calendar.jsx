@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import ButtonsSendSchedule from "./ButtonsSendSchedule";
 import LegendSchedule from "./LegendSchedule";
+import Loader from "./Loader";
 
-const Calendar = ({ workedDays, onDayClick }) => {
+const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
 
@@ -68,6 +69,7 @@ const Calendar = ({ workedDays, onDayClick }) => {
             {daysInMonth.map((day, index) => {
               const isWeekend = index % 7 === 5 || index % 7 === 6;
               const isWorked = workedDays.includes(day);
+              const isLoading = loadindDay === day && day !== null;
 
               return (
                 <div
@@ -78,7 +80,8 @@ const Calendar = ({ workedDays, onDayClick }) => {
                     border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold cursor-pointer`}
                   onClick={() => onDayClick(day)}
                 >
-                  {day}
+                  {isLoading ? <Loader/> : day}
+                  
                 </div>
               );
             })}
