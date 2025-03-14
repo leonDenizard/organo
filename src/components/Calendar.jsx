@@ -80,7 +80,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                     border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold cursor-pointer`}
                   onClick={() => onDayClick(day)}
                 >
-                  {isLoading ? <Loader/> : day}
+                  {isLoading ? "..." : day}
                   
                 </div>
               );

@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const uploadScheduleToBD = async (json) => {
   try {
-    const schedule = await fetch('http://localhost:3000/api/schedule/', {
+    const schedule = await fetch(`${API_URL}/api/schedule/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -13,7 +15,7 @@ export const uploadScheduleToBD = async (json) => {
 
     
     if(response.length === 0){
-      const uploadSchedule = await fetch(`http://localhost:3000/api/schedule/`, {
+      const uploadSchedule = await fetch(`${API_URL}/api/schedule/`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json'
