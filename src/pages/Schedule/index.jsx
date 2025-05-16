@@ -165,7 +165,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
   }
 
   return (
-    <div className="container w-[90%] m-auto min-h-screenwd">
+    <div className="container w-[90%] m-auto min-h-screen">
       {!isLoading ? (
         <>
           {showHeader && <Header name={firstName} img={profilePhoto} logout={handleLogOut} />}

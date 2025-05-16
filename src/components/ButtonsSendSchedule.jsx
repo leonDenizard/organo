@@ -1,10 +1,11 @@
 import { uploadScheduleToBD } from "../services/schedule"
-import schedule from "../mockup/outubro.json"
 import { useState } from "react"
 
 export default function ButtonsSendSchedule() {
 
   const [file, setFile] = useState(null)
+
+  const API_URL = import.meta.env.VITE_API_URL;
 
 
   const handleScheduleJson = (e) =>{
@@ -20,7 +21,7 @@ export default function ButtonsSendSchedule() {
 
   const handleUpload = async () => {
     if(!file){
-      console.log("Nenhum arquivo encontrado")
+      alert("Nenhum arquivo encontrado")
       return
     }
 
@@ -32,6 +33,7 @@ export default function ButtonsSendSchedule() {
 
         const response = await uploadScheduleToBD(jsonData)
 
+        alert("Escala inserida com sucesso")
       } catch (error) {
         console.log("Erro ao processar o arquivo JSON")
       }
@@ -39,9 +41,29 @@ export default function ButtonsSendSchedule() {
     reader.readAsText(file)
     setFile(null)
   }
+
+  const handleDeleteSchedule = async () => {
+
+    try {
+      const response = await fetch(`${API_URL}/schedule/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+
+      if(!response.ok){
+        throw new Error("Erro ao deletar escala")
+      }
+
+      alert("Escala deletada com sucesso")
+    } catch (error) {
+      console.error("Erro: ", error)
+    }
+  }
   
   return (
-    <div className="absolute top-10">
+    <div className="absolute top-10 flex justify-between w-full">
       <input
         type="file"
         accept=".json"
@@ -49,14 +71,21 @@ export default function ButtonsSendSchedule() {
         style={{ display: 'none' }}
         id="fileInput"
       />
-      <label htmlFor="fileInput" className="px-4 py-2 bg-blue-500 text-white rounded cursor-pointer">
+      <label htmlFor="fileInput" className="flex-1 px-4 py-2 bg-blue-500 text-white rounded cursor-pointer font-semibold">
         {file ? file.name : "Escolher o arquivo"}
       </label>
       <button
-        className="px-4 py-2 bg-bubble-red text-white rounded ml-2"
+        className="px-4 py-2 bg-green-600 text-white rounded-full ml-2 font-semibold"
         onClick={handleUpload}
       >
         Enviar Escala
+      </button>
+
+      <button
+        className="px-4 py-2 bg-bubble-red text-white rounded-full ml-2 font-semibold"
+        onClick={handleDeleteSchedule}
+      >
+        Deletar Escala
       </button>
       
     </div>
