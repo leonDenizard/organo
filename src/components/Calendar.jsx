@@ -88,7 +88,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
       </div>
       <LegendSchedule/>
 
-      <ButtonsSendSchedule/>
+      {/* <ButtonsSendSchedule/> */}
     </div>
   );
 };

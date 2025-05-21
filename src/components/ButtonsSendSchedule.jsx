@@ -63,7 +63,7 @@ export default function ButtonsSendSchedule() {
   }
   
   return (
-    <div className="absolute top-10 flex justify-between w-full">
+    <div className="relative flex justify-between w-4/5 m-auto">
       <input
         type="file"
         accept=".json"
