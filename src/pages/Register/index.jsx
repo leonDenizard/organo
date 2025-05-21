@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
 import Loader from "../../components/Loader";
 import { checkUserExists } from "../../services/firebase";
-import resizeImage from "../../functions/resizeImage";
+import resizeImage from "../../functions/resizeImage"
 
 export default function Register() {
 
@@ -228,6 +228,7 @@ export default function Register() {
   }
 
   return (
+    
     <form
       onSubmit={handleSubmit}
       className="relative"

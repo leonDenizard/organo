@@ -5,6 +5,7 @@ import Calendar from "../../components/Calendar";
 import Header from "../../components/Header";
 import { useNavigate } from "react-router-dom";
 import ButtonsSendSchedule from "../../components/ButtonsSendSchedule";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Schedule({ showHeader = true, onDayClick, uid }) {
   const { user, logOut } = useAuth();
@@ -174,8 +175,10 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
+
       {!isLoading ? (
         <>
+          <Breadcrumb/>
           {showHeader && <Header name={firstName} img={profilePhoto} logout={handleLogOut} />}
           <Calendar workedDays={workedDays} onDayClick={handleDayClick} loadindDay={loadindDay} />
           {isAdmin && <ButtonsSendSchedule />}
