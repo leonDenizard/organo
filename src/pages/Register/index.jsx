@@ -17,13 +17,14 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const { user, isLoading, setIsLoading } = useAuth();
+  let { user, isLoading, setIsLoading } = useAuth();
 
+  const [isFetchingImage, setIsFetchingImage] = useState(false);
 
+  // setIsLoading(true)
   const email = user.email;
   const uid = user.uid;
   const photoUrl = user.photoURL;
-
 
 
   const [name, setName] = useState(user.displayName);
@@ -117,7 +118,9 @@ export default function Register() {
 
   const fetchImage = async (uid, photoUrl, setSelectedPhoto) => {
 
+    setIsFetchingImage(true);
     try {
+
       const response = await fetch(`${API_URL}/user/${uid}`, {
         method: 'GET',
         headers: {
@@ -153,12 +156,17 @@ export default function Register() {
       setSelectedRole(exists.role)
       setSelectedChild(exists.child)
     }
+
+    setIsFetchingImage(false);
+
   };
 
   useEffect(() => {
 
-    fetchImage(uid, photoUrl, setSelectedPhoto)
-  }, [uid, photoUrl])
+    if (uid) {
+      fetchImage(uid, user.photoURL, setSelectedPhoto);
+    }
+  }, [uid])
 
 
   const handleSubmit = async (event) => {
@@ -169,6 +177,7 @@ export default function Register() {
     if (!selectedManager) return alert("Selecione seu gestor(a).")
     if (!selectedChild) return alert("Selecione se possui filhos.")
 
+    setIsLoading(true)
     try {
 
       const exists = await checkUserExists(uid)
@@ -208,27 +217,27 @@ export default function Register() {
         const data = await response.json()
         console.log(data)
 
-        if (isLoading) {
-          return <Loader />
-        }
-
         navigate("/dashboard")
       }
 
 
     } catch (error) {
       console.error("Erro na requisição:", error)
+    }finally{
+      setIsLoading(false)
     }
+
   };
 
 
 
-  if (isLoading) {
-    return <Loader />
+  if (isLoading || isFetchingImage) {
+    return <Loader />;
   }
+  setIsLoading(false)
 
   return (
-    
+
     <form
       onSubmit={handleSubmit}
       className="relative"
@@ -244,7 +253,9 @@ export default function Register() {
 
           <div>
             <ButtonUpload onChange={handleFileChange} disabled={false} />
-            <img src={selectedPhoto} className="absolute top-0 right-0 w-28 h-28 rounded-full object-cover" />
+            <img src={selectedPhoto}
+              className="absolute top-0 right-0 w-28 h-28 rounded-full object-cover"
+            />
           </div>
         </div>
 
