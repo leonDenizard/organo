@@ -20,13 +20,9 @@ export default function Breadcrumb() {
                 {breadcrumbs.map((crumb, index) => (
                     <span key={crumb.to} className="flex items-center space-x-1">
                         <span className="mx-1 text-white">{'>'}</span>
-                        {index === breadcrumbs.length - 1 ? (
+                        
                             <span className="font-semibold text-white">{capitalize(crumb.label)}</span>
-                        ) : (
-                            <Link to={crumb.to} className="text-blue-600 hover:underline">
-                                {capitalize(crumb.label)}
-                            </Link>
-                        )}
+                        
                     </span>
                 ))}
             </nav>

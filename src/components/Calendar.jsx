@@ -45,7 +45,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   
 
   return (
-    <div className="calendar-container relative m-auto w-4/5 h-screen flex flex-col items-center justify-center">
+    <div className="calendar-container relative m-auto lg:w-4/5 h-screen flex flex-col items-center justify-center">
       <div className="h-[600px]">
         <div className="calendar-header flex gap-2">        
           <h2 className="text-6xl font-bold">
@@ -75,7 +75,11 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                   className={`day ${day ? "" : "empty"} 
                     ${isWorked ? "bg-day-worked-week" : ""}
                     ${isWorked && isWeekend ? "bg-weekend" : ""}
-                    border border-border-color flex justify-center items-center p-6 px-10 text-2xl font-bold cursor-pointer`}
+                    border border-border-color flex justify-center items-center
+                    p-4 px-3 text-xl font-bold cursor-pointer
+                    md:px-10 md:p-6 md:text-2xl
+                    lg:p-6 lg:px-10 lg:text-3xl 
+                     `}
                   onClick={() => onDayClick(day)}
                 >
                   {isLoading ? "..." : day}
