@@ -19,7 +19,8 @@ function Card({
   birthday,
   iconChild,
   child,
-
+  iconInterval,
+  interval,
   onClick
 }) {
   const link = formatWhatsAppLink(whats);
@@ -45,7 +46,8 @@ function Card({
     teteu: "Matheus Silva",
     duda: "Duda",
     guto: "Augusto Cezar",
-    luan: "Luan"
+    luan: "Luan",
+    ricardo: "Ricardo"
   };
   const formatSuper = (value) => {
     if (supers[value]) {
@@ -128,6 +130,10 @@ function Card({
         <div className="w-full flex gap-2 items-center">
           <div>{iconSuper}</div>
           <p>{formattedSuper}</p>
+        </div>
+        <div className="w-full flex gap-2 items-center">
+          <div className="bg-border-color rounded-full">{iconInterval}</div>
+          <p>{interval}</p>
         </div>
 
         <div className="w-full flex gap-2 items-center">

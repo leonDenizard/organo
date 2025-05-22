@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
 import { checkUserExists } from "../../services/firebase";
+import Coffe from "../../components/icons/Coffe";
 
 export default function Dashboard() {
   const { user, logOut } = useAuth();
@@ -222,6 +223,8 @@ export default function Dashboard() {
                 hour={user.time}
                 iconSuper={<Check />}
                 supe={user.manager}
+                iconInterval={<Coffe/>}
+                interval={user.interval}
                 iconBirthday={<Conffeti />}
                 birthday={user.birthday}
                 iconChild={<ChildIcon />}

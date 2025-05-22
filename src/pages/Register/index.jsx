@@ -19,19 +19,20 @@ export default function Register() {
 
   let { user, isLoading, setIsLoading } = useAuth();
 
-  const [isFetchingImage, setIsFetchingImage] = useState(false);
-
+  
   // setIsLoading(true)
   const email = user.email;
   const uid = user.uid;
   const photoUrl = user.photoURL;
-
-
+  
+  
   const [name, setName] = useState(user.displayName);
   const [whatsApp, setWhatsApp] = useState("");
   const [slack, setSlack] = useState("");
   const [surname, setSurname] = useState("");
   const [birthday, setBirthday] = useState("")
+  const [isFetchingImage, setIsFetchingImage] = useState(false);
+  const [interval, setInterval] = useState("13:00")
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -95,6 +96,11 @@ export default function Register() {
     }
   };
 
+  const handleInterval = (event) => {
+    setInterval(event.target.value)
+    console.log("Intervalo selecionado: ", event.target.value)
+  }
+
 
   const userRegistered = {
 
@@ -111,7 +117,7 @@ export default function Register() {
     birthday: birthday,
     child: selectedChild,
     admin: false,
-
+    interval: interval
   }
 
 
@@ -223,7 +229,7 @@ export default function Register() {
 
     } catch (error) {
       console.error("Erro na requisição:", error)
-    }finally{
+    } finally {
       setIsLoading(false)
     }
 
@@ -234,7 +240,7 @@ export default function Register() {
   if (isLoading || isFetchingImage) {
     return <Loader />;
   }
-  setIsLoading(false)
+  //setIsLoading(false)
 
   return (
 
@@ -271,6 +277,7 @@ export default function Register() {
               title="10:00 às 19:00"
               id="morning"
             />
+
             <CheckBox
               isChecked={selectedTime === "afternoon"}
               onChange={() => handleChangeTime("afternoon")}
@@ -285,6 +292,7 @@ export default function Register() {
               title="22:00 às 00:00"
               id="night"
             />
+
           </div>
 
           <div className="">
@@ -405,7 +413,7 @@ export default function Register() {
 
         <div>
           <h1 className="text-3xl font-semibold mt-4">Possui filhos?</h1>
-          <div className="flex mt-5 justify-between -mr-8 gap-10">
+          <div className="relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xl:gap-4">
             <div>
               <CheckBox
                 isChecked={selectedChild === "yes"}
@@ -422,7 +430,44 @@ export default function Register() {
                 id="no"
               />
             </div>
+
+            <div className="flex flex-col ">
+            <label htmlFor="horario" className="text-2xl font-semibold lg:-mt-10">Selecione o horário do intervalo</label>
+            <select id="horario" 
+              name="horario" 
+              className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
+              value={interval}
+              onChange={handleInterval}
+            >
+              <option value="13:00">13:00</option>
+              <option value="13:30">13:30</option>
+              <option value="14:00">14:00</option>
+              <option value="14:30">14:30</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="15:30">15:30</option>
+              <option value="16:00">16:00</option>
+              <option value="16:30">16:30</option>
+              <option value="17:00">17:00</option>
+              <option value="17:30">17:30</option>
+              <option value="18:00">18:00</option>
+              <option value="18:30">18:30</option>
+              <option value="19:00">19:00</option>
+              <option value="19:30">19:30</option>
+              <option value="20:00">20:00</option>
+              <option value="20:30">20:30</option>
+              <option value="21:00">21:00</option>
+              <option value="21:30">21:30</option>
+              <option value="22:00">22:00</option>
+              <option value="22:30">22:30</option>
+            </select>
           </div>
+
+          </div>
+
+
+          
+
         </div>
         <ButtonSubmit text="Cadastrar" />
       </div>
