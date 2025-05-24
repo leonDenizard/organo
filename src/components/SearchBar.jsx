@@ -1,6 +1,6 @@
 export default function SearchBar({handleInputName}) {
   return (
-    <div className="relative top-8 w-full flex justify-center">
+    <div className="relative top-8 w-[90%] m-auto lg:w-full lg:flex lg:justify-center">
       <div className="relative  lg:w-[60vw]">
         <div className="absolute top-[10px] lg:top-[15px] right-[24px]">
           <svg

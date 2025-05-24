@@ -45,8 +45,8 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   
 
   return (
-    <div className="calendar-container relative m-auto lg:w-4/5 h-screen flex flex-col items-center justify-center">
-      <div className="h-[600px]">
+    <div className="calendar-container relative m-auto lg:w-4/5 flex flex-col items-center justify-start top-12">
+      <div className="relative">
         <div className="calendar-header flex gap-2">        
           <h2 className="text-6xl font-bold">
             {new Date().toLocaleString("default", { month: "2-digit" })} /{" "}
