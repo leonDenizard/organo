@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { useAuth } from "../../context/AuthProvider";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import Header from "../../components/Header";
@@ -38,7 +37,7 @@ export default function UserDetail() {
 
     if (isLoading) return <Loader />
 
-    console.log(userData)
+    //console.log(userData)
 
     return (
         <div className="container w-[90%] m-auto">

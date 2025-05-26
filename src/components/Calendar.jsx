@@ -75,8 +75,9 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                   className={`day ${day ? "" : "empty"} 
                     ${isWorked ? "bg-day-worked-week" : ""}
                     ${isWorked && isWeekend ? "bg-weekend" : ""}
+                    relative
                     border border-border-color flex justify-center items-center
-                    p-4 px-3 text-xl font-bold cursor-pointer
+                    min-w-11 min-h-12 p-4 px-6 text-xl font-bold cursor-pointer
                     md:px-10 md:p-6 md:text-2xl
                     lg:p-6 lg:px-10 lg:text-3xl 
                      `}

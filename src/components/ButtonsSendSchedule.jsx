@@ -68,13 +68,8 @@ export default function ButtonsSendSchedule() {
   
   return (
     <div className="
-      relative grid grid-cols-1 gap-3 w-[100%] p-3 px-4 top-32
-      md:flex md:justify-between
-      md:rounded-full border-2 border-border-color
-      md:m-auto
-      md:text-nowrap
-      lg:w-[88%] 
-      2xl:w-[60%]
+      relative grid grid-cols-1 gap-3 p-3 top-32
+      md:flex md:justify-center
       ">
       <input
         type="file"
@@ -83,7 +78,7 @@ export default function ButtonsSendSchedule() {
         style={{ display: 'none' }}
         id="fileInput"
       />
-      <label htmlFor="fileInput" className="rounded-full flex-1 px-4 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-white cursor-pointer font-semibold">
+      <label htmlFor="fileInput" className="rounded-full px-6 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-white cursor-pointer font-semibold">
         {file ? file.name : "➕ Escolher o arquivo"}
       </label>
       
