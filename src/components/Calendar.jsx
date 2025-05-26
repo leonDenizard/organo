@@ -1,7 +1,5 @@
 import { useState, useEffect } from "react";
-import ButtonsSendSchedule from "./ButtonsSendSchedule";
 import LegendSchedule from "./LegendSchedule";
-import Loader from "./Loader";
 
 const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -73,8 +71,8 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                 <div
                   key={index}
                   className={`day ${day ? "" : "empty"} 
-                    ${isWorked ? "bg-day-worked-week" : ""}
-                    ${isWorked && isWeekend ? "bg-weekend" : ""}
+                    ${isWorked ? "bg-day-worked-week hover:bg-backgound transition-all duration-300" : ""}
+                    ${isWorked && isWeekend ? "bg-weekend hover:bg-backgound transition-all duration-300" : ""}
                     relative
                     border border-border-color flex justify-center items-center
                     min-w-11 min-h-12 p-4 px-6 text-xl font-bold cursor-pointer
