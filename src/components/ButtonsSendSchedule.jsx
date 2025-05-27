@@ -49,7 +49,7 @@ export default function ButtonsSendSchedule() {
   const handleDeleteSchedule = async () => {
 
     try {
-      const response = await fetch(`https://server-ten-ivory.vercel.app/api/schedule`, {
+      const response = await fetch(`${API_URL}/schedule`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
