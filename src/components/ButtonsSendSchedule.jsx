@@ -46,6 +46,8 @@ export default function ButtonsSendSchedule() {
     setFile(null)
   }
 
+  console.log("API Vercel", API_URL)
+
   const handleDeleteSchedule = async () => {
 
     try {
