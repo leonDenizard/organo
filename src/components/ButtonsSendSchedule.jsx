@@ -59,7 +59,7 @@ export default function ButtonsSendSchedule() {
       if(!response.ok){
         throw new Error(`Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`)
       }
-
+      console.log(`Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`)
       alert("Escala deletada com sucesso")
     } catch (error) {
       console.error("Erro: ", error)
