@@ -49,7 +49,7 @@ export default function ButtonsSendSchedule() {
   const handleDeleteSchedule = async () => {
 
     try {
-      const response = await fetch(`${API_URL}/schedule/`, {
+      const response = await fetch(`${API_URL}/schedule`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -57,7 +57,7 @@ export default function ButtonsSendSchedule() {
       })
 
       if(!response.ok){
-        throw new Error("Erro ao deletar escala")
+        throw new Error(`Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`)
       }
 
       alert("Escala deletada com sucesso")
