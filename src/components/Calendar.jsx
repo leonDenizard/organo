@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import LegendSchedule from "./LegendSchedule";
 
 const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
+  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     const year = currentDate.getFullYear();
@@ -65,8 +66,8 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
             {daysInMonth.map((day, index) => {
               const isWeekend = index % 7 === 5 || index % 7 === 6;
               const isWorked = workedDays.includes(day);
-              const isLoading = loadindDay === day && day !== null;
-              //loadindDay === day && day !== null;
+              const isLoading = loadindDay === day && day !== null
+              //;
               
 
               return (
@@ -81,11 +82,15 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                     md:px-10 md:p-6 md:text-2xl
                     lg:p-6 lg:px-10 lg:text-3xl 
                      `}
-                  onClick={() => onDayClick(day)}
+                  onClick={() => {
+                    startTransition(() => {
+                      onDayClick(day)
+                    })
+                  }}
                 >
                   {isLoading ? 
                     (
-                      <div className="absolute w-10 h-10 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                      <div className="absolute w-10 h-10 border-4 border-t-blue-400 border-gray-300 rounded-full animate-spin"></div>
                     ) : 
                     
                     (day)
