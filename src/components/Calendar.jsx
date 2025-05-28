@@ -66,6 +66,8 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
               const isWeekend = index % 7 === 5 || index % 7 === 6;
               const isWorked = workedDays.includes(day);
               const isLoading = loadindDay === day && day !== null;
+              //loadindDay === day && day !== null;
+              
 
               return (
                 <div
@@ -81,7 +83,13 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                      `}
                   onClick={() => onDayClick(day)}
                 >
-                  {isLoading ? "..." : day}
+                  {isLoading ? 
+                    (
+                      <div className="absolute w-10 h-10 border-4 border-t-black border-gray-300 rounded-full animate-spin"></div>
+                    ) : 
+                    
+                    (day)
+                  }
                   
                 </div>
               );
