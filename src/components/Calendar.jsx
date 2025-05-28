@@ -1,10 +1,9 @@
-import { useState, useEffect, useTransition } from "react";
+import { useState, useEffect } from "react";
 import LegendSchedule from "./LegendSchedule";
 
 const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
-  const [isPending, startTransition] = useTransition()
 
   useEffect(() => {
     const year = currentDate.getFullYear();
@@ -82,11 +81,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                     md:px-10 md:p-6 md:text-2xl
                     lg:p-6 lg:px-10 lg:text-3xl 
                      `}
-                  onClick={() => {
-                    startTransition(() => {
-                      onDayClick(day)
-                    })
-                  }}
+                  onClick={() => onDayClick(day)}
                 >
                   {isLoading ? 
                     (

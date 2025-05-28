@@ -45,6 +45,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
         const workedDaysArray = [];
         schedule.forEach((item) => {
           const dayData = item.schedule;
+          console.log("DIA daydata", dayData)
           for (const [date, uids] of Object.entries(dayData)) {
             if (uids.includes(userUIDToFetch))
               workedDaysArray.push(parseInt(date.split("-")[0], 10));
@@ -53,7 +54,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
 
         setWorkedDays(workedDaysArray);
       } catch (error) {
-        console.error("Erro ao buscar dados:", error);
+        console.error("Erro ao buscar dados ou usuário não está escala", error);
       } finally {
         setIsLoading(false);
       }
@@ -73,13 +74,18 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
       return;
     }
 
-    const formattedDate = `
-    ${String(day).padStart(2, "0")}
-    -${String(currentMonth).padStart(2, "0")}
-    -${currentYear}`;
+    const formattedDate = `${String(day).padStart(2, "0")}-${String(currentMonth).padStart(2, "0")}-${currentYear}`;
 
+    console.log(formattedDate)
     try {
       setLoadingDay(day);
+
+      
+
+      // const response = await fetch(`${API_URL}/schedule/${selectedUserData.uid}`)
+      // const scheduleData = await response.json()
+
+      // console.log(scheduleData)
 
       //🔄 POST para updateSchedule
       const response = await fetch(`${API_URL}/schedule/update`, {
