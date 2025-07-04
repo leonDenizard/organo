@@ -37,7 +37,7 @@ export default function FilterBar({
       </div>
       <div className="
       absolute pointer-events-none right-0 top-0 h-full w-16 
-      bg-gradient-to-l from-black/50 to-transparent
+      bg-gradient-to-l from-backgound to-transparent
       lg:hidden"></div>
     </div>
   );

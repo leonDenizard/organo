@@ -1,49 +1,41 @@
-import Signin from "./pages/Sigin";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-} from "react-router-dom";
-import Register from "./pages/Register";
-import { useAuth } from "./context/AuthProvider";
-import Dashboard from "./pages/Dashboard";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useEffect, useState } from "react";
+
+import Signin from "./pages/Sigin";
+import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
+import Schedule from "./pages/Schedule";
+import UserDetail from "./pages/UserDetail";
+
 import { checkUserExists } from "./services/firebase";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import Schedule from "./pages/Schedule";
-import UserDetail from "./pages/UserDetail"
+import { useAuth } from "./context/AuthProvider";
+import { AdminRoute } from "./components/AdminRoute";
 
 function App() {
-  const { user } = useAuth()
-  const [userExists, setUserExists] = useState(null)
+  const { googleUser, backendUser, isLoading } = useAuth();
+  const [userExists, setUserExists] = useState(null);
 
-  useEffect(() => {
-    const verifyUser = async () => {
-      if (user && user.uid) {
-        const exists = await checkUserExists(user.uid)
-        setUserExists(exists);
-      }
-    };
-    verifyUser();
-  }, [user]);
-  
-  
+  console.log("Dados do Google:", googleUser);
+  console.log("Dados do back:", backendUser);
 
   return (
     <Router>
       <Routes>
         <Route path={"/"} element={<Signin />} />
         <Route element={<ProtectedRoute />}>
-          <Route path="/register" element={<Register />}/>
-          <Route path="/dashboard" element={<Dashboard />}/>
-          <Route path="/schedule" element={<Schedule />}/>
-          <Route path="/user/:uid" element={<UserDetail />}/>
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/schedule" element={<Schedule />} />
+          <Route path="/user/:uid" element={<UserDetail />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
+          <Route path="/admin" element={<UserDetail />} />
         </Route>
       </Routes>
     </Router>
   );
 }
 
-
 export default App;
-

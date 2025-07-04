@@ -17,16 +17,16 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  let { user, isLoading, setIsLoading } = useAuth();
+  let { googleUser, isLoading, setIsLoading } = useAuth();
 
   
   // setIsLoading(true)
-  const email = user.email;
-  const uid = user.uid;
-  const photoUrl = user.photoURL;
+  const email = googleUser.email;
+  const uid = googleUser.uid;
+  const photoUrl = googleUser.photoURL;
   
   
-  const [name, setName] = useState(user.displayName);
+  const [name, setName] = useState(googleUser.displayName);
   const [whatsApp, setWhatsApp] = useState("");
   const [slack, setSlack] = useState("");
   const [surname, setSurname] = useState("");
@@ -170,7 +170,7 @@ export default function Register() {
   useEffect(() => {
 
     if (uid) {
-      fetchImage(uid, user.photoURL, setSelectedPhoto);
+      fetchImage(uid, googleUser.photoURL, setSelectedPhoto);
     }
   }, [uid])
 

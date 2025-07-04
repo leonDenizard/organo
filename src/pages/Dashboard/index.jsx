@@ -18,7 +18,7 @@ import { checkUserExists } from "../../services/firebase";
 import Coffe from "../../components/icons/Coffe";
 
 export default function Dashboard() {
-  const { user, logOut } = useAuth();
+  const { googleUser, logOut } = useAuth();
   const navigate = useNavigate();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
@@ -36,16 +36,16 @@ export default function Dashboard() {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (user) {
+      if (googleUser) {
         //Retorna somente 1 usuário
-        const userUIDQuery = await fetch(`${API_URL}/user/${user.uid}`, {
+        const userUIDQuery = await fetch(`${API_URL}/user/${googleUser.uid}`, {
           method: "GET",
           headers: {
             'Content-Type': 'application/json'
           }
         })
 
-        const exists = await checkUserExists(user.uid)
+        const exists = await checkUserExists(googleUser.uid)
 
         console.log(exists)
         if(!exists){
@@ -95,7 +95,7 @@ export default function Dashboard() {
     };
 
     fetchUserData();
-  }, [user]);
+  }, [googleUser]);
 
   let firstName = "";
   let profilePhoto = "";

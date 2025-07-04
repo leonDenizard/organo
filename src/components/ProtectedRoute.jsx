@@ -3,15 +3,13 @@ import { useAuth } from "../context/AuthProvider"
 import Loader from "./Loader"
 
 export const ProtectedRoute = () => {
-    const { user, isLoading } = useAuth()
+    const { googleUser, backendUser, isLoading } = useAuth()
 
-    const outlet = (
+    
 
-        <Outlet />
-    )
+    if (isLoading) return <Loader />;
 
-    if(isLoading){
-        return <Loader/>
-    }
-    return user ?  outlet : <Navigate to="/" />
+    if (!googleUser) return <Navigate to="/" />;
+
+    return <Outlet />;
 }
