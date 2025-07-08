@@ -7,9 +7,15 @@ export const ProtectedRoute = () => {
 
     
 
-    if (isLoading) return <Loader />;
+    if (isLoading){
+        return <Loader/>
+    }
 
-    if (!googleUser) return <Navigate to="/" />;
+    if(!googleUser){
+        console.log("Não achei nada de google user", googleUser, backendUser)
+        return <Navigate to="/"/>
+    }
+    
 
     return <Outlet />;
 }

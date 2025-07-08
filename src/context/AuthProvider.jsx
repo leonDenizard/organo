@@ -10,46 +10,33 @@ function AuthProvider({ children }) {
   const [backendUser, setBackendUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      
-      setGoogleUser(user);
-    });
-
-    return () => {
-      unsubscribe();
-    };
-    
-  }, []);
-
-
-
-  useEffect(() => {
-    const fetchBackendUser = async () => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsLoading(true);
-      if (googleUser && googleUser.uid) {
-
+      
+      setGoogleUser(user)
+      if (user && user.uid) {
         try {
-          const backendData = await checkUserExists(googleUser.uid);
-          
+          const backendData = await checkUserExists(user.uid);
+
           if (backendData) {
             setBackendUser(backendData);
           } else {
             setBackendUser(null);
           }
         } catch (error) {
-          console.error("Erro buscando usuário no backend AUTHPROVIDER", error);
-          setBackendUser(null);
-        } finally {
-          setIsLoading(false);
+          console.log("Erro ao buscar usuário no back authprovider", error);
         }
       } else {
-        // Se não tem firebaseUser, limpa backendUser e loading
-        setBackendUser(null);
-        setIsLoading(false);
+        setGoogleUser(user);
       }
+
+      setIsLoading(false);
+    });
+
+    return () => {
+      unsubscribe();
     };
-    fetchBackendUser();
-  }, [googleUser]);
+  }, []);
 
   const logOut = async () => {
     await auth.signOut();

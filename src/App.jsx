@@ -7,14 +7,12 @@ import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
 import UserDetail from "./pages/UserDetail";
 
-import { checkUserExists } from "./services/firebase";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { useAuth } from "./context/AuthProvider";
 import { AdminRoute } from "./components/AdminRoute";
 
 function App() {
   const { googleUser, backendUser, isLoading } = useAuth();
-  const [userExists, setUserExists] = useState(null);
 
   console.log("Dados do Google:", googleUser);
   console.log("Dados do back:", backendUser);
