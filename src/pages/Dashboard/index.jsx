@@ -32,7 +32,6 @@ export default function Dashboard() {
 
 
   const API_URL = import.meta.env.VITE_API_URL
-  console.log("API_URL no frontend:", API_URL)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -47,7 +46,7 @@ export default function Dashboard() {
 
         const exists = await checkUserExists(googleUser.uid)
 
-        console.log(exists)
+       
         if(!exists){
           navigate("/register")
         }
@@ -189,8 +188,6 @@ export default function Dashboard() {
   }
 
   const isAdmin = userDataLogged.admin
-  console.log(isAdmin)
-
   return (
     <div className="container w-[95%] lg:w-[90%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (

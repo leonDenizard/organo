@@ -1,18 +1,14 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import Loader from "./Loader";
 
 export const AdminRoute = () => {
-  const { user } = useAuth();
+  const { backendUser, isLoading } = useAuth();
 
   
 
-  if (!user) {
+  if(isLoading) return <Loader/>
 
-    console.log("isnt admin component AdminRoute")
-    return <Navigate to="/" />;
-  }
-
-  if (!user.admin) return <Navigate to="/dashboard" />;
-
+  console.log("BACKEEND USER", backendUser)
   return <Outlet />;
 };

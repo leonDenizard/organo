@@ -9,13 +9,47 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [backendUser, setBackendUser] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setIsLoading(true);
-      
-      setGoogleUser(user)
+
+      setGoogleUser(user);
       if (user && user.uid) {
         try {
+          const response = await fetch(`${API_URL}/user`);
+          const users = await response.json();
+
+          if (users.length === 0) {
+            console.log("Ninguem nessa bagaça");
+
+            const firstUser = {
+              uid: user.uid,
+              name: user.displayName,
+              email: user.email,
+              admin: true,
+            };
+
+            const createUserResponse = await fetch(`${API_URL}/user`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(firstUser),
+            });
+            if (!createUserResponse.ok) {
+              console.log(`Erro na requisição: ${response.status}`);
+              const errorData = await response.json();
+              console.log(errorData);
+
+              return;
+            }
+
+            const data = await createUserResponse.json();
+            console.log(data);
+          }
+
           const backendData = await checkUserExists(user.uid);
 
           if (backendData) {

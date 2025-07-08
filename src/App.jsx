@@ -14,9 +14,6 @@ import { AdminRoute } from "./components/AdminRoute";
 function App() {
   const { googleUser, backendUser, isLoading } = useAuth();
 
-  console.log("Dados do Google:", googleUser);
-  console.log("Dados do back:", backendUser);
-
   return (
     <Router>
       <Routes>

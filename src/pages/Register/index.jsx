@@ -183,7 +183,6 @@ export default function Register() {
     if (!selectedManager) return alert("Selecione seu gestor(a).")
     if (!selectedChild) return alert("Selecione se possui filhos.")
 
-    setIsLoading(true)
     try {
 
       const exists = await checkUserExists(uid)
