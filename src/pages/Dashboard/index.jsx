@@ -213,7 +213,7 @@ export default function Dashboard() {
                 iconSlack={<Slack />}
                 slack={user.slack}
                 iconWhats={<Whats />}
-                whats={user.whatsapp}
+                whats={user.whatsapp || ""}
                 iconMail={<Gmail />}
                 mail={user.email}
                 iconHour={<Clock />}

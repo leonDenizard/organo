@@ -5,10 +5,10 @@ import Loader from "./Loader";
 export const AdminRoute = () => {
   const { backendUser, isLoading } = useAuth();
 
-  
-
   if(isLoading) return <Loader/>
 
-  console.log("BACKEEND USER", backendUser)
+  if(backendUser.admin != true){
+    return <Navigate to={"/dashboard"}/>
+  }
   return <Outlet />;
 };
