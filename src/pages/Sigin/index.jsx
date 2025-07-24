@@ -3,11 +3,9 @@ import { auth, checkUserExists } from "../../services/firebase";
 import { useNavigate } from "react-router-dom";
 
 import logoGoogle from "../../../public/google.png";
-import { useAuth } from "../../context/AuthProvider";
 
 export default function Signin() {
 
-  const { setUser } = useAuth()
   const navigate = useNavigate();
 
   function getEmail(email) {

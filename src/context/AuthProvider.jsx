@@ -5,9 +5,12 @@ import { auth, checkUserExists } from "../services/firebase";
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
+
   const [googleUser, setGoogleUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [backendUser, setBackendUser] = useState(null);
+
+  const [isFirstUser, setIsFirstUser] = useState(null)
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,12 +26,15 @@ function AuthProvider({ children }) {
 
           if (users.length === 0) {
             console.log("Ninguem nessa bagaça");
+            console.log("Estado do FirstUser dentro do Auth", isFirstUser);
+            setIsFirstUser(true)
 
             const firstUser = {
               uid: user.uid,
               name: user.displayName,
               email: user.email,
               admin: true,
+              
             };
 
             const createUserResponse = await fetch(`${API_URL}/user`, {
@@ -47,7 +53,7 @@ function AuthProvider({ children }) {
             }
 
             const data = await createUserResponse.json();
-            console.log(data);
+            console.log(data, isFirstUser);
           }
 
           const backendData = await checkUserExists(user.uid);
@@ -84,6 +90,7 @@ function AuthProvider({ children }) {
         backendUser,
         isLoading,
         logOut,
+        isFirstUser
       }}
     >
       {children}
