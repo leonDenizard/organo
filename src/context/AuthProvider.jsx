@@ -10,7 +10,7 @@ function AuthProvider({ children }) {
   const [isLoading, setIsLoading] = useState(true);
   const [backendUser, setBackendUser] = useState(null);
 
-  const [isFirstUser, setIsFirstUser] = useState(null)
+  const [isFirstUser, setIsFirstUser] = useState(false)
 
   const API_URL = import.meta.env.VITE_API_URL;
 
