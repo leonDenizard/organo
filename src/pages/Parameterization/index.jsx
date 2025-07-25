@@ -1,55 +1,79 @@
 import { useState } from "react";
 import ButtonFilter from "../../components/ButtonFilter";
+import Loader from "../../components/Loader"
 import Input from "../../components/Input";
+import useParameterization from "../../hooks/useParameterization";
 
 export default function Parameterization() {
+  const [activeTab, setActiveTab] = useState("Cargo");
 
-  const [activeTab, setActiveTab] = useState("Cargo")
-  
+  const { position, setPosition, handleSubmitPosition, allPositions } =
+    useParameterization();
+
   return (
     <div className="relative h-screen">
       <nav className="flex justify-around border-2">
-        <ButtonFilter name={"Cargo"} onClick={() => setActiveTab("Cargo")}/>
-        <ButtonFilter name={"Squad"} onClick={() => setActiveTab("Squad")}/>
-        <ButtonFilter name={"Supervisor"} onClick={() => setActiveTab("Supervisor")}/>
-        <ButtonFilter name={"Horário de trabalho"} onClick={() => setActiveTab("Horario")}/>
+        <ButtonFilter name={"Cargo"} onClick={() => setActiveTab("Cargo")} />
+        <ButtonFilter name={"Squad"} onClick={() => setActiveTab("Squad")} />
+        <ButtonFilter
+          name={"Supervisor"}
+          onClick={() => setActiveTab("Supervisor")}
+        />
+        <ButtonFilter
+          name={"Horário de trabalho"}
+          onClick={() => setActiveTab("Horario")}
+        />
       </nav>
-      
-      <section className="border-2 h-[400px] w-[80%] relative top-0 left-0 m-auto mt-20">
 
+      <section className="border-2 h-[400px] w-[80%] relative top-0 left-0 m-auto mt-20">
         {activeTab === "Cargo" && (
-          
           <div>
             <h2>Cadastro dos cargos</h2>
-            <Input title={"JR I"}/>
+            <Input
+              title={"JR I"}
+              value={position}
+              onChange={(e) => setPosition(e.target.value)}
+            />
+            <button
+              onClick={handleSubmitPosition}
+              className="mt-2 bg-green-600 text-white px-4 py-2 rounded"
+            >
+              Salvar Cargo
+            </button>
+
+            <div>
+              <p>Display Cargos</p>
+              {allPositions.length === 0 ? (
+                <Loader/>
+              ) : (
+                allPositions.map((p) => <p key={p._id}>{p.name}</p>)
+              )}
+            </div>
           </div>
         )}
 
         {activeTab === "Squad" && (
-
           <div>
             <h2>Cadastro dos Squad</h2>
-            <Input title={"@Squa-NFC"}/>
+            <Input title={"@Squa-NFC"} />
           </div>
         )}
 
-        {activeTab === "Supervisor" &&(
-
+        {activeTab === "Supervisor" && (
           <div>
             <h2>Cadastro dos Supervisores</h2>
-            <Input title={"Nome Super"}/>
+            <Input title={"Nome Super"} />
           </div>
-
         )}
 
         {activeTab === "Horario" && (
-
           <div>
             <h2>Cadastro dos horários do suporte</h2>
-            
+
             <p>Inicio</p>
-            <select id="horario" 
-              name="horario" 
+            <select
+              id="horario"
+              name="horario"
               className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
               value={""}
               onChange={""}
@@ -78,8 +102,9 @@ export default function Parameterization() {
             </select>
 
             <p>Fim</p>
-            <select id="horario" 
-              name="horario" 
+            <select
+              id="horario"
+              name="horario"
               className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
               value={""}
               onChange={""}
@@ -108,9 +133,7 @@ export default function Parameterization() {
             </select>
           </div>
         )}
-
       </section>
-
     </div>
-  )
+  );
 }
