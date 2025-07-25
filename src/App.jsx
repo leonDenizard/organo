@@ -1,18 +1,17 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Signin from "./pages/Sigin";
-import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Schedule from "./pages/Schedule";
 import UserDetail from "./pages/UserDetail";
-import Parameterization from "./pages/Parameterization"
+import Parameterization from "./pages/Parameterization";
 
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
 import AuthRedirectHandler from "./components/AuthRedirectHandler";
+import AdminOrFirstUserRoute from "./components/AdminOrFirstUserRoute";
 
 function App() {
-
   return (
     <Router>
       <Routes>
@@ -22,7 +21,9 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/schedule" element={<Schedule />} />
           <Route path="/user/:uid" element={<UserDetail />} />
-          <Route path="/parameterization" element={<Parameterization/>} />
+          <Route element={<AdminOrFirstUserRoute />}>
+            <Route path="/parameterization" element={<Parameterization />} />
+          </Route>
         </Route>
 
         <Route element={<AdminRoute />}>
