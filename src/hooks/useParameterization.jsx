@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { createPosition, getAllPosition } from "../services/parameterizationService";
+import { createPosition, deletePositionById, getAllPosition } from "../services/parameterizationService";
 
 export default function useParameterization() {
   const [position, setPosition] = useState("");
@@ -14,6 +14,11 @@ export default function useParameterization() {
     setPosition("");
     fetchPosition()
   };
+
+  const handleDeletePosition = async (id) => {
+    await deletePositionById(id)
+    fetchPosition()
+  }
 
   const fetchPosition = async () => {
     const data = await getAllPosition()
@@ -31,5 +36,6 @@ export default function useParameterization() {
     allPositions,
     fetchPosition,
     handleSubmitPosition,
+    handleDeletePosition
   };
 }

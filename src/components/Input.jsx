@@ -1,6 +1,6 @@
-export default function Input({ title, onChange, value, max, required }) {
+export default function Input({ title, onChange, value, max, required, onKeyDown }) {
   return (
-    <div className="relative top-4">
+    <div className="relative">
       <input
         onChange={onChange}
         type="text"
@@ -10,6 +10,7 @@ export default function Input({ title, onChange, value, max, required }) {
         h-9 p-5 lg:w-1/2 rounded-md w-4/6"
         maxLength={max}
         required={required}
+        onKeyDown={onKeyDown}
       />
       {/* <div className="absolute top-1/2 -translate-y-1/2 left-11 text-lg font-light
       peer-focus:top-0 overflow-hidden transition-all duration-300 w-40 bg-black">

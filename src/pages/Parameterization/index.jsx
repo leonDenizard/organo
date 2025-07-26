@@ -1,14 +1,21 @@
 import { useState } from "react";
 import ButtonFilter from "../../components/ButtonFilter";
-import Loader from "../../components/Loader"
+import ButtonSubmit from "../../components/ButtonSubmit";
+import Loader from "../../components/Loader";
 import Input from "../../components/Input";
 import useParameterization from "../../hooks/useParameterization";
+import { Trash } from "lucide-react";
 
 export default function Parameterization() {
   const [activeTab, setActiveTab] = useState("Cargo");
 
-  const { position, setPosition, handleSubmitPosition, allPositions } =
-    useParameterization();
+  const {
+    position,
+    setPosition,
+    handleSubmitPosition,
+    allPositions,
+    handleDeletePosition,
+  } = useParameterization();
 
   return (
     <div className="relative h-screen">
@@ -30,24 +37,36 @@ export default function Parameterization() {
           <div>
             <h2>Cadastro dos cargos</h2>
             <Input
+              
               title={"JR I"}
               value={position}
               onChange={(e) => setPosition(e.target.value)}
+              onKeyDown={(e) => {
+                if(e.key === "Enter"){
+                  handleSubmitPosition()
+                }
+              }}
             />
             <button
               onClick={handleSubmitPosition}
-              className="mt-2 bg-green-600 text-white px-4 py-2 rounded"
+              className="bg-green-600 text-white px-4 py-2 rounded"
             >
               Salvar Cargo
             </button>
-
+            
             <div>
               <p>Display Cargos</p>
-              {allPositions.length === 0 ? (
-                <Loader/>
-              ) : (
-                allPositions.map((p) => <p key={p._id}>{p.name}</p>)
-              )}
+              {allPositions.map((position) => (
+                <div key={position._id} className="flex items-center gap-4 ">
+                  <span>{position.name}</span>
+                  <Trash
+                    color="white"
+                    size={16}
+                    strokeWidth={3}
+                    onClick={() => handleDeletePosition(position._id)}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         )}

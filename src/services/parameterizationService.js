@@ -18,3 +18,12 @@ export async function getAllPosition() {
 
     return await response.json()
 }
+
+export async function deletePositionById(id){
+    const response = await fetch(`${API_URL}/position/${id}`, {
+        method: "DELETE",
+        headers: { "Content-type": "application/json"},
+    })
+
+    return await response.json()
+}
