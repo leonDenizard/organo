@@ -15,6 +15,17 @@ export default function Parameterization() {
     handleSubmitPosition,
     allPositions,
     handleDeletePosition,
+    squad,
+    setSquad,
+    handleSubmitSquad,
+    allSquads,
+    handleDeleteSquad,
+    supervisor,
+    setSupervisor,
+    handleSubmitSuper,
+    allSuper,
+    handleDeleteSuper
+
   } = useParameterization();
 
   return (
@@ -36,24 +47,26 @@ export default function Parameterization() {
         {activeTab === "Cargo" && (
           <div>
             <h2>Cadastro dos cargos</h2>
-            <Input
-              
-              title={"JR I"}
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              onKeyDown={(e) => {
-                if(e.key === "Enter"){
-                  handleSubmitPosition()
-                }
-              }}
-            />
-            <button
-              onClick={handleSubmitPosition}
-              className="bg-green-600 text-white px-4 py-2 rounded"
-            >
-              Salvar Cargo
-            </button>
-            
+
+            <div className="flex-col">
+              <Input
+                title={"JR I"}
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmitPosition();
+                  }
+                }}
+              />
+              <button 
+                onClick={handleSubmitPosition}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Salvar Cargo
+              </button>
+            </div>
+
             <div>
               <p>Display Cargos</p>
               {allPositions.map((position) => (
@@ -74,17 +87,82 @@ export default function Parameterization() {
         {activeTab === "Squad" && (
           <div>
             <h2>Cadastro dos Squad</h2>
-            <Input title={"@Squa-NFC"} />
+            <div className="flex-col">
+              <Input
+                title={"@squad-slack"}
+                value={squad}
+                onChange={(e) => setSquad(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmitSquad();
+                  }
+                }}
+              />
+              <button 
+                onClick={handleSubmitSquad}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Salvar Squad
+              </button>
+            </div>
+
+            <div>
+              <p>Display Squad</p>
+              {allSquads.map((squad) => (
+                <div key={squad._id} className="flex items-center gap-4 ">
+                  <span>{squad.name}</span>
+                  <Trash
+                    color="white"
+                    size={16}
+                    strokeWidth={3}
+                    onClick={() => handleDeleteSquad(squad._id)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
         {activeTab === "Supervisor" && (
           <div>
             <h2>Cadastro dos Supervisores</h2>
-            <Input title={"Nome Super"} />
+
+            <div className="flex-col">
+              <Input
+                title={"Nome Super"}
+                value={supervisor}
+                onChange={(e) => setSupervisor(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSubmitSuper();
+                  }
+                }}
+              />
+              <button 
+                onClick={(handleSubmitSuper)}
+                className="bg-green-600 text-white px-4 py-2 rounded"
+              >
+                Salvar Super
+              </button>
+            </div>
+
+            <div>
+              <p>Display Supers</p>
+              {allSuper.map((supervisor) => (
+                <div key={supervisor._id} className="flex items-center gap-4 ">
+                  <span>{supervisor.name}</span>
+                  <Trash
+                    color="white"
+                    size={16}
+                    strokeWidth={3}
+                    onClick={() => handleDeleteSuper(supervisor._id)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
-
+      
         {activeTab === "Horario" && (
           <div>
             <h2>Cadastro dos horários do suporte</h2>
