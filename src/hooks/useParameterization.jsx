@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { createPosition, createSquad, createSupervisor, deletePositionById, deleteSquadById, deleteSuperById, getAllPosition, getAllSquad, getAllSuper } from "../services/parameterizationService";
+import { createPosition, createSquad, createSupervisor, createWorkShift, deletePositionById, deleteSquadById, deleteSuperById, deleteWorkShiftById, getAllPosition, getAllSquad, getAllSuper, getAllWorkShift } from "../services/parameterizationService";
 
 export default function useParameterization() {
   const [position, setPosition] = useState("");
   const [allPositions, setAllPositions] = useState([])
+
   const [squad, setSquad] = useState("")
   const [allSquads, setAllSquads] = useState([])
+
   const [supervisor, setSupervisor] = useState("")
   const [allSuper, setAllSuper] = useState([])
+
+  const [startTime, setStartTime] = useState("10:00")
+  const [endTime, setEndTime] = useState("10:00")
+  const [workShifts, setWorkShifts] = useState([])
 
   //Handler submit
 
@@ -69,10 +75,27 @@ export default function useParameterization() {
     fetchSuper()
   }
 
+  const handleSubmitWorkShift = async () => {
+    await createWorkShift(startTime, endTime)
+    fetchWorkShift()
+  }
+
+  const fetchWorkShift = async () =>{
+    const data = await getAllWorkShift()
+    setWorkShifts(data)
+  }
+
+  const handleDeleteWorkShift = async (id) => {
+    await deleteWorkShiftById(id)
+    fetchWorkShift()
+  }
+
+
   useEffect(() => {
     fetchPosition()
     fetchSquad()
     fetchSuper()
+    fetchWorkShift()
   }, [])
 
   return {
@@ -92,6 +115,14 @@ export default function useParameterization() {
     setSupervisor,
     allSuper,
     handleSubmitSuper,
-    handleDeleteSuper
+    handleDeleteSuper,
+
+    startTime,
+    endTime,
+    setStartTime,
+    setEndTime,
+    workShifts,
+    handleSubmitWorkShift,
+    handleDeleteWorkShift,
   };
 }

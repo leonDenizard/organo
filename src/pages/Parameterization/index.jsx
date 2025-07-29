@@ -1,7 +1,5 @@
 import { useState } from "react";
 import ButtonFilter from "../../components/ButtonFilter";
-import ButtonSubmit from "../../components/ButtonSubmit";
-import Loader from "../../components/Loader";
 import Input from "../../components/Input";
 import useParameterization from "../../hooks/useParameterization";
 import { Trash } from "lucide-react";
@@ -24,8 +22,14 @@ export default function Parameterization() {
     setSupervisor,
     handleSubmitSuper,
     allSuper,
-    handleDeleteSuper
-
+    handleDeleteSuper,
+    startTime,
+    endTime,
+    setStartTime,
+    setEndTime,
+    workShifts,
+    handleSubmitWorkShift,
+    handleDeleteWorkShift,
   } = useParameterization();
 
   return (
@@ -59,7 +63,7 @@ export default function Parameterization() {
                   }
                 }}
               />
-              <button 
+              <button
                 onClick={handleSubmitPosition}
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
@@ -98,7 +102,7 @@ export default function Parameterization() {
                   }
                 }}
               />
-              <button 
+              <button
                 onClick={handleSubmitSquad}
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
@@ -138,8 +142,8 @@ export default function Parameterization() {
                   }
                 }}
               />
-              <button 
-                onClick={(handleSubmitSuper)}
+              <button
+                onClick={handleSubmitSuper}
                 className="bg-green-600 text-white px-4 py-2 rounded"
               >
                 Salvar Super
@@ -162,7 +166,7 @@ export default function Parameterization() {
             </div>
           </div>
         )}
-      
+
         {activeTab === "Horario" && (
           <div>
             <h2>Cadastro dos horários do suporte</h2>
@@ -172,30 +176,24 @@ export default function Parameterization() {
               id="horario"
               name="horario"
               className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
-              value={""}
-              onChange={""}
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
             >
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
               <option value="13:00">13:00</option>
-              <option value="13:30">13:30</option>
-              <option value="14:00">14:00</option>
-              <option value="14:30">14:30</option>
               <option value="14:00">14:00</option>
               <option value="15:00">15:00</option>
-              <option value="15:30">15:30</option>
               <option value="16:00">16:00</option>
-              <option value="16:30">16:30</option>
               <option value="17:00">17:00</option>
-              <option value="17:30">17:30</option>
               <option value="18:00">18:00</option>
-              <option value="18:30">18:30</option>
               <option value="19:00">19:00</option>
-              <option value="19:30">19:30</option>
               <option value="20:00">20:00</option>
-              <option value="20:30">20:30</option>
               <option value="21:00">21:00</option>
-              <option value="21:30">21:30</option>
               <option value="22:00">22:00</option>
-              <option value="22:30">22:30</option>
+              <option value="23:00">23:00</option>
+              <option value="00:00">00:00</option>
             </select>
 
             <p>Fim</p>
@@ -203,31 +201,48 @@ export default function Parameterization() {
               id="horario"
               name="horario"
               className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
-              value={""}
-              onChange={""}
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
             >
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
               <option value="13:00">13:00</option>
-              <option value="13:30">13:30</option>
-              <option value="14:00">14:00</option>
-              <option value="14:30">14:30</option>
               <option value="14:00">14:00</option>
               <option value="15:00">15:00</option>
-              <option value="15:30">15:30</option>
               <option value="16:00">16:00</option>
-              <option value="16:30">16:30</option>
               <option value="17:00">17:00</option>
-              <option value="17:30">17:30</option>
               <option value="18:00">18:00</option>
-              <option value="18:30">18:30</option>
               <option value="19:00">19:00</option>
-              <option value="19:30">19:30</option>
               <option value="20:00">20:00</option>
-              <option value="20:30">20:30</option>
               <option value="21:00">21:00</option>
-              <option value="21:30">21:30</option>
               <option value="22:00">22:00</option>
-              <option value="22:30">22:30</option>
+              <option value="23:00">23:00</option>
+              <option value="00:00">00:00</option>
             </select>
+
+            <button
+              onClick={handleSubmitWorkShift}
+              className="bg-green-600 text-white px-4 py-2 rounded"
+            >
+              Salvar Horário de trabalho
+            </button>
+
+            <div>
+              <p>Display Horários</p>
+              {workShifts.map((works) => (
+                <div key={works._id} className="flex items-center gap-4 ">
+                  <span>{works.startTime}</span>
+                  <span>{works.endTime}</span>
+                  <Trash
+                    color="white"
+                    size={16}
+                    strokeWidth={3}
+                    onClick={() => handleDeleteWorkShift(works._id)}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </section>

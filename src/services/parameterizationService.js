@@ -153,3 +153,55 @@ export async function deleteSuperById(id){
     console.error("Erro ao deletar Super", error)
   }
 } 
+
+export async function createWorkShift(startTime, endTime){
+  try {
+    const response = await fetch(`${API_URL}/work-shift`, {
+      method: "POST",
+      headers: {"Content-type": "application/json"},
+      body: JSON.stringify({
+        startTime: startTime,
+        endTime: endTime
+      })
+      
+    })
+
+    if(!response.ok) throw new Error ("Erro ao cadastrar horário")
+
+    return await response.json()
+  } catch (error) {
+    console.log("Erro ao cadastrar horário", error)
+  }
+
+}
+
+export async function getAllWorkShift(){
+  try {
+    const response = await fetch(`${API_URL}/work-shift`, {
+      method: "GET",
+      headers: {"Content-type" : "application/json"}
+    })
+
+    if(!response.ok) throw new Error("Erro ao buscar horário")
+    
+    return response.json()
+  } catch (error) {
+    console.log("Erro ao buscar horários", error)
+  }
+}
+
+export async function deleteWorkShiftById(id){
+  try{
+    const response = await fetch(`${API_URL}/work-shift/${id}`, {
+        method: "DELETE",
+        headers: {"Content-type": "application/json"}
+    })
+
+    if(!response.ok) throw new Error("Erro ao deletar Horário", id)
+    
+    return await response.json()
+
+  } catch (error) {
+    console.error("Erro ao deletar horário", error)
+  }
+}
