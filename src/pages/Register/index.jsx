@@ -17,7 +17,6 @@ import useParameterization from "../../hooks/useParameterization";
 
 export default function Register() {
   const API_URL = import.meta.env.VITE_API_URL;
-  console.log("API_URL no frontend:", API_URL);
 
   const navigate = useNavigate();
 
@@ -66,8 +65,8 @@ export default function Register() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   //Pegando infos do hook pra renderizar
-  const { workShifts, allPositions } = useParameterization();
-  console.log("Horario vindo do hook useParameterization page /register",allPositions);
+  const { workShifts, allPositions, allSuper } = useParameterization();
+  console.log("Horario vindo do hook useParameterization page /register",allSuper);
 
 
   const handleSelectShift = (id) => {
@@ -79,7 +78,7 @@ export default function Register() {
   };
 
   const handleChangeManager = (id) => {
-    setSelectedManager(selectedManager === id ? null : id);
+    setSelectedManager((prev) => (prev === id ? null : id))
   };
 
   const handleChangeChildOption = (id) => {
@@ -224,6 +223,7 @@ export default function Register() {
   //setIsLoading(false)
 
   const roleExists = allPositions.some((pos) => pos._id === selectedRole);
+  const superExists = allSuper.some((sup) => sup._id === selectedManager);
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
@@ -310,50 +310,18 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
             <div className="lg:flex mt-5 gap-10">
               <div>
-                <CheckBox
-                  isChecked={selectedManager === "guto"}
-                  onChange={() => handleChangeManager("guto")}
-                  disabled={selectedManager && selectedManager !== "guto"}
-                  title="Augusto Cezar"
-                  id="guto"
-                />
-                <CheckBox
-                  isChecked={selectedManager === "greice"}
-                  onChange={() => handleChangeManager("greice")}
-                  disabled={selectedManager && selectedManager !== "greice"}
-                  title="Greice Marques"
-                  id="greice"
-                />
-                <CheckBox
-                  isChecked={selectedManager === "diogo"}
-                  onChange={() => handleChangeManager("diogo")}
-                  disabled={selectedManager && selectedManager !== "diogo"}
-                  title="Diogo Nunes"
-                  id="diogo"
-                />
-              </div>
-              <div>
-                <CheckBox
-                  isChecked={selectedManager === "duda"}
-                  onChange={() => handleChangeManager("duda")}
-                  disabled={selectedManager && selectedManager !== "duda"}
-                  title="Duda"
-                  id="duda"
-                />
-                <CheckBox
-                  isChecked={selectedManager === "luan"}
-                  onChange={() => handleChangeManager("luan")}
-                  disabled={selectedManager && selectedManager !== "luan"}
-                  title="Luan"
-                  id="luan"
-                />
-                <CheckBox
-                  isChecked={selectedManager === "teteu"}
-                  onChange={() => handleChangeManager("teteu")}
-                  disabled={selectedManager && selectedManager !== "teteu"}
-                  title="Mateus Silva"
-                  id="teteu"
-                />
+                {
+                  allSuper.map((sup) => (
+                    <CheckBox
+                      key={sup._id}
+                      isChecked={selectedManager === sup._id}
+                      disabled={superExists && selectedManager && selectedManager !== sup._id}
+                      onChange={() => handleChangeManager(sup._id)}
+                      id={sup._id}
+                      title={sup.name}
+                    />
+                  ))
+                }
               </div>
             </div>
           </div>
@@ -389,7 +357,7 @@ export default function Register() {
               <select
                 id="horario"
                 name="horario"
-                className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
+                className="md:max-w-[25%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
                 value={interval}
                 onChange={handleInterval}
               >
