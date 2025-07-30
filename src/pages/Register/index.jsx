@@ -5,13 +5,17 @@ import Input from "../../components/Input";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import { useAuth } from "../../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
-import { formatDate, formatSlackHandle, formatWhatsApp } from "../../functions/regex";
+import {
+  formatDate,
+  formatSlackHandle,
+  formatWhatsApp,
+} from "../../functions/regex";
 import Loader from "../../components/Loader";
 import { checkUserExists } from "../../services/firebase";
-import resizeImage from "../../functions/resizeImage"
+import resizeImage from "../../functions/resizeImage";
+import useParameterization from "../../hooks/useParameterization";
 
 export default function Register() {
-
   const API_URL = import.meta.env.VITE_API_URL;
   console.log("API_URL no frontend:", API_URL);
 
@@ -19,20 +23,18 @@ export default function Register() {
 
   let { googleUser, isLoading, setIsLoading } = useAuth();
 
-  
   // setIsLoading(true)
   const email = googleUser.email;
   const uid = googleUser.uid;
   const photoUrl = googleUser.photoURL;
-  
-  
+
   const [name, setName] = useState(googleUser.displayName);
   const [whatsApp, setWhatsApp] = useState("");
   const [slack, setSlack] = useState("");
   const [surname, setSurname] = useState("");
-  const [birthday, setBirthday] = useState("")
+  const [birthday, setBirthday] = useState("");
   const [isFetchingImage, setIsFetchingImage] = useState(false);
-  const [interval, setInterval] = useState("13:00")
+  const [interval, setInterval] = useState("13:00");
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -44,29 +46,33 @@ export default function Register() {
   };
 
   const handleSlack = (e) => {
-    const formatedSlack = formatSlackHandle(e.target.value)
+    const formatedSlack = formatSlackHandle(e.target.value);
     setSlack(formatedSlack);
   };
 
   const handleSurname = (e) => {
-    setSurname(e.target.value)
-  }
+    setSurname(e.target.value);
+  };
 
   const handleBirthday = (e) => {
-    const birthdayFormated = formatDate(e.target.value)
-    setBirthday(birthdayFormated)
-  }
+    const birthdayFormated = formatDate(e.target.value);
+    setBirthday(birthdayFormated);
+  };
 
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedShiftId, setSelectedShiftId] = useState(null);
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedManager, setSelectedManager] = useState(null);
-  const [selectedChild, setSelectedChild] = useState(null)
-  const [selectedPhoto, setSelectedPhoto] = useState(null)
+  const [selectedChild, setSelectedChild] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+
+  //Pegando infos do hook pra renderizar
+  const { workShifts } = useParameterization();
+  console.log("Horario vindo do hook useParameterization page /register",workShifts);
 
 
-  const handleChangeTime = (id) => {
-    setSelectedTime(selectedTime === id ? null : id);
-  };
+  const handleSelectShift = (id) => {
+    setSelectedShiftId((prev) => (prev === id ? null : id))
+  }
 
   const handleChangeRole = (id) => {
     setSelectedRole(selectedRole === id ? null : id);
@@ -77,8 +83,8 @@ export default function Register() {
   };
 
   const handleChangeChildOption = (id) => {
-    setSelectedChild(selectedChild === id ? null : id)
-  }
+    setSelectedChild(selectedChild === id ? null : id);
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -92,24 +98,21 @@ export default function Register() {
         };
         reader.readAsDataURL(blob);
       });
-
     }
   };
 
   const handleInterval = (event) => {
-    setInterval(event.target.value)
-    console.log("Intervalo selecionado: ", event.target.value)
-  }
-
+    setInterval(event.target.value);
+    console.log("Intervalo selecionado: ", event.target.value);
+  };
 
   const userRegistered = {
-
     uid: uid,
     name: name,
     whatsapp: whatsApp,
     slack: slack,
     email: email,
-    time: selectedTime,
+    time: selectedShiftId,
     role: selectedRole,
     manager: selectedManager,
     photoUrl: selectedPhoto,
@@ -117,124 +120,103 @@ export default function Register() {
     birthday: birthday,
     child: selectedChild,
     admin: false,
-    interval: interval
-  }
-
-
+    interval: interval,
+  };
 
   const fetchImage = async (uid, photoUrl, setSelectedPhoto) => {
-
     setIsFetchingImage(true);
     try {
-
       const response = await fetch(`${API_URL}/user/${uid}`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Content-Type': 'application/json'
-        }
+          "Content-Type": "application/json",
+        },
       });
 
       const data = await response.json();
 
-
       if (data.photoUrl) {
-        setSelectedPhoto(data.photoUrl)
+        setSelectedPhoto(data.photoUrl);
       } else {
         setSelectedPhoto(photoUrl);
-
       }
     } catch (error) {
       console.error("Erro ao buscar a foto:", error);
       setSelectedPhoto(photoUrl);
     }
 
-
-    const exists = await checkUserExists(uid)
+    const exists = await checkUserExists(uid);
 
     if (exists) {
-      setName(exists.name)
-      setWhatsApp(exists.whatsapp)
-      setSlack(exists.slack)
-      setSurname(exists.surname)
-      setBirthday(exists.birthday)
-      setSelectedTime(exists.time)
-      setSelectedManager(exists.manager)
-      setSelectedRole(exists.role)
-      setSelectedChild(exists.child)
+      setName(exists.name);
+      setWhatsApp(exists.whatsapp);
+      setSlack(exists.slack);
+      setSurname(exists.surname);
+      setBirthday(exists.birthday);
+      setSelectedShiftId(exists.time);
+      setSelectedManager(exists.manager);
+      setSelectedRole(exists.role);
+      setSelectedChild(exists.child);
     }
 
     setIsFetchingImage(false);
-
   };
 
   useEffect(() => {
-
     if (uid) {
       fetchImage(uid, googleUser.photoURL, setSelectedPhoto);
     }
-  }, [uid])
-
+  }, [uid]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!selectedTime) return alert("Selecione seu horário.")
-    if (!selectedRole) return alert("Selecione seu cargo.")
-    if (!selectedManager) return alert("Selecione seu gestor(a).")
-    if (!selectedChild) return alert("Selecione se possui filhos.")
+    if (!selectedShiftId) return alert("Selecione seu horário.");
+    if (!selectedRole) return alert("Selecione seu cargo.");
+    if (!selectedManager) return alert("Selecione seu gestor(a).");
+    if (!selectedChild) return alert("Selecione se possui filhos.");
 
     try {
+      const exists = await checkUserExists(uid);
 
-      const exists = await checkUserExists(uid)
-
-
-      let response
+      let response;
       if (exists) {
-
         response = await fetch(`${API_URL}/user/${uid}`, {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(userRegistered)
-
-        })
-        navigate("/dashboard")
-
+          body: JSON.stringify(userRegistered),
+        });
+        navigate("/dashboard");
       } else {
-
         response = await fetch(`${API_URL}/user`, {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json'
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(userRegistered)
-        })
+          body: JSON.stringify(userRegistered),
+        });
 
         if (!response.ok) {
           console.log(`Erro na requisição: ${response.status}`);
-          const errorData = await response.json()
-          console.log(errorData)
+          const errorData = await response.json();
+          console.log(errorData);
 
-          return
+          return;
         }
 
-        const data = await response.json()
-        console.log(data)
+        const data = await response.json();
+        console.log(data);
 
-        navigate("/dashboard")
+        navigate("/dashboard");
       }
-
-
     } catch (error) {
-      console.error("Erro na requisição:", error)
+      console.error("Erro na requisição:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-
   };
-
-
 
   if (isLoading || isFetchingImage) {
     return <Loader />;
@@ -242,23 +224,42 @@ export default function Register() {
   //setIsLoading(false)
 
   return (
-
-    <form
-      onSubmit={handleSubmit}
-      className="relative"
-    >
+    <form onSubmit={handleSubmit} className="relative">
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
-          <Input onChange={handleName} title="Digite seu nome" value={name} required={true} />
-          <Input onChange={handleWhatsApp} title="WhatsApp: (DD) + Número" value={whatsApp} max={16} required={true} />
-          <Input onChange={handleSlack} title="@slack" value={slack} required={true} />
+          <Input
+            onChange={handleName}
+            title="Digite seu nome"
+            value={name}
+            required={true}
+          />
+          <Input
+            onChange={handleWhatsApp}
+            title="WhatsApp: (DD) + Número"
+            value={whatsApp}
+            max={16}
+            required={true}
+          />
+          <Input
+            onChange={handleSlack}
+            title="@slack"
+            value={slack}
+            required={true}
+          />
           <Input onChange={handleSurname} title="Apelido" value={surname} />
-          <Input onChange={handleBirthday} title="Aniversário (dia/mês/ano)" value={birthday} max={10} required={true} />
+          <Input
+            onChange={handleBirthday}
+            title="Aniversário (dia/mês/ano)"
+            value={birthday}
+            max={10}
+            required={true}
+          />
 
           <div>
             <ButtonUpload onChange={handleFileChange} disabled={false} />
-            <img src={selectedPhoto}
+            <img
+              src={selectedPhoto}
               className="absolute top-0 right-0 w-28 h-28 rounded-full object-cover"
             />
           </div>
@@ -269,7 +270,19 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mb-5">
               Horário de expediente
             </h1>
-            <CheckBox
+            {
+              workShifts.map((works) => (
+                <CheckBox
+                  key={works._id}
+                  id={works._id}
+                  title={`${works.startTime} às ${works.endTime}`}
+                  disabled={selectedShiftId && selectedShiftId !== works._id}
+                  onChange={()=> handleSelectShift(works._id)}
+                  isChecked={selectedShiftId === works._id}
+                />
+              ))
+            }
+            {/* <CheckBox
               isChecked={selectedTime === "morning"}
               onChange={() => handleChangeTime("morning")}
               disabled={selectedTime && selectedTime !== "morning"}
@@ -290,8 +303,7 @@ export default function Register() {
               disabled={selectedTime && selectedTime !== "night"}
               title="22:00 às 00:00"
               id="night"
-            />
-
+            /> */}
           </div>
 
           <div className="">
@@ -354,8 +366,6 @@ export default function Register() {
                 </div>
               </div>
             </div>
-
-
           </div>
           <div>
             <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
@@ -431,42 +441,43 @@ export default function Register() {
             </div>
 
             <div className="flex flex-col ">
-            <label htmlFor="horario" className="text-2xl font-semibold lg:-mt-10">Selecione o horário do intervalo</label>
-            <select id="horario" 
-              name="horario" 
-              className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
-              value={interval}
-              onChange={handleInterval}
-            >
-              <option value="13:00">13:00</option>
-              <option value="13:30">13:30</option>
-              <option value="14:00">14:00</option>
-              <option value="14:30">14:30</option>
-              <option value="14:00">14:00</option>
-              <option value="15:00">15:00</option>
-              <option value="15:30">15:30</option>
-              <option value="16:00">16:00</option>
-              <option value="16:30">16:30</option>
-              <option value="17:00">17:00</option>
-              <option value="17:30">17:30</option>
-              <option value="18:00">18:00</option>
-              <option value="18:30">18:30</option>
-              <option value="19:00">19:00</option>
-              <option value="19:30">19:30</option>
-              <option value="20:00">20:00</option>
-              <option value="20:30">20:30</option>
-              <option value="21:00">21:00</option>
-              <option value="21:30">21:30</option>
-              <option value="22:00">22:00</option>
-              <option value="22:30">22:30</option>
-            </select>
+              <label
+                htmlFor="horario"
+                className="text-2xl font-semibold lg:-mt-10"
+              >
+                Selecione o horário do intervalo
+              </label>
+              <select
+                id="horario"
+                name="horario"
+                className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
+                value={interval}
+                onChange={handleInterval}
+              >
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="14:00">14:00</option>
+                <option value="14:30">14:30</option>
+                <option value="14:00">14:00</option>
+                <option value="15:00">15:00</option>
+                <option value="15:30">15:30</option>
+                <option value="16:00">16:00</option>
+                <option value="16:30">16:30</option>
+                <option value="17:00">17:00</option>
+                <option value="17:30">17:30</option>
+                <option value="18:00">18:00</option>
+                <option value="18:30">18:30</option>
+                <option value="19:00">19:00</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+                <option value="21:30">21:30</option>
+                <option value="22:00">22:00</option>
+                <option value="22:30">22:30</option>
+              </select>
+            </div>
           </div>
-
-          </div>
-
-
-          
-
         </div>
         <ButtonSubmit text="Cadastrar" />
       </div>
