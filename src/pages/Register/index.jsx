@@ -66,8 +66,8 @@ export default function Register() {
   const [selectedPhoto, setSelectedPhoto] = useState(null);
 
   //Pegando infos do hook pra renderizar
-  const { workShifts } = useParameterization();
-  console.log("Horario vindo do hook useParameterization page /register",workShifts);
+  const { workShifts, allPositions } = useParameterization();
+  console.log("Horario vindo do hook useParameterization page /register",allPositions);
 
 
   const handleSelectShift = (id) => {
@@ -75,7 +75,7 @@ export default function Register() {
   }
 
   const handleChangeRole = (id) => {
-    setSelectedRole(selectedRole === id ? null : id);
+    setSelectedRole((prev) => (prev === id ? null : id))
   };
 
   const handleChangeManager = (id) => {
@@ -223,6 +223,7 @@ export default function Register() {
   }
   //setIsLoading(false)
 
+  const roleExists = allPositions.some((pos) => pos._id === selectedRole);
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
@@ -282,28 +283,6 @@ export default function Register() {
                 />
               ))
             }
-            {/* <CheckBox
-              isChecked={selectedTime === "morning"}
-              onChange={() => handleChangeTime("morning")}
-              disabled={selectedTime && selectedTime !== "morning"}
-              title="10:00 às 19:00"
-              id="morning"
-            />
-
-            <CheckBox
-              isChecked={selectedTime === "afternoon"}
-              onChange={() => handleChangeTime("afternoon")}
-              disabled={selectedTime && selectedTime !== "afternoon"}
-              title="13:00 às 22:00"
-              id="afternoon"
-            />
-            <CheckBox
-              isChecked={selectedTime === "night"}
-              onChange={() => handleChangeTime("night")}
-              disabled={selectedTime && selectedTime !== "night"}
-              title="22:00 às 00:00"
-              id="night"
-            /> */}
           </div>
 
           <div className="">
@@ -311,58 +290,18 @@ export default function Register() {
               <h1 className="text-3xl font-semibold mt-4">Cargo Atual</h1>
               <div className="flex mt-5 gap-7">
                 <div>
-                  <CheckBox
-                    isChecked={selectedRole === "trial"}
-                    onChange={() => handleChangeRole("trial")}
-                    disabled={selectedRole && selectedRole !== "trial"}
-                    title="Trial (Menor que três meses)"
-                    id="trial"
-                  />
-                  <CheckBox
-                    isChecked={selectedRole === "jri"}
-                    onChange={() => handleChangeRole("jri")}
-                    disabled={selectedRole && selectedRole !== "jri"}
-                    title="JR I"
-                    id="jri"
-                  />
-                  <CheckBox
-                    isChecked={selectedRole === "jrii"}
-                    onChange={() => handleChangeRole("jrii")}
-                    disabled={selectedRole && selectedRole !== "jrii"}
-                    title="JR II"
-                    id="jrii"
-                  />
-                  <CheckBox
-                    isChecked={selectedRole === "jriii"}
-                    onChange={() => handleChangeRole("jriii")}
-                    disabled={selectedRole && selectedRole !== "jriii"}
-                    title="JR III"
-                    id="jriii"
-                  />
-                </div>
-
-                <div>
-                  <CheckBox
-                    isChecked={selectedRole === "pleno"}
-                    onChange={() => handleChangeRole("pleno")}
-                    disabled={selectedRole && selectedRole !== "pleno"}
-                    title="Pleno"
-                    id="pleno"
-                  />
-                  <CheckBox
-                    isChecked={selectedRole === "super"}
-                    onChange={() => handleChangeRole("super")}
-                    disabled={selectedRole && selectedRole !== "super"}
-                    title="Super"
-                    id="super"
-                  />
-                  <CheckBox
-                    isChecked={selectedRole === "gerente"}
-                    onChange={() => handleChangeRole("gerente")}
-                    disabled={selectedRole && selectedRole !== "gerente"}
-                    title="Gerente"
-                    id="gerente"
-                  />
+                  {
+                    allPositions.map((position) => (
+                      <CheckBox
+                        key={position._id}
+                        isChecked={selectedRole === position._id}
+                        disabled={roleExists && selectedRole && selectedRole !== position._id}
+                        onChange={() => handleChangeRole(position._id)}
+                        id={position._id}
+                        title={position.name}
+                      />
+                    ))
+                  }
                 </div>
               </div>
             </div>
