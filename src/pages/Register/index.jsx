@@ -20,9 +20,8 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  let { googleUser, isLoading, setIsLoading } = useAuth();
+  let { googleUser, isLoading } = useAuth();
 
-  // setIsLoading(true)
   const email = googleUser.email;
   const uid = googleUser.uid;
   const photoUrl = googleUser.photoURL;
@@ -63,26 +62,31 @@ export default function Register() {
   const [selectedManager, setSelectedManager] = useState(null);
   const [selectedChild, setSelectedChild] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [selectedSquad, setSelectedSquad] = useState(null);
 
   //Pegando infos do hook pra renderizar
-  const { workShifts, allPositions, allSuper } = useParameterization();
-  console.log("Horario vindo do hook useParameterization page /register",allSuper);
-
+  const { workShifts, allPositions, allSuper, allSquads } =
+    useParameterization();
 
   const handleSelectShift = (id) => {
-    setSelectedShiftId((prev) => (prev === id ? null : id))
-  }
+    setSelectedShiftId((prev) => (prev === id ? null : id));
+  };
 
   const handleChangeRole = (id) => {
-    setSelectedRole((prev) => (prev === id ? null : id))
+    setSelectedRole((prev) => (prev === id ? null : id));
   };
 
   const handleChangeManager = (id) => {
-    setSelectedManager((prev) => (prev === id ? null : id))
+    setSelectedManager((prev) => (prev === id ? null : id));
   };
 
   const handleChangeChildOption = (id) => {
     setSelectedChild(selectedChild === id ? null : id);
+  };
+
+  const handleChangeSquad = (id) => {
+    setSelectedSquad((prev) => (prev === id ? null : id));
+    console.log(selectedSquad);
   };
 
   const handleFileChange = (e) => {
@@ -102,7 +106,6 @@ export default function Register() {
 
   const handleInterval = (event) => {
     setInterval(event.target.value);
-    console.log("Intervalo selecionado: ", event.target.value);
   };
 
   const userRegistered = {
@@ -114,6 +117,7 @@ export default function Register() {
     time: selectedShiftId,
     role: selectedRole,
     manager: selectedManager,
+    squad: selectedSquad,
     photoUrl: selectedPhoto,
     surname: surname,
     birthday: birthday,
@@ -155,6 +159,7 @@ export default function Register() {
       setSelectedShiftId(exists.time);
       setSelectedManager(exists.manager);
       setSelectedRole(exists.role);
+      setSelectedSquad(exists.squad);
       setSelectedChild(exists.child);
     }
 
@@ -212,8 +217,6 @@ export default function Register() {
       }
     } catch (error) {
       console.error("Erro na requisição:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -224,6 +227,7 @@ export default function Register() {
 
   const roleExists = allPositions.some((pos) => pos._id === selectedRole);
   const superExists = allSuper.some((sup) => sup._id === selectedManager);
+  const squadExists = allSquads.some((squad) => squad._id === selectedSquad);
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
@@ -271,18 +275,16 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mb-5">
               Horário de expediente
             </h1>
-            {
-              workShifts.map((works) => (
-                <CheckBox
-                  key={works._id}
-                  id={works._id}
-                  title={`${works.startTime} às ${works.endTime}`}
-                  disabled={selectedShiftId && selectedShiftId !== works._id}
-                  onChange={()=> handleSelectShift(works._id)}
-                  isChecked={selectedShiftId === works._id}
-                />
-              ))
-            }
+            {workShifts.map((works) => (
+              <CheckBox
+                key={works._id}
+                id={works._id}
+                title={`${works.startTime} às ${works.endTime}`}
+                disabled={selectedShiftId && selectedShiftId !== works._id}
+                onChange={() => handleSelectShift(works._id)}
+                isChecked={selectedShiftId === works._id}
+              />
+            ))}
           </div>
 
           <div className="">
@@ -290,18 +292,20 @@ export default function Register() {
               <h1 className="text-3xl font-semibold mt-4">Cargo Atual</h1>
               <div className="flex mt-5 gap-7">
                 <div>
-                  {
-                    allPositions.map((position) => (
-                      <CheckBox
-                        key={position._id}
-                        isChecked={selectedRole === position._id}
-                        disabled={roleExists && selectedRole && selectedRole !== position._id}
-                        onChange={() => handleChangeRole(position._id)}
-                        id={position._id}
-                        title={position.name}
-                      />
-                    ))
-                  }
+                  {allPositions.map((position) => (
+                    <CheckBox
+                      key={position._id}
+                      isChecked={selectedRole === position._id}
+                      disabled={
+                        roleExists &&
+                        selectedRole &&
+                        selectedRole !== position._id
+                      }
+                      onChange={() => handleChangeRole(position._id)}
+                      id={position._id}
+                      title={position.name}
+                    />
+                  ))}
                 </div>
               </div>
             </div>
@@ -310,48 +314,45 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
             <div className="lg:flex mt-5 gap-10">
               <div>
-                {
-                  allSuper.map((sup) => (
-                    <CheckBox
-                      key={sup._id}
-                      isChecked={selectedManager === sup._id}
-                      disabled={superExists && selectedManager && selectedManager !== sup._id}
-                      onChange={() => handleChangeManager(sup._id)}
-                      id={sup._id}
-                      title={sup.name}
-                    />
-                  ))
-                }
+                {allSuper.map((sup) => (
+                  <CheckBox
+                    key={sup._id}
+                    isChecked={selectedManager === sup._id}
+                    disabled={
+                      superExists &&
+                      selectedManager &&
+                      selectedManager !== sup._id
+                    }
+                    onChange={() => handleChangeManager(sup._id)}
+                    id={sup._id}
+                    title={sup.name}
+                  />
+                ))}
               </div>
             </div>
           </div>
-        </div>
+          <div>
+            <h1 className="text-3xl font-semibold mt-4">Squad</h1>
 
-        <div>
-          <h1 className="text-3xl font-semibold mt-4">Possui filhos?</h1>
-          <div className="relative grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xl:gap-4">
-            <div>
-              <CheckBox
-                isChecked={selectedChild === "yes"}
-                onChange={() => handleChangeChildOption("yes")}
-                disabled={selectedChild && selectedChild !== "yes"}
-                title="Sim"
-                id="yes"
-              />
-              <CheckBox
-                isChecked={selectedChild === "no"}
-                onChange={() => handleChangeChildOption("no")}
-                disabled={selectedChild && selectedChild !== "no"}
-                title="Não"
-                id="no"
-              />
+            <div className="relative mt-5">
+              {allSquads.map((squad) => (
+                <CheckBox
+                  key={squad._id}
+                  isChecked={selectedSquad === squad._id}
+                  disabled={
+                    squadExists && selectedSquad && selectedSquad !== squad._id
+                  }
+                  onChange={() => handleChangeSquad(squad._id)}
+                  id={squad._id}
+                  title={squad.name}
+                />
+              ))}
+              {console.log(selectedSquad)}
             </div>
-
+          </div>
+          <div className="Horario">
             <div className="flex flex-col ">
-              <label
-                htmlFor="horario"
-                className="text-2xl font-semibold lg:-mt-10"
-              >
+              <label htmlFor="horario" className="text-3xl font-semibold mt-4">
                 Selecione o horário do intervalo
               </label>
               <select
@@ -385,7 +386,30 @@ export default function Register() {
               </select>
             </div>
           </div>
+
+          <div className="FILHO">
+            <h1 className="text-3xl font-semibold mt-4">Possui filhos?</h1>
+            <div className="relative flex mt-5 gap-7">
+              <div>
+                <CheckBox
+                  isChecked={selectedChild === "yes"}
+                  onChange={() => handleChangeChildOption("yes")}
+                  disabled={selectedChild && selectedChild !== "yes"}
+                  title="Sim"
+                  id="yes"
+                />
+                <CheckBox
+                  isChecked={selectedChild === "no"}
+                  onChange={() => handleChangeChildOption("no")}
+                  disabled={selectedChild && selectedChild !== "no"}
+                  title="Não"
+                  id="no"
+                />
+              </div>
+            </div>
+          </div>
         </div>
+
         <ButtonSubmit text="Cadastrar" />
       </div>
     </form>
