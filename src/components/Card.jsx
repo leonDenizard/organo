@@ -14,7 +14,7 @@ function Card({
   iconHour,
   hour,
   iconSuper,
-  supe,
+  manager,
   iconBirthday,
   birthday,
   iconChild,
@@ -25,37 +25,37 @@ function Card({
 }) {
   const link = formatWhatsAppLink(whats);
 
-  const schedules = {
-    morning: "10:00 às 19:00",
-    afternoon: "13:00 às 22:00",
-    night: "15:00 às 00:00",
-  };
-  const formatSchedules = (value) => {
-    //console.log(schedules[value])
-    if (schedules[value]) {
-      return schedules[value];
-    } else {
-      return;
-    }
-  };
-  const formatHour = formatSchedules(hour);
+  // const schedules = {
+  //   morning: "10:00 às 19:00",
+  //   afternoon: "13:00 às 22:00",
+  //   night: "15:00 às 00:00",
+  // };
+  // const formatSchedules = (value) => {
+  //   //console.log(schedules[value])
+  //   if (schedules[value]) {
+  //     return schedules[value];
+  //   } else {
+  //     return;
+  //   }
+  // };
+  // const formatHour = formatSchedules(hour);
 
-  const supers = {
-    diogo: "Diogo",
-    greice: "Greice",
-    teteu: "Matheus Silva",
-    duda: "Duda",
-    guto: "Augusto Cezar",
-    luan: "Luan",
-    ricardo: "Ricardo"
-  };
-  const formatSuper = (value) => {
-    if (supers[value]) {
-      return supers[value];
-    }
-  };
-  const formattedSuper = formatSuper(supe);
-  //console.log(formattedSuper)
+  // const supers = {
+  //   diogo: "Diogo",
+  //   greice: "Greice",
+  //   teteu: "Matheus Silva",
+  //   duda: "Duda",
+  //   guto: "Augusto Cezar",
+  //   luan: "Luan",
+  //   ricardo: "Ricardo"
+  // };
+  // const formatSuper = (value) => {
+  //   if (supers[value]) {
+  //     return supers[value];
+  //   }
+  // };
+  // // const formattedSuper = formatSuper(supe);
+  // //console.log(formattedSuper)
   const childFormat = (child) => {
 
     if (child === "yes") {
@@ -124,12 +124,12 @@ function Card({
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconHour}</div>
-          <p>{formatHour}</p>
+          <p>{hour}</p>
         </div>
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconSuper}</div>
-          <p>{formattedSuper}</p>
+          <p>{manager}</p>
         </div>
         <div className="w-full flex gap-2 items-center">
           <div className="bg-border-color rounded-full">{iconInterval}</div>

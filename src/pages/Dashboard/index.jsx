@@ -16,6 +16,7 @@ import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
 import { checkUserExists } from "../../services/firebase";
 import Coffe from "../../components/icons/Coffe";
+import useParameterization from "../../hooks/useParameterization";
 
 export default function Dashboard() {
   const { googleUser, logOut } = useAuth();
@@ -30,8 +31,10 @@ export default function Dashboard() {
   const [modalOptions, setModalOptions] = useState([]);
   const [onSelectFunction, setOnSelectFunction] = useState(null);
 
+  const { allSquads, allPositions, allSuper, workShifts } =
+    useParameterization();
 
-  const API_URL = import.meta.env.VITE_API_URL
+  const API_URL = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -40,46 +43,41 @@ export default function Dashboard() {
         const userUIDQuery = await fetch(`${API_URL}/user/${googleUser.uid}`, {
           method: "GET",
           headers: {
-            'Content-Type': 'application/json'
-          }
-        })
+            "Content-Type": "application/json",
+          },
+        });
 
-        const exists = await checkUserExists(googleUser.uid)
+        const exists = await checkUserExists(googleUser.uid);
 
-       
-        if(!exists){
-          navigate("/register")
+        if (!exists) {
+          navigate("/register");
         }
-        
-        const userUIDResponse = await userUIDQuery.json()
-        
+
+        const userUIDResponse = await userUIDQuery.json();
+
         const allUserQuery = await fetch(`${API_URL}/user/`, {
           method: "GET",
           headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        const allUserResponse = await allUserQuery.json()
-    
+            "Content-Type": "application/json",
+          },
+        });
+        const allUserResponse = await allUserQuery.json();
+
         try {
-          
           if (!allUserResponse.empty) {
             let allUserData = [];
 
-            allUserData = [...allUserResponse]
+            allUserData = [...allUserResponse];
 
             setAllUser(allUserData);
-            
+
             setSortedUsers(allUserData);
 
-            
             if (!userUIDQuery.empty) {
-              
-              const userData = userUIDResponse
+              const userData = userUIDResponse;
 
               setUserDataLogged(userData);
             }
-
           } else {
             console.log("Nenhum documento encontrado");
           }
@@ -119,8 +117,8 @@ export default function Dashboard() {
 
   //console.log(userDataLogged)
 
-  if(!userDataLogged){
-    navigate('/register')
+  if (!userDataLogged) {
+    navigate("/register");
   }
 
   const sortByName = () => {
@@ -131,8 +129,6 @@ export default function Dashboard() {
     setSortedUsers(usersOrder);
     setIsAscending(!isAscending);
   };
-
-
 
   const openModal = (options, onSelect) => {
     setModalOptions(options);
@@ -150,23 +146,27 @@ export default function Dashboard() {
       (user) => user.role === selectedRole
     );
     setSortedUsers(sortedUsers);
-    closeModal(); 
+    closeModal();
   };
 
-  const times = ["afternoon", "morning", "night"]
+  const times = ["afternoon", "morning", "night"];
   const sortByTime = (selectedTime) => {
-    const sortedUsers = [...allUsers].filter((user) => user.time === selectedTime)
+    const sortedUsers = [...allUsers].filter(
+      (user) => user.time === selectedTime
+    );
 
-    setSortedUsers(sortedUsers)
-    closeModal(); 
-  }
-
-  const manager = ["guto", "greice", "diogo", "luan","duda","teteu"]
-  const sortByManager = (selectedManager) => {
-    const sortedUsers = [...allUsers].filter((user) => user.manager === selectedManager)
-    setSortedUsers(sortedUsers)
+    setSortedUsers(sortedUsers);
     closeModal();
-  }
+  };
+
+  const manager = ["guto", "greice", "diogo", "luan", "duda", "teteu"];
+  const sortByManager = (selectedManager) => {
+    const sortedUsers = [...allUsers].filter(
+      (user) => user.manager === selectedManager
+    );
+    setSortedUsers(sortedUsers);
+    closeModal();
+  };
 
   const handleSchedule = () => {
     navigate("/schedule");
@@ -182,17 +182,22 @@ export default function Dashboard() {
     setSortedUsers(matchingUsers);
   };
 
-  const handleLogOut = async() =>{
-    await logOut()
-    navigate("/")
-  }
+  const handleLogOut = async () => {
+    await logOut();
+    navigate("/");
+  };
+  
 
-  const isAdmin = userDataLogged.admin
+  const isAdmin = userDataLogged.admin;
   return (
     <div className="container w-[95%] lg:w-[90%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
         <>
-          <Header name={firstName} img={profilePhoto} logout={handleLogOut}></Header>
+          <Header
+            name={firstName}
+            img={profilePhoto}
+            logout={handleLogOut}
+          ></Header>
 
           <SearchBar handleInputName={handleInputName} />
           <FilterBar
@@ -202,6 +207,7 @@ export default function Dashboard() {
             orderByTime={() => openModal(times, sortByTime)}
             handleSchedule={handleSchedule}
           />
+          {console.log(workShifts.find((ws) => ws._id))}
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
@@ -209,7 +215,10 @@ export default function Dashboard() {
                 imgProfile={user.photoUrl}
                 name={nameCardFormatted(user.name)}
                 surname={user.surname}
-                role={user.role}
+                role={
+                  allPositions.find((position) => position._id === user.role)
+                    ?.name || "Sem cargo"
+                }
                 iconSlack={<Slack />}
                 slack={user.slack}
                 iconWhats={<Whats />}
@@ -217,10 +226,20 @@ export default function Dashboard() {
                 iconMail={<Gmail />}
                 mail={user.email}
                 iconHour={<Clock />}
-                hour={user.time}
+
+                hour={(() => {
+                  const shift = workShifts.find((ws) => ws._id === user.time);
+                  return shift
+                    ? `${shift.startTime} - ${shift.endTime}`
+                    : "Horário não definido";
+                })()}
+
                 iconSuper={<Check />}
-                supe={user.manager}
-                iconInterval={<Coffe/>}
+                manager={
+                  allSuper.find((sup) => sup._id === user.manager)?.name ||
+                  "Sem Super"
+                }
+                iconInterval={<Coffe />}
                 interval={user.interval}
                 iconBirthday={<Conffeti />}
                 birthday={user.birthday}
@@ -232,11 +251,12 @@ export default function Dashboard() {
           </div>
           {/* Renderizar o modal se estiver aberto */}
           {isOpenModal && (
-          <PopUpMenu
-            options={modalOptions}
-            onSelect={onSelectFunction}
-            closeModal={closeModal}
-          />)}
+            <PopUpMenu
+              options={modalOptions}
+              onSelect={onSelectFunction}
+              closeModal={closeModal}
+            />
+          )}
         </>
       ) : (
         <Loader />
