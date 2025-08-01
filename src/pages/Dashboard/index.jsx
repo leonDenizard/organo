@@ -152,7 +152,6 @@ export default function Dashboard() {
   };
 
   const times = workShifts;
-  console.log(times)
   const sortByTime = (selectedTime) => {
     const sortedUsers = [...allUsers].filter(
       (user) => user.time === selectedTime
@@ -170,6 +169,13 @@ export default function Dashboard() {
     setSortedUsers(sortedUsers);
     closeModal();
   };
+
+  const sortBySquadI = (squadId) => {
+    const sortedUsers = [...allUsers].filter((user) => user.squad === squadId)
+    console.log(sortedUsers)
+    setSortedUsers(sortedUsers)
+    closeModal()
+  }
 
   const handleSchedule = () => {
     navigate("/schedule");
@@ -208,6 +214,7 @@ export default function Dashboard() {
             orderByRole={() => openModal(roles, sortByRule)}
             orderByManager={() => openModal(manager, sortByManager)}
             orderByTime={() => openModal(times, sortByTime)}
+            orderBySquads={() => openModal(allSquads, sortBySquadI)}
             handleSchedule={handleSchedule}
           />
           
