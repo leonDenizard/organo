@@ -17,6 +17,9 @@ import PopUpMenu from "../../components/PopUpMenu";
 import { checkUserExists } from "../../services/firebase";
 import Coffe from "../../components/icons/Coffe";
 import useParameterization from "../../hooks/useParameterization";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSlack, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
+import { faClock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 export default function Dashboard() {
   const { googleUser, logOut } = useAuth();
@@ -199,7 +202,7 @@ export default function Dashboard() {
 
   const isAdmin = userDataLogged.admin;
   return (
-    <div className="container w-[95%] lg:w-[90%] m-auto lg:h-screen h-dvh">
+    <div className="container w-[95%] lg:w-[95%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
         <>
           <Header
@@ -233,9 +236,9 @@ export default function Dashboard() {
                 slack={user.slack}
                 iconWhats={<Whats />}
                 whats={user.whatsapp || ""}
-                iconMail={<Gmail />}
+                iconMail={<Gmail/>}
                 mail={user.email}
-                iconHour={<Clock />}
+                iconHour={<Clock/>}
 
                 hour={(() => {
                   const shift = workShifts.find((ws) => ws._id === user.time);
