@@ -140,16 +140,19 @@ export default function Dashboard() {
     setIsOpenModal(false);
   };
 
-  const roles = ["gerente", "super", "pleno", "jriii", "jrii", "jri", "trial"];
+  const roles = allPositions;
+
   const sortByRule = (selectedRole) => {
     const sortedUsers = [...allUsers].filter(
       (user) => user.role === selectedRole
     );
+    
     setSortedUsers(sortedUsers);
     closeModal();
   };
 
-  const times = ["afternoon", "morning", "night"];
+  const times = workShifts;
+  console.log(times)
   const sortByTime = (selectedTime) => {
     const sortedUsers = [...allUsers].filter(
       (user) => user.time === selectedTime
@@ -159,7 +162,7 @@ export default function Dashboard() {
     closeModal();
   };
 
-  const manager = ["guto", "greice", "diogo", "luan", "duda", "teteu"];
+  const manager = allSuper;
   const sortByManager = (selectedManager) => {
     const sortedUsers = [...allUsers].filter(
       (user) => user.manager === selectedManager
@@ -207,7 +210,7 @@ export default function Dashboard() {
             orderByTime={() => openModal(times, sortByTime)}
             handleSchedule={handleSchedule}
           />
-          {console.log(workShifts.find((ws) => ws._id))}
+          
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
