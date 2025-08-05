@@ -205,3 +205,56 @@ export async function deleteWorkShiftById(id){
     console.error("Erro ao deletar horário", error)
   }
 }
+
+export async function getAllUsers(){
+  try {
+    const response = await fetch(`${API_URL}/user`, {
+      method: "GET",
+      headers: {"Content-type": "application/json"}
+    })
+
+    if(!response.ok) throw new Error("Não foi possível buscar usuários")
+
+    return await response.json()
+  } catch (error) {
+    console.error("Erro ao buscar usuários", error)
+  }
+}
+
+export async function updateUserAdminById(id){
+  try{
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: "PUTCH",
+      headers: {"Content-type": "application/json"},
+      body: JSON.stringify({
+        admin: true
+      })
+    })
+
+    if(!response.ok) throw new Error("Erro ao atualizar admin")
+    
+    return await response.json()
+
+  }catch(error){
+    console.error("Erro ao atualizar usuário", id, error)
+  }
+}
+
+export async function deleteUserAdminById(id){
+  try{
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: "PUTCH",
+      headers: {"Content-type": "application/json"},
+      body: JSON.stringify({
+        admin: false
+      })
+    })
+
+    if(!response.ok) throw new Error("Erro ao atualizar admin")
+    
+    return await response.json()
+
+  }catch(error){
+    console.error("Erro ao atualizar usuário", id, error)
+  }
+}

@@ -12,7 +12,7 @@ export default function useParameterization() {
   const [allSuper, setAllSuper] = useState([])
 
   const [startTime, setStartTime] = useState("10:00")
-  const [endTime, setEndTime] = useState("10:00")
+  const [endTime, setEndTime] = useState("19:00")
   const [workShifts, setWorkShifts] = useState([])
 
   //Handler submit

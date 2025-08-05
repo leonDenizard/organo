@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import ButtonFilter from "../../components/ButtonFilter";
-import Input from "../../components/Input";
 import useParameterization from "../../hooks/useParameterization";
 import { Trash } from "lucide-react";
 
@@ -15,6 +13,7 @@ export default function Parameterization() {
     { key: "squad", label: "Squads" },
     { key: "supervisor", label: "Supervisor" },
     { key: "horario", label: "Horário" },
+    { key: "admin", label: "Admin"}
   ];
 
   const {
@@ -70,7 +69,7 @@ export default function Parameterization() {
           <li
             key={key}
             ref={(el) => (tabRefs.current[key] = el)}
-            className={`list-none p-3 px-6 cursor-pointer tracking-widest text-2xl relative z-10
+            className={`list-none p-3 px-6 cursor-pointer tracking-widest text-xl relative z-10
             ${
               activeTab === key ? "text-blue-white font-semibold" : "text-white"
             }
@@ -348,6 +347,70 @@ export default function Parameterization() {
               </div>
             </div>
           )}
+
+          
+          {activeTab === "admin" && (
+            <div className="">
+              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+                Cadastro dos Admin's
+              </h2>
+              <div className="relative flex-col space-y-10 border w-">
+                <select
+                    className="focus:outline-none bg-backgound text-xl font-medium bg-transparent border-2 border-border-color rounded p-3"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  >
+                    {Array.from({ length: 15 }, (_, i) => {
+                      const hour = 10 + i;
+                      const label =
+                        hour >= 24
+                          ? "00:00"
+                          : `${hour.toString().padStart(2, "0")}:00`;
+                      return (
+                        <option className="bg-backgound border-none" key={label} value={label}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </select>
+
+                  <button
+                    onClick={handleSubmitWorkShift}
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
+          rounded w-[200px] font-semibold text-lg tracking-wide"
+                  >
+                    Inserir admin
+                  </button>
+
+                <div className="flex flex-col gap-3">
+                  {allPositions.map((position) => (
+                    <div
+                      key={position._id}
+                      className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"
+                    >
+                      <span className="flex justify-center items-center text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red relative w-2 h-8 mr-4"></span>
+                        {position.name}
+                      </span>
+                      <div
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
+                    hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
+                          color="white"
+                          size={20}
+                          strokeWidth={2}
+                          onClick={() => handleDeletePosition(position._id)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+                   
         </div>
       </section>
     </div>
