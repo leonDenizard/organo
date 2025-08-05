@@ -70,7 +70,7 @@ export default function Parameterization() {
           <li
             key={key}
             ref={(el) => (tabRefs.current[key] = el)}
-            className={`list-none p-3 px-6 cursor-pointer text-xl relative z-10
+            className={`list-none p-3 px-6 cursor-pointer tracking-widest text-2xl relative z-10
             ${
               activeTab === key ? "text-blue-white font-semibold" : "text-white"
             }
@@ -90,206 +90,261 @@ export default function Parameterization() {
         />
       </nav>
 
-      <section className="border-2 h-[400px] w-[80%] relative top-0 left-0 m-auto mt-20">
-        <div className="relative w-full h-full">
-          
+      <section className="w-[90%] relative top-0 left-0 m-auto xl:mt-20 2xl:mt-40">
+        <div className="relative flex justify-center">
           {activeTab === "cargo" && (
-            <div>
-              <h2>Cadastro dos cargos</h2>
+            <div className="">
+              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+                Cadastro dos cargos
+              </h2>
+              <div className="relative flex-col space-y-10">
+                <div className="flex gap-3">
+                  <input
+                    value={position}
+                    placeholder={"JR I"}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleSubmitPosition();
+                      }
+                    }}
+                    onChange={(e) => setPosition(e.target.value)}
+                    className=" relative peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
+                    p-3 w-[500px] text-xl font-medium"
+                    type="text"
+                  />
 
-              <div className="flex-col">
-                <Input
-                  title={"JR I"}
-                  value={position}
-                  onChange={(e) => setPosition(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleSubmitPosition();
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleSubmitPosition}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                  Salvar Cargo
-                </button>
-              </div>
+                  <button
+                    onClick={handleSubmitPosition}
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
+                    rounded w-[150px] font-semibold text-lg tracking-wide"
+                  >
+                    Salvar Cargo
+                  </button>
+                </div>
 
-              <div>
-                <p>Display Cargos</p>
-                {allPositions.map((position) => (
-                  <div key={position._id} className="flex items-center gap-4 ">
-                    <span>{position.name}</span>
-                    <Trash
-                      color="white"
-                      size={16}
-                      strokeWidth={3}
-                      onClick={() => handleDeletePosition(position._id)}
-                    />
-                  </div>
-                ))}
+                <div className="flex flex-col gap-3">
+                  {allPositions.map((position) => (
+                    <div
+                      key={position._id}
+                      className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"
+                    >
+                      <span className="flex justify-center items-center text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red relative w-2 h-8 mr-4"></span>
+                        {position.name}
+                      </span>
+                      <div
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
+                    hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
+                          color="white"
+                          size={20}
+                          strokeWidth={2}
+                          onClick={() => handleDeletePosition(position._id)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === "squad" && (
             <div>
-              <h2>Cadastro dos Squad</h2>
-              <div className="flex-col">
-                <Input
-                  title={"@squad-slack"}
-                  value={squad}
-                  onChange={(e) => setSquad(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleSubmitSquad();
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleSubmitSquad}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                  Salvar Squad
-                </button>
-              </div>
+              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+                Cadastro dos Squads
+              </h2>
 
-              <div>
-                <p>Display Squad</p>
-                {allSquads.map((squad) => (
-                  <div key={squad._id} className="flex items-center gap-4 ">
-                    <span>{squad.name}</span>
-                    <Trash
-                      color="white"
-                      size={16}
-                      strokeWidth={3}
-                      onClick={() => handleDeleteSquad(squad._id)}
-                    />
-                  </div>
-                ))}
+              <div className="relative flex-col space-y-10">
+                <div className="flex gap-3">
+                  <input
+                    value={squad}
+                    placeholder={"@squad-suporte"}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSubmitSquad();
+                    }}
+                    onChange={(e) => setSquad(e.target.value)}
+                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
+          p-3 w-[500px] text-xl font-medium"
+                    type="text"
+                  />
+
+                  <button
+                    onClick={handleSubmitSquad}
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
+          rounded w-[150px] font-semibold text-lg tracking-wide"
+                  >
+                    Salvar Squad
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {allSquads.map((squad) => (
+                    <div
+                      key={squad._id}
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                    >
+                      <span className="flex items-center text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
+                        {squad.name}
+                      </span>
+                      <div
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
+              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
+                          size={20}
+                          strokeWidth={2}
+                          onClick={() => handleDeleteSquad(squad._id)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === "supervisor" && (
             <div>
-              <h2>Cadastro dos Supervisores</h2>
+              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+                Cadastro dos Supervisores
+              </h2>
 
-              <div className="flex-col">
-                <Input
-                  title={"Nome Super"}
-                  value={supervisor}
-                  onChange={(e) => setSupervisor(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleSubmitSuper();
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleSubmitSuper}
-                  className="bg-green-600 text-white px-4 py-2 rounded"
-                >
-                  Salvar Super
-                </button>
-              </div>
+              <div className="relative flex-col space-y-10">
+                <div className="flex gap-3">
+                  <input
+                    value={supervisor}
+                    placeholder={"Nome super"}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") handleSubmitSuper();
+                    }}
+                    onChange={(e) => setSupervisor(e.target.value)}
+                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
+          p-3 w-[500px] text-xl font-medium"
+                    type="text"
+                  />
 
-              <div>
-                <p>Display Supers</p>
-                {allSuper.map((supervisor) => (
-                  <div
-                    key={supervisor._id}
-                    className="flex items-center gap-4 "
+                  <button
+                    onClick={handleSubmitSuper}
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
+          rounded w-[150px] font-semibold text-lg tracking-wide"
                   >
-                    <span>{supervisor.name}</span>
-                    <Trash
-                      color="white"
-                      size={16}
-                      strokeWidth={3}
-                      onClick={() => handleDeleteSuper(supervisor._id)}
-                    />
-                  </div>
-                ))}
+                    Salvar Super
+                  </button>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {allSuper.map((supervisor) => (
+                    <div
+                      key={supervisor._id}
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                    >
+                      <span className="flex items-center text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
+                        {supervisor.name}
+                      </span>
+                      <div
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
+              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
+                          size={20}
+                          strokeWidth={2}
+                          onClick={() => handleDeleteSuper(supervisor._id)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === "horario" && (
             <div>
-              <h2>Cadastro dos horários do suporte</h2>
+              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+                Cadastro dos horários do suporte
+              </h2>
 
-              <p>Inicio</p>
-              <select
-                id="horario"
-                name="horario"
-                className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-              >
-                <option value="10:00">10:00</option>
-                <option value="11:00">11:00</option>
-                <option value="12:00">12:00</option>
-                <option value="13:00">13:00</option>
-                <option value="14:00">14:00</option>
-                <option value="15:00">15:00</option>
-                <option value="16:00">16:00</option>
-                <option value="17:00">17:00</option>
-                <option value="18:00">18:00</option>
-                <option value="19:00">19:00</option>
-                <option value="20:00">20:00</option>
-                <option value="21:00">21:00</option>
-                <option value="22:00">22:00</option>
-                <option value="23:00">23:00</option>
-                <option value="00:00">00:00</option>
-              </select>
+              <div className="relative flex-col space-y-10">
+                <div className="flex gap-3">
+                  <select
+                    className="w-[220px] text-xl font-medium bg-transparent border-2 border-border-color rounded p-3
+          focus:bg-button-hover outline-none"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                  >
+                    {Array.from({ length: 15 }, (_, i) => {
+                      const hour = 10 + i;
+                      const label =
+                        hour >= 24
+                          ? "00:00"
+                          : `${hour.toString().padStart(2, "0")}:00`;
+                      return (
+                        <option className="bg-backgound border-none" key={label} value={label}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </select>
 
-              <p>Fim</p>
-              <select
-                id="horario"
-                name="horario"
-                className="md:max-w-[70%] focus:outline-none bg-backgound mt-4 border-2 border-border-color rounded-md p-2 text-lg"
-                value={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
-              >
-                <option value="10:00">10:00</option>
-                <option value="11:00">11:00</option>
-                <option value="12:00">12:00</option>
-                <option value="13:00">13:00</option>
-                <option value="14:00">14:00</option>
-                <option value="15:00">15:00</option>
-                <option value="16:00">16:00</option>
-                <option value="17:00">17:00</option>
-                <option value="18:00">18:00</option>
-                <option value="19:00">19:00</option>
-                <option value="20:00">20:00</option>
-                <option value="21:00">21:00</option>
-                <option value="22:00">22:00</option>
-                <option value="23:00">23:00</option>
-                <option value="00:00">00:00</option>
-              </select>
+                  <select
+                    className="focus:outline-none bg-backgound w-[220px] text-xl font-medium bg-transparent border-2 border-border-color rounded p-3"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                  >
+                    {Array.from({ length: 15 }, (_, i) => {
+                      const hour = 10 + i;
+                      const label =
+                        hour >= 24
+                          ? "00:00"
+                          : `${hour.toString().padStart(2, "0")}:00`;
+                      return (
+                        <option className="bg-backgound border-none" key={label} value={label}>
+                          {label}
+                        </option>
+                      );
+                    })}
+                  </select>
 
-              <button
-                onClick={handleSubmitWorkShift}
-                className="bg-green-600 text-white px-4 py-2 rounded"
-              >
-                Salvar Horário de trabalho
-              </button>
+                  <button
+                    onClick={handleSubmitWorkShift}
+                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
+          rounded w-[200px] font-semibold text-lg tracking-wide"
+                  >
+                    Salvar Horário
+                  </button>
+                </div>
 
-              <div>
-                <p>Display Horários</p>
-                {workShifts.map((works) => (
-                  <div key={works._id} className="flex items-center gap-4 ">
-                    <span>{works.startTime}</span>
-                    <span>{works.endTime}</span>
-                    <Trash
-                      color="white"
-                      size={16}
-                      strokeWidth={3}
-                      onClick={() => handleDeleteWorkShift(works._id)}
-                    />
-                  </div>
-                ))}
+                <div className="flex flex-col gap-3">
+                  {workShifts.map((works) => (
+                    <div
+                      key={works._id}
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                    >
+                      <span className="flex items-center text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
+                        {works.startTime} - {works.endTime}
+                      </span>
+                      <div
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
+              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                      >
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
+                          size={20}
+                          strokeWidth={2}
+                          onClick={() => handleDeleteWorkShift(works._id)}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}

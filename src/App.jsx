@@ -27,7 +27,7 @@ function App() {
         </Route>
 
         <Route element={<AdminRoute />}>
-          <Route path="/admin" element={<UserDetail />} />
+          <Route path="/admin" element={<Parameterization />} />
         </Route>
       </Routes>
     </Router>
