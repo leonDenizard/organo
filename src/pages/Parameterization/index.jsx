@@ -13,7 +13,7 @@ export default function Parameterization() {
     { key: "squad", label: "Squads" },
     { key: "supervisor", label: "Supervisor" },
     { key: "horario", label: "Horário" },
-    { key: "admin", label: "Admin"}
+    { key: "admin", label: "Admin" },
   ];
 
   const {
@@ -39,6 +39,12 @@ export default function Parameterization() {
     workShifts,
     handleSubmitWorkShift,
     handleDeleteWorkShift,
+    allUsers,
+    selectedUserUid,
+    setSelectedUserUid,
+    userAdmin,
+    handlePromoteToAdmin,
+    handleRemoveAdmin,
   } = useParameterization();
 
   useEffect(() => {
@@ -285,7 +291,11 @@ export default function Parameterization() {
                           ? "00:00"
                           : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option className="bg-backgound border-none" key={label} value={label}>
+                        <option
+                          className="bg-backgound border-none"
+                          key={label}
+                          value={label}
+                        >
                           {label}
                         </option>
                       );
@@ -304,7 +314,11 @@ export default function Parameterization() {
                           ? "00:00"
                           : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option className="bg-backgound border-none" key={label} value={label}>
+                        <option
+                          className="bg-backgound border-none"
+                          key={label}
+                          value={label}
+                        >
                           {label}
                         </option>
                       );
@@ -348,49 +362,54 @@ export default function Parameterization() {
             </div>
           )}
 
-          
           {activeTab === "admin" && (
             <div className="">
               <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
                 Cadastro dos Admin's
               </h2>
-              <div className="relative flex-col space-y-10 border w-">
-                <select
-                    className="focus:outline-none bg-backgound text-xl font-medium bg-transparent border-2 border-border-color rounded p-3"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
+              <div className="relative flex-col space-y-10 min-w-[500px]">
+                <div className="flex gap-3">
+                  <select
+                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
+          p-3 w-[500px] text-xl font-medium"
+                    value={selectedUserUid}
+                    onChange={(e) => setSelectedUserUid(e.target.value)}
                   >
-                    {Array.from({ length: 15 }, (_, i) => {
-                      const hour = 10 + i;
-                      const label =
-                        hour >= 24
-                          ? "00:00"
-                          : `${hour.toString().padStart(2, "0")}:00`;
-                      return (
-                        <option className="bg-backgound border-none" key={label} value={label}>
-                          {label}
-                        </option>
-                      );
-                    })}
+                    <option className="bg-backgound" value="">
+                      Selecione um usuário
+                    </option>
+                    {allUsers.map((user) => (
+                      <option
+                        key={user.id}
+                        value={user.uid}
+                        className="bg-backgound border-none"
+                      >
+                        {user.name}
+                      </option>
+                    ))}
                   </select>
 
                   <button
-                    onClick={handleSubmitWorkShift}
+                    onClick={() => handlePromoteToAdmin(selectedUserUid)}
                     className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-          rounded w-[200px] font-semibold text-lg tracking-wide"
+          rounded w-[150px] font-semibold text-lg tracking-wide"
                   >
                     Inserir admin
                   </button>
+                </div>
 
                 <div className="flex flex-col gap-3">
-                  {allPositions.map((position) => (
+                  {userAdmin.map((user) => (
                     <div
-                      key={position._id}
+                      key={user.id}
                       className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"
                     >
                       <span className="flex justify-center items-center text-lg tracking-wider">
-                        <span className="inline-block rounded-full bg-bubble-red relative w-2 h-8 mr-4"></span>
-                        {position.name}
+                        <img
+                          src={user.profile}
+                          className="inline-block rounded-full relative w-8 h-8 mr-4"
+                        />
+                        {user.name}
                       </span>
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
@@ -401,7 +420,7 @@ export default function Parameterization() {
                           color="white"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleDeletePosition(position._id)}
+                          onClick={() => handleRemoveAdmin(selectedUserUid)}
                         />
                       </div>
                     </div>
@@ -410,7 +429,6 @@ export default function Parameterization() {
               </div>
             </div>
           )}
-                   
         </div>
       </section>
     </div>

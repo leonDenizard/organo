@@ -11,7 +11,7 @@ import Check from "../../components/icons/Check";
 import Conffeti from "../../components/icons/Conffeti";
 import ChildIcon from "../../components/icons/ChildIcon";
 import Loader from "../../components/Loader";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import FilterBar from "../../components/FilterBar";
 import PopUpMenu from "../../components/PopUpMenu";
 import { checkUserExists } from "../../services/firebase";

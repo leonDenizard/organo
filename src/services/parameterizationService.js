@@ -221,10 +221,10 @@ export async function getAllUsers(){
   }
 }
 
-export async function updateUserAdminById(id){
+export async function updateUserAdminById(uid){
   try{
-    const response = await fetch(`${API_URL}/user/${id}`, {
-      method: "PUTCH",
+    const response = await fetch(`${API_URL}/user/${uid}`, {
+      method: "PATCH",
       headers: {"Content-type": "application/json"},
       body: JSON.stringify({
         admin: true
@@ -236,14 +236,14 @@ export async function updateUserAdminById(id){
     return await response.json()
 
   }catch(error){
-    console.error("Erro ao atualizar usuário", id, error)
+    console.error("Erro ao atualizar usuário", uid, error)
   }
 }
 
-export async function deleteUserAdminById(id){
+export async function deleteUserAdminById(uid){
   try{
-    const response = await fetch(`${API_URL}/user/${id}`, {
-      method: "PUTCH",
+    const response = await fetch(`${API_URL}/user/${uid}`, {
+      method: "PATCH",
       headers: {"Content-type": "application/json"},
       body: JSON.stringify({
         admin: false
@@ -255,6 +255,6 @@ export async function deleteUserAdminById(id){
     return await response.json()
 
   }catch(error){
-    console.error("Erro ao atualizar usuário", id, error)
+    console.error("Erro ao atualizar usuário", uid, error)
   }
 }

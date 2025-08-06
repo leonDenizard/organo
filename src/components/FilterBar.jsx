@@ -28,6 +28,7 @@ export default function FilterBar({
         <ButtonFilter name={"Horário"} onClick={orderByTime} />
         <ButtonFilter name={"Gestor"} onClick={orderByManager} />
         <ButtonFilter name={"Squads"} onClick={orderBySquads} />
+        <ButtonFilter name={"Admin"} />
         <ButtonFilter
           name={"Escala"}
           onClick={handleSchedule}
