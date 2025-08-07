@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import useParameterization from "../../hooks/useParameterization";
 import { Trash } from "lucide-react";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Parameterization() {
   const [activeTab, setActiveTab] = useState("cargo");
@@ -70,6 +71,7 @@ export default function Parameterization() {
 
   return (
     <div className="relative h-screen">
+      <Breadcrumb/>
       <nav className="relative top-8 justify-center flex gap-5">
         {tabs.map(({ key, label }) => (
           <li

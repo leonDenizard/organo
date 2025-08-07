@@ -19,7 +19,7 @@ export default function Breadcrumb() {
 
                 {breadcrumbs.map((crumb, index) => (
                     <span key={crumb.to} className="flex items-center space-x-1">
-                        <span className="mx-1 text-white">{'>'}</span>
+                        <span className="mx-1 text-white">{'/'}</span>
                         
                             <span className="font-semibold text-white">{capitalize(crumb.label)}</span>
                         

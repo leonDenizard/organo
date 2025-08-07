@@ -33,6 +33,7 @@ export default function Register() {
   const [birthday, setBirthday] = useState("");
   const [isFetchingImage, setIsFetchingImage] = useState(false);
   const [interval, setInterval] = useState("13:00");
+  const [admin, setAdmin] = useState(false);
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -122,7 +123,7 @@ export default function Register() {
     surname: surname,
     birthday: birthday,
     child: selectedChild,
-    admin: false,
+    admin: admin,
     interval: interval,
   };
 
@@ -161,6 +162,7 @@ export default function Register() {
       setSelectedRole(exists.role);
       setSelectedSquad(exists.squad);
       setSelectedChild(exists.child);
+      setAdmin(exists.admin)
     }
 
     setIsFetchingImage(false);
@@ -339,9 +341,6 @@ export default function Register() {
                 <CheckBox
                   key={squad._id}
                   isChecked={selectedSquad === squad._id}
-                  disabled={
-                    squadExists && selectedSquad && selectedSquad !== squad._id
-                  }
                   onChange={() => handleChangeSquad(squad._id)}
                   id={squad._id}
                   title={squad.name}

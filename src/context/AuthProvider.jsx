@@ -90,7 +90,8 @@ function AuthProvider({ children }) {
         backendUser,
         isLoading,
         logOut,
-        isFirstUser
+        isFirstUser,
+        isAdmin: backendUser?.admin ?? false,
       }}
     >
       {children}

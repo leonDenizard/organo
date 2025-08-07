@@ -21,9 +21,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlack, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faClock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import { getAllUsers } from "../../services/parameterizationService";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Dashboard() {
-  const { googleUser, logOut } = useAuth();
+  const { googleUser, logOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
@@ -201,15 +202,16 @@ export default function Dashboard() {
   };
 
   
+  console.log("É admin logado no dash?", isAdmin)
   const handleAdmin = async() => {
     
-    if(userDataLogged.admin === true){
-      navigate("/parameterization")
+    if(isAdmin){
+      navigate("/admin")
     }
   }
   
 
-  const isAdmin = userDataLogged.admin;
+  
   return (
     <div className="container w-[95%] lg:w-[95%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
