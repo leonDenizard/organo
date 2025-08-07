@@ -1,3 +1,4 @@
+import { useAuth } from "../context/AuthProvider";
 import ButtonFilter from "./ButtonFilter";
 
 export default function FilterBar({
@@ -7,8 +8,11 @@ export default function FilterBar({
   orderByTime,
   orderBySquads,
   handleSchedule,
-  handleAdmin
+  handleAdmin,
 }) {
+
+  const {isAdmin} = useAuth()
+
   return (
     <div className="relative top-14">
       <div
@@ -29,7 +33,8 @@ export default function FilterBar({
         <ButtonFilter name={"Horário"} onClick={orderByTime} />
         <ButtonFilter name={"Gestor"} onClick={orderByManager} />
         <ButtonFilter name={"Squads"} onClick={orderBySquads} />
-        <ButtonFilter name={"Admin"} onClick={handleAdmin}/>
+        {isAdmin && <ButtonFilter name={"Admin"} onClick={handleAdmin} />}
+
         <ButtonFilter
           name={"Escala"}
           onClick={handleSchedule}
@@ -39,10 +44,12 @@ export default function FilterBar({
           border={"1px solid rgba(0, 51, 255, 1)"}
         />
       </div>
-      <div className="
+      <div
+        className="
       absolute pointer-events-none right-0 top-0 h-full w-16 
       bg-gradient-to-l from-backgound to-transparent
-      lg:hidden"></div>
+      lg:hidden"
+      ></div>
     </div>
   );
 }

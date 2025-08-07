@@ -202,7 +202,6 @@ export default function Dashboard() {
   };
 
   
-  console.log("É admin logado no dash?", isAdmin)
   const handleAdmin = async() => {
     
     if(isAdmin){

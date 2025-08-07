@@ -8,7 +8,7 @@ import ButtonsSendSchedule from "../../components/ButtonsSendSchedule";
 import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Schedule({ showHeader = true, onDayClick, uid }) {
-  const { user, logOut } = useAuth();
+  const { user, logOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -135,12 +135,6 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     await logOut();
     navigate("/");
   };
-
-  let isAdmin;
-  if (loggedUserData && loggedUserData.admin) {
-    isAdmin = loggedUserData.admin;
-  }
-
   return (
     <div className="container w-[90%] m-auto min-h-screen">
       {!isLoading ? (
