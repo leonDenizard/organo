@@ -420,7 +420,7 @@ export default function Parameterization() {
                           color="white"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleRemoveAdmin(selectedUserUid)}
+                          onClick={() => handleRemoveAdmin(user.uid)}
                         />
                       </div>
                     </div>

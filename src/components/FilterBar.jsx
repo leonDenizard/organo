@@ -7,6 +7,7 @@ export default function FilterBar({
   orderByTime,
   orderBySquads,
   handleSchedule,
+  handleAdmin
 }) {
   return (
     <div className="relative top-14">
@@ -28,7 +29,7 @@ export default function FilterBar({
         <ButtonFilter name={"Horário"} onClick={orderByTime} />
         <ButtonFilter name={"Gestor"} onClick={orderByManager} />
         <ButtonFilter name={"Squads"} onClick={orderBySquads} />
-        <ButtonFilter name={"Admin"} />
+        <ButtonFilter name={"Admin"} onClick={handleAdmin}/>
         <ButtonFilter
           name={"Escala"}
           onClick={handleSchedule}

@@ -20,6 +20,7 @@ import useParameterization from "../../hooks/useParameterization";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSlack, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
 import { faClock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { getAllUsers } from "../../services/parameterizationService";
 
 export default function Dashboard() {
   const { googleUser, logOut } = useAuth();
@@ -198,6 +199,14 @@ export default function Dashboard() {
     await logOut();
     navigate("/");
   };
+
+  
+  const handleAdmin = async() => {
+    
+    if(userDataLogged.admin === true){
+      navigate("/parameterization")
+    }
+  }
   
 
   const isAdmin = userDataLogged.admin;
@@ -218,6 +227,7 @@ export default function Dashboard() {
             orderByManager={() => openModal(manager, sortByManager)}
             orderByTime={() => openModal(times, sortByTime)}
             orderBySquads={() => openModal(allSquads, sortBySquadI)}
+            handleAdmin={() => handleAdmin()}
             handleSchedule={handleSchedule}
           />
           
