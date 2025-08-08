@@ -1,4 +1,6 @@
+import { Copy, SquareArrowOutUpRight } from "lucide-react";
 import { formatWhatsAppLink } from "../functions/regex";
+import { useAuth } from "../context/AuthProvider";
 
 function Card({
   imgProfile,
@@ -21,43 +23,12 @@ function Card({
   child,
   iconInterval,
   interval,
-  onClick
+  onClick,
 }) {
   const link = formatWhatsAppLink(whats);
+  const { isAdmin } = useAuth();
 
-  // const schedules = {
-  //   morning: "10:00 às 19:00",
-  //   afternoon: "13:00 às 22:00",
-  //   night: "15:00 às 00:00",
-  // };
-  // const formatSchedules = (value) => {
-  //   //console.log(schedules[value])
-  //   if (schedules[value]) {
-  //     return schedules[value];
-  //   } else {
-  //     return;
-  //   }
-  // };
-  // const formatHour = formatSchedules(hour);
-
-  // const supers = {
-  //   diogo: "Diogo",
-  //   greice: "Greice",
-  //   teteu: "Matheus Silva",
-  //   duda: "Duda",
-  //   guto: "Augusto Cezar",
-  //   luan: "Luan",
-  //   ricardo: "Ricardo"
-  // };
-  // const formatSuper = (value) => {
-  //   if (supers[value]) {
-  //     return supers[value];
-  //   }
-  // };
-  // // const formattedSuper = formatSuper(supe);
-  // //console.log(formattedSuper)
   const childFormat = (child) => {
-
     if (child === "yes") {
       return (
         <>
@@ -70,9 +41,27 @@ function Card({
     }
   };
 
+  const handleCopy = (text) => {
+    if (typeof text === "string") {
+      navigator.clipboard.writeText(text);
+    } else if (typeof text === "object" && text !== null) {
+      navigator.clipboard.writeText(JSON.stringify(text, null, 2));
+    } else {
+      navigator.clipboard.writeText(String(text));
+    }
+  };
+
   return (
-  
-    <div className="pt-2 pb-12 px-10 bg-card-bg" onClick={onClick}>
+    <div className="group relative pt-2 pb-12 px-10 bg-card-bg">
+      {isAdmin && (
+        <div className=" top-3 right-4 absolute cursor-pointer">
+          <SquareArrowOutUpRight
+            className="stroke-transparent group-hover:stroke-white transition-colors duration-500"
+            onClick={onClick}
+          />
+        </div>
+      )}
+
       <div className="w-full flex justify-center">
         <img
           src={imgProfile}
@@ -99,27 +88,42 @@ function Card({
       </div>
 
       <div className="">
-        <h2 className="relative top-3 text-xl uppercase font-semibold text-white">
+        <h2 className="relative truncate max-w-full top-3 text-xl uppercase font-semibold text-white">
           {role}
         </h2>
       </div>
 
       <div className="relative flex flex-col gap-1 top-6 text-fourthy-color tracking-wide">
-        <div className="w-full flex gap-2 items-center">
+        <div
+          className="group/slack relative w-full flex gap-2 items-center cursor-pointer"
+          onClick={() => handleCopy(slack)}
+        >
           <div>{iconSlack}</div>
           <p>{slack}</p>
+          {console.log(slack)}
+          <Copy
+            size={19}
+            className="absolute -right-6 stroke-transparent group-hover/slack:stroke-white transition-all duration-200"
+          />
         </div>
 
-        <div className="w-full flex gap-2 items-center">
+        <div className="relative w-full flex gap-2 items-center">
           <div>{iconWhats}</div>
           <a href={`https://wa.me/${link}`} target="_blank">
-            <p>{whats}</p>
+            <p className="hover:underline">{whats}</p>
           </a>
         </div>
 
-        <div className="w-full flex gap-2 items-center">
+        <div
+          className="group/mail relative w-full flex gap-2 items-center cursor-pointer"
+          onClick={() => handleCopy(mail)}
+        >
           <div>{iconMail}</div>
-          <p>{mail}</p>
+          <p className="truncate">{mail}</p>
+          <Copy
+            size={19}
+            className="absolute -right-6 stroke-transparent group-hover/mail:stroke-white transition-all duration-200"
+          />
         </div>
 
         <div className="w-full flex gap-2 items-center">
@@ -129,7 +133,7 @@ function Card({
 
         <div className="w-full flex gap-2 items-center">
           <div>{iconSuper}</div>
-          <p>{manager}</p>
+          <p className="truncate">{manager}</p>
         </div>
         <div className="w-full flex gap-2 items-center">
           <div className="bg-border-color rounded-full">{iconInterval}</div>

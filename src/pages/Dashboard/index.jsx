@@ -24,7 +24,7 @@ import { getAllUsers } from "../../services/parameterizationService";
 import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Dashboard() {
-  const { googleUser, logOut, isAdmin } = useAuth();
+  const { googleUser, logOut, isAdmin, backendUser } = useAuth();
   const navigate = useNavigate();
 
   const [userDataLogged, setUserDataLogged] = useState(null);
@@ -100,7 +100,7 @@ export default function Dashboard() {
   }, [googleUser]);
 
   let firstName = "";
-  let profilePhoto = "";
+  let profilePhoto = backendUser?.photoUrl ? backendUser.photoUrl : userDataLogged?.photoUrl
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
@@ -108,9 +108,7 @@ export default function Dashboard() {
     //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
   }
 
-  if (userDataLogged && userDataLogged.photoUrl) {
-    profilePhoto = userDataLogged.photoUrl;
-  }
+  
 
   const nameCardFormatted = (names) => {
     return (names = names.split(" ").slice(0, 2).join(" "));

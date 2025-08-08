@@ -3,13 +3,17 @@ import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
 import Header from "../../components/Header";
 import Schedule from "../Schedule";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function UserDetail() {
     const { uid } = useParams()
     const [userData, setUserData] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
+    const {backendUser} = useAuth()
 
     const API_URL = import.meta.env.VITE_API_URL;
+
+    console.log(backendUser)
 
     useEffect(() => {
 
@@ -41,7 +45,7 @@ export default function UserDetail() {
 
     return (
         <div className="container w-[90%] m-auto">
-            <Header name={userData?.name} img={userData?.photoUrl} />
+            <Header name={backendUser?.name} img={backendUser?.photoUrl} />
             <h1 className="text-2xl font-bold">Detalhes do Usuário</h1>
             <p>Nome: {userData?.name}</p>
             <p>Email: {userData?.email}</p>
