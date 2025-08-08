@@ -8,7 +8,7 @@ import ButtonsSendSchedule from "../../components/ButtonsSendSchedule";
 import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Schedule({ showHeader = true, onDayClick, uid }) {
-  const { user, logOut, isAdmin } = useAuth();
+  const { googleUser, logOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
@@ -19,19 +19,21 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Ano atual
 
-  const [loggedUserData, setLoggedUserData] = useState(null); // Dados do usuário logado (admin ou não)
+  const [loggedUserData, setLoggedUserData] = useState(null)
   const [selectedUserData, setSelectedUserData] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
+
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const loggedUserResponse = await fetch(`${API_URL}/user/${user.uid}`);
+        const loggedUserResponse = await fetch(`${API_URL}/user/${googleUser.uid}`);
         const loggedUser = await loggedUserResponse.json();
+
         setLoggedUserData(loggedUser);
 
-        const userUIDToFetch = loggedUser.admin && uid ? uid : user.uid;
+        const userUIDToFetch = loggedUser.admin && uid ? uid : googleUser.uid;
 
         const userResponse = await fetch(`${API_URL}/user/${userUIDToFetch}`);
         const selectedUser = await userResponse.json();
@@ -45,7 +47,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
         const workedDaysArray = [];
         schedule.forEach((item) => {
           const dayData = item.schedule;
-          console.log("DIA daydata", dayData)
+          
           for (const [date, uids] of Object.entries(dayData)) {
             if (uids.includes(userUIDToFetch))
               workedDaysArray.push(parseInt(date.split("-")[0], 10));
@@ -61,7 +63,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     };
 
     fetchUserData();
-  }, [uid, user]);
+  }, [uid, googleUser]);
 
   if (isLoading) {
     <Loader />;
@@ -69,14 +71,14 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
 
   // 🔄 Função para atualizar a escala
   const handleDayClick = async (day) => {
-    if (!loggedUserData?.admin) {
+    if (!isAdmin) {
       alert("Você não possui permissão parar alterar escala");
       return;
     }
 
     const formattedDate = `${String(day).padStart(2, "0")}-${String(currentMonth).padStart(2, "0")}-${currentYear}`;
 
-    console.log(formattedDate)
+
     try {
       setLoadingDay(day);
 
