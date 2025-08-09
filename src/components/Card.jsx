@@ -1,6 +1,8 @@
 import { Copy, SquareArrowOutUpRight } from "lucide-react";
 import { formatWhatsAppLink } from "../functions/regex";
 import { useAuth } from "../context/AuthProvider";
+import { useState } from "react";
+import Tooltip from "../components/Tooltip";
 
 function Card({
   imgProfile,
@@ -41,14 +43,17 @@ function Card({
     }
   };
 
+  const [showTooltip, setShowTooltip] = useState(false);
+
   const handleCopy = (text) => {
-    if (typeof text === "string") {
-      navigator.clipboard.writeText(text);
-    } else if (typeof text === "object" && text !== null) {
-      navigator.clipboard.writeText(JSON.stringify(text, null, 2));
-    } else {
-      navigator.clipboard.writeText(String(text));
-    }
+    let toCopy;
+    if (typeof text === "string") toCopy = text;
+    else if (typeof text === "object" && text !== null)
+      toCopy = JSON.stringify(text, null, 2);
+    else toCopy = String(text);
+
+    navigator.clipboard.writeText(toCopy);
+    setShowTooltip(true);
   };
 
   return (
@@ -94,18 +99,23 @@ function Card({
       </div>
 
       <div className="relative flex flex-col gap-1 top-6 text-fourthy-color tracking-wide">
-        <div
-          className="group/slack relative w-full flex gap-2 items-center cursor-pointer"
-          onClick={() => handleCopy(slack)}
+        <Tooltip
+          show={showTooltip}
+          text="Copiado!"
+          onClose={() => setShowTooltip(false)}
         >
-          <div>{iconSlack}</div>
-          <p>{slack}</p>
-          {console.log(slack)}
-          <Copy
-            size={19}
-            className="absolute -right-6 stroke-transparent group-hover/slack:stroke-white transition-all duration-200"
-          />
-        </div>
+          <div
+            className="group/slack relative w-full flex gap-2 items-center cursor-pointer"
+            onClick={() => handleCopy(slack)}
+          >
+            <div>{iconSlack}</div>
+            <p>{slack}</p>
+            <Copy
+              size={19}
+              className="absolute -right-6 stroke-transparent group-hover/slack:stroke-white transition-all duration-200"
+            />
+          </div>
+        </Tooltip>
 
         <div className="relative w-full flex gap-2 items-center">
           <div>{iconWhats}</div>
