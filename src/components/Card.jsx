@@ -1,8 +1,8 @@
 import { Copy, SquareArrowOutUpRight } from "lucide-react";
 import { formatWhatsAppLink } from "../functions/regex";
 import { useAuth } from "../context/AuthProvider";
-import { useState } from "react";
-import Tooltip from "../components/Tooltip";
+import toast from "react-hot-toast";
+import { toastEmail, toastSlack } from "../services/toastService.jsx";
 
 function Card({
   imgProfile,
@@ -30,6 +30,8 @@ function Card({
   const link = formatWhatsAppLink(whats);
   const { isAdmin } = useAuth();
 
+  const notify = () => toast.success("Copiado");
+
   const childFormat = (child) => {
     if (child === "yes") {
       return (
@@ -43,17 +45,14 @@ function Card({
     }
   };
 
-  const [showTooltip, setShowTooltip] = useState(false);
+  const handleCopySlack = async (text) => {
+    await navigator.clipboard.writeText(text);
+    toastSlack("Slack copiado!");
+  };
 
-  const handleCopy = (text) => {
-    let toCopy;
-    if (typeof text === "string") toCopy = text;
-    else if (typeof text === "object" && text !== null)
-      toCopy = JSON.stringify(text, null, 2);
-    else toCopy = String(text);
-
-    navigator.clipboard.writeText(toCopy);
-    setShowTooltip(true);
+  const handleCopyEmail = async (text) => {
+    await navigator.clipboard.writeText(text);
+    toastEmail("E-mail copiado!");
   };
 
   return (
@@ -99,23 +98,17 @@ function Card({
       </div>
 
       <div className="relative flex flex-col gap-1 top-6 text-fourthy-color tracking-wide">
-        <Tooltip
-          show={showTooltip}
-          text="Copiado!"
-          onClose={() => setShowTooltip(false)}
+        <div
+          className="group/slack relative w-full flex gap-2 items-center cursor-pointer"
+          onClick={() => handleCopySlack(slack)}
         >
-          <div
-            className="group/slack relative w-full flex gap-2 items-center cursor-pointer"
-            onClick={() => handleCopy(slack)}
-          >
-            <div>{iconSlack}</div>
-            <p>{slack}</p>
-            <Copy
-              size={19}
-              className="absolute -right-6 stroke-transparent group-hover/slack:stroke-white transition-all duration-200"
-            />
-          </div>
-        </Tooltip>
+          <div>{iconSlack}</div>
+          <p>{slack}</p>
+          <Copy
+            size={19}
+            className="absolute -right-6 stroke-transparent group-hover/slack:stroke-white transition-all duration-200"
+          />
+        </div>
 
         <div className="relative w-full flex gap-2 items-center">
           <div>{iconWhats}</div>
@@ -126,7 +119,7 @@ function Card({
 
         <div
           className="group/mail relative w-full flex gap-2 items-center cursor-pointer"
-          onClick={() => handleCopy(mail)}
+          onClick={() => handleCopyEmail(mail)}
         >
           <div>{iconMail}</div>
           <p className="truncate">{mail}</p>

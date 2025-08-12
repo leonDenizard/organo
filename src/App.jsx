@@ -10,10 +10,14 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AdminRoute } from "./components/AdminRoute";
 import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AdminOrFirstUserRoute from "./components/AdminOrFirstUserRoute";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <Router>
+
+    <Toaster/>
+
       <Routes>
         <Route path={"/"} element={<Signin />} />
         <Route element={<ProtectedRoute />}>
