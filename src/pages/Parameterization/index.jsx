@@ -22,6 +22,7 @@ export default function Parameterization() {
     setPosition,
     handleSubmitPosition,
     allPositions,
+    positionsOptimistic,
     handleDeletePosition,
     squad,
     setSquad,
@@ -132,7 +133,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {allPositions.map((position) => (
+                  {positionsOptimistic.map((position) => (
                     <div
                       key={position._id}
                       className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"

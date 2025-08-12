@@ -16,6 +16,7 @@ import {
   getAllWorkShift,
   updateUserAdminById,
 } from "../services/parameterizationService";
+import toast from "react-hot-toast";
 
 export default function useParameterization() {
   const [position, setPosition] = useState("");
@@ -31,27 +32,34 @@ export default function useParameterization() {
   const [endTime, setEndTime] = useState("19:00");
   const [workShifts, setWorkShifts] = useState([]);
 
-  const [allUsers, setAllUser] = useState([])
+  const [allUsers, setAllUser] = useState([]);
   const [selectedUserUid, setSelectedUserUid] = useState("");
-  const [userAdmin, setUsersAdmin] = useState("")
+  const [userAdmin, setUsersAdmin] = useState("");
 
   //Handler submit
+
+  const [positionsOptimistic, setPositionsOptimistic] = useState([]);
+
+  useEffect(() => {
+    setPositionsOptimistic(allPositions); // sincroniza quando allPositions mudar
+  }, [allPositions]);
 
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
 
-    const newPos = {id: Date.now().toString(), name: position}
-    setPosition((old) => [...old, newPos]);
-    setPosition("")
+    const newPos = { _id: Date.now().toString(), name: position };
+
+    // Atualiza a UI imediatamente
+    setPositionsOptimistic((old) => [...old, newPos]);
+    setPosition("");
 
     try {
       await createPosition(position);
       fetchPosition();
-    } catch (error) {
-      console.error("Erro ao salvar cargo", error)
+    } catch (err) {
+      console.error("Erro ao salvar cargo:", err);
+      // Aqui poderia remover o cargo otimista ou avisar o usuário
     }
-    
-    
   };
 
   const handleSubmitSquad = async () => {
@@ -68,8 +76,17 @@ export default function useParameterization() {
   };
 
   const handleDeletePosition = async (id) => {
-    await deletePositionById(id);
-    fetchPosition();
+
+    toast.promise(
+      deletePositionById(id),
+      {
+        loading: "Deletando cargo...",
+        success: "Cargo deletado com sucesso",
+        error: "Erro ao deletar cargo"
+      }
+    ).then(() => {
+      fetchPosition()
+    })
   };
 
   const handleDeleteSquad = async (id) => {
@@ -117,8 +134,8 @@ export default function useParameterization() {
     fetchWorkShift();
   };
 
-  const fetchAllUsers = async () =>{
-    const response = await getAllUsers()
+  const fetchAllUsers = async () => {
+    const response = await getAllUsers();
 
     const users = response.map((user) => ({
       id: user._id,
@@ -126,24 +143,23 @@ export default function useParameterization() {
       name: user.name,
       admin: user.admin,
       profile: user.photoUrl,
-    }) )
+    }));
 
-    const admins = users.filter((user) => user.admin === true)
-    setUsersAdmin(admins)
-    setAllUser(users)
-  }
+    const admins = users.filter((user) => user.admin === true);
+    setUsersAdmin(admins);
+    setAllUser(users);
+  };
 
   const handlePromoteToAdmin = async (uid) => {
-    if(!uid) return
-    await updateUserAdminById(uid)
-    fetchAllUsers()
-  } 
+    if (!uid) return;
+    await updateUserAdminById(uid);
+    fetchAllUsers();
+  };
   const handleRemoveAdmin = async (uid) => {
-    if(!uid) return
-    await deleteUserAdminById(uid)
-    fetchAllUsers()
-  } 
-
+    if (!uid) return;
+    await deleteUserAdminById(uid);
+    fetchAllUsers();
+  };
 
   useEffect(() => {
     fetchPosition();
@@ -159,7 +175,7 @@ export default function useParameterization() {
     allPositions,
     handleSubmitPosition,
     handleDeletePosition,
-
+    positionsOptimistic,
     squad,
     setSquad,
     allSquads,
@@ -186,6 +202,6 @@ export default function useParameterization() {
     setSelectedUserUid,
     handlePromoteToAdmin,
     handleRemoveAdmin,
-    userAdmin
+    userAdmin,
   };
 }
