@@ -171,7 +171,7 @@ export default function useParameterization() {
     ) {
       toast.error("Supervisor já criado!");
       setSupervisor("");
-      return
+      return;
     }
 
     const newSuper = { _id: Date.now.toString(), name: supervisor };
@@ -287,46 +287,43 @@ export default function useParameterization() {
     const admins = users.filter((user) => user.admin === true);
     setUsersAdmin(admins);
     setAllUser(users);
+    setUserOptimistic(admins);
   };
 
   const handlePromoteToAdmin = async (uid) => {
     if (!uid) return;
 
-    const prevUsers = [...userOptimistic];
-
-    setUserOptimistic((old) =>
-      old.map((user) => (user.uid === uid ? { ...user, role: "admin" } : user))
+    // Verifica se já é admin na lista completa
+    const userAlreadyAdmin = allUsers.some(
+      (user) => user.uid === uid && user.admin === true
     );
 
+    if (userAlreadyAdmin) {
+      toast.error("Usuário já é admin");
+      return;
+    }
+
+    // Pega o usuário para adicionar no estado otimista
+    const userToPromote = allUsers.find((user) => user.uid === uid);
+
+    // Atualiza otimista adicionando o usuário com admin=true
+    setUserOptimistic((old) => [...old, { ...userToPromote, admin: true }]);
+
     try {
-    
-      const userAlreadyAdmin = allUsers.some(
-        (user) => user.uid === uid && user.admin === true
-      );
-
-      if (userAlreadyAdmin) {
-        toast.error("Usuário já é admin");
-        setUserOptimistic(prevUsers);
-        return;
-      }
-
       await updateUserAdminById(uid);
-      fetchAllUsers();
-
+      await fetchAllUsers(); // Sincroniza a lista completa após update
       toast.success("Usuário promovido para admin");
     } catch (err) {
-      setUserOptimistic(prevUsers); 
-      toast.error(
-        err?.response?.data?.message ||
-          err?.message ||
-          "Erro ao promover usuário"
-      );
+      // Reverte estado otimista em caso de erro
+      setUserOptimistic((old) => old.filter((user) => user.uid !== uid));
+      toast.error(err?.message || "Erro ao promover usuário");
     }
   };
 
   const handleRemoveAdmin = async (uid) => {
     if (!uid) return;
-
+    await deleteUserAdminById(uid);
+    fetchAllUsers();
     toast
       .promise(deleteUserAdminById(uid), {
         loading: "Removendo acesso de Admin...",
