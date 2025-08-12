@@ -1,24 +1,19 @@
 const API_URL = import.meta.env.VITE_API_URL
 
 export async function createPosition(data) {
-  try {
-    const response = await fetch(`${API_URL}/position/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: data }),
-    });
+  const response = await fetch(`${API_URL}/position/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name: data }),
+  });
 
-    const result = await response.json();
+  const result = await response.json();
 
-    if (!response.ok) {
-      throw new Error(result.message || "Erro ao criar cargo");
-    }
-
-    return result;
-  } catch (error) {
-    console.error("createPosition error:", error.message);
-    return { error: error.message };
+  if (!response.ok) {
+    throw new Error(result.message || "Erro ao criar cargo");
   }
+
+  return result;
 }
 
 

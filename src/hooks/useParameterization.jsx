@@ -46,19 +46,31 @@ export default function useParameterization() {
 
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
+    if (
+      allPositions.some(
+        (pos) => pos.name.toLowerCase() === position.toLowerCase()
+      )
+    ) {
+      toast.error("Cargo já existe");
+      return;
+    }
 
     const newPos = { _id: Date.now().toString(), name: position };
 
-    // Atualiza a UI imediatamente
+    // Adiciona OTIMISTA
     setPositionsOptimistic((old) => [...old, newPos]);
     setPosition("");
 
     try {
-      await createPosition(position);
+      await createPosition(position); // se erro, vai lançar e cair no catch
       fetchPosition();
     } catch (err) {
-      console.error("Erro ao salvar cargo:", err);
-      // Aqui poderia remover o cargo otimista ou avisar o usuário
+      // Remove o item otimista que falhou
+      setPositionsOptimistic((old) =>
+        old.filter((pos) => pos._id !== newPos._id)
+      );
+
+      toast.error(err.message || "Erro ao salvar cargo");
     }
   };
 
@@ -76,17 +88,21 @@ export default function useParameterization() {
   };
 
   const handleDeletePosition = async (id) => {
-
-    toast.promise(
-      deletePositionById(id),
-      {
+    toast
+      .promise(deletePositionById(id), {
         loading: "Deletando cargo...",
         success: "Cargo deletado com sucesso",
-        error: "Erro ao deletar cargo"
-      }
-    ).then(() => {
-      fetchPosition()
-    })
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar carfo";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchPosition();
+      });
   };
 
   const handleDeleteSquad = async (id) => {
