@@ -48,6 +48,8 @@ export default function Parameterization() {
     handleRemoveAdmin,
   } = useParameterization();
 
+  
+
   useEffect(() => {
     const updateUnderline = () => {
       const currentRef = tabRefs.current[activeTab];
@@ -71,7 +73,7 @@ export default function Parameterization() {
 
   return (
     <div className="relative h-screen">
-      <Breadcrumb/>
+      <Breadcrumb />
       <nav className="relative top-8 justify-center flex gap-5">
         {tabs.map(({ key, label }) => (
           <li

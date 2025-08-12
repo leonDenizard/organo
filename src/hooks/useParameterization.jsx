@@ -40,9 +40,18 @@ export default function useParameterization() {
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
 
-    await createPosition(position);
-    setPosition("");
-    fetchPosition();
+    const newPos = {id: Date.now().toString(), name: position}
+    setPosition((old) => [...old, newPos]);
+    setPosition("")
+
+    try {
+      await createPosition(position);
+      fetchPosition();
+    } catch (error) {
+      console.error("Erro ao salvar cargo", error)
+    }
+    
+    
   };
 
   const handleSubmitSquad = async () => {

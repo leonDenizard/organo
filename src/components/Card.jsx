@@ -30,8 +30,6 @@ function Card({
   const link = formatWhatsAppLink(whats);
   const { isAdmin } = useAuth();
 
-  const notify = () => toast.success("Copiado");
-
   const childFormat = (child) => {
     if (child === "yes") {
       return (
