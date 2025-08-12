@@ -39,10 +39,18 @@ export default function useParameterization() {
   //Handler submit
 
   const [positionsOptimistic, setPositionsOptimistic] = useState([]);
+  const [squadsOptimistic, setSquadsOptimistic] = useState([]);
+  const [superOptimistic, setSuperOptimistic] = useState([]);
+  const [workOptimistic, setWorkOptimistic] = useState([]);
+  const [userOptimistic, setUserOptimistic] = useState([]);
 
   useEffect(() => {
-    setPositionsOptimistic(allPositions); // sincroniza quando allPositions mudar
-  }, [allPositions]);
+    setPositionsOptimistic(allPositions);
+    setSquadsOptimistic(allSquads);
+    setSuperOptimistic(allSuper);
+    setWorkOptimistic(workShifts);
+    setUserOptimistic(allUsers);
+  }, [allPositions, allSquads, allSuper, workShifts, allUsers]);
 
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
@@ -52,6 +60,7 @@ export default function useParameterization() {
       )
     ) {
       toast.error("Cargo já existe");
+      setPosition("");
       return;
     }
 
@@ -62,7 +71,8 @@ export default function useParameterization() {
     setPosition("");
 
     try {
-      await createPosition(position); // se erro, vai lançar e cair no catch
+      await createPosition(position);
+      toast.success("Cargo cadastrado com sucesso");
       fetchPosition();
     } catch (err) {
       // Remove o item otimista que falhou
@@ -77,9 +87,31 @@ export default function useParameterization() {
   const handleSubmitSquad = async () => {
     if (!squad.trim()) return;
 
-    await createSquad(squad);
-    fetchSquad();
-    setSquad("");
+    if (
+      allSquads.some(
+        (sqd) => sqd.name.toLowerCase() === squad.toLocaleLowerCase()
+      )
+    ) {
+      toast.error("Squad já existe");
+      setSquad("");
+      return;
+    }
+
+    const newSquad = { _id: Date.now().toString(), name: squad };
+
+    setSquadsOptimistic((old) => [...old, newSquad]);
+
+    try {
+      await createSquad(squad);
+      setSquad("");
+      toast.success("Squad criado com suecesso");
+      fetchSquad();
+    } catch (error) {
+      setSquadsOptimistic((old) =>
+        old.filter((sqd) => sqd._id !== newSquad._id)
+      );
+      toast.error(error.message || "Erro ao salvar cargo");
+    }
   };
 
   const fetchSquad = async () => {
@@ -96,7 +128,7 @@ export default function useParameterization() {
           const msg =
             err?.response?.data?.message ||
             err?.message ||
-            "Erro ao deletar carfo";
+            "Erro ao deletar cargo";
           return msg;
         },
       })
@@ -106,8 +138,21 @@ export default function useParameterization() {
   };
 
   const handleDeleteSquad = async (id) => {
-    await deleteSquadById(id);
-    fetchSquad();
+    toast
+      .promise(deleteSquadById(id), {
+        loading: "Deletando Squad",
+        success: "Squad deletado com sucesso!",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar carfo";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchSquad();
+      });
   };
 
   const fetchPosition = async () => {
@@ -119,9 +164,30 @@ export default function useParameterization() {
   const handleSubmitSuper = async () => {
     if (!supervisor.trim()) return;
 
-    await createSupervisor(supervisor);
-    fetchSuper();
-    setSupervisor("");
+    if (
+      allSuper.some(
+        (sup) => sup.name.toLocaleLowerCase() === supervisor.toLocaleLowerCase()
+      )
+    ) {
+      toast.error("Supervisor já criado!");
+      setSupervisor("");
+      return
+    }
+
+    const newSuper = { _id: Date.now.toString(), name: supervisor };
+    setSuperOptimistic((old) => [...old, newSuper]);
+
+    try {
+      await createSupervisor(supervisor);
+      setSupervisor("");
+      toast.success("Supervisor inserido com sucesso");
+      fetchSuper();
+    } catch (error) {
+      setSquadsOptimistic((old) =>
+        old.filter((sup) => sup._id !== newSuper._id)
+      );
+      toast.error(error.message || "Erro ao salvar supervisor");
+    }
   };
 
   const fetchSuper = async () => {
@@ -131,13 +197,57 @@ export default function useParameterization() {
   };
 
   const handleDeleteSuper = async (id) => {
-    await deleteSuperById(id);
-    fetchSuper();
+    toast
+      .promise(deleteSuperById(id), {
+        loading: "Deletando supervisor...",
+        success: "Supervisor deletado com sucesso",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar Super";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchSuper();
+      });
   };
 
   const handleSubmitWorkShift = async () => {
-    await createWorkShift(startTime, endTime);
-    fetchWorkShift();
+    const newStart = startTime.trim();
+    const newEnd = endTime.trim();
+
+    if (
+      workShifts.some(
+        (ws) => ws.startTime === newStart && ws.endTime === newEnd
+      )
+    ) {
+      toast.error("Horário já existe");
+      return;
+    }
+
+    const newWorkShift = {
+      _id: Date.now().toString(),
+      startTime: newStart,
+      endTime: newEnd,
+    };
+
+    setWorkOptimistic((old) => [...old, newWorkShift]);
+
+    try {
+      await createWorkShift(newStart, newEnd);
+      fetchWorkShift();
+      toast.success("Horário inserio com sucesso");
+    } catch (err) {
+      setWorkOptimistic((old) =>
+        old.filter((ws) => ws._id !== newWorkShift._id)
+      );
+
+      toast.error(
+        err?.response?.data?.message || err?.message || "Erro ao salvar horário"
+      );
+    }
   };
 
   const fetchWorkShift = async () => {
@@ -146,8 +256,21 @@ export default function useParameterization() {
   };
 
   const handleDeleteWorkShift = async (id) => {
-    await deleteWorkShiftById(id);
-    fetchWorkShift();
+    toast
+      .promise(deleteWorkShiftById(id), {
+        loading: "Deletando Horário...",
+        success: "Horário deletado com sucesso",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar Horário";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchWorkShift();
+      });
   };
 
   const fetchAllUsers = async () => {
@@ -168,13 +291,57 @@ export default function useParameterization() {
 
   const handlePromoteToAdmin = async (uid) => {
     if (!uid) return;
-    await updateUserAdminById(uid);
-    fetchAllUsers();
+
+    const prevUsers = [...userOptimistic];
+
+    setUserOptimistic((old) =>
+      old.map((user) => (user.uid === uid ? { ...user, role: "admin" } : user))
+    );
+
+    try {
+    
+      const userAlreadyAdmin = allUsers.some(
+        (user) => user.uid === uid && user.admin === true
+      );
+
+      if (userAlreadyAdmin) {
+        toast.error("Usuário já é admin");
+        setUserOptimistic(prevUsers);
+        return;
+      }
+
+      await updateUserAdminById(uid);
+      fetchAllUsers();
+
+      toast.success("Usuário promovido para admin");
+    } catch (err) {
+      setUserOptimistic(prevUsers); 
+      toast.error(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Erro ao promover usuário"
+      );
+    }
   };
+
   const handleRemoveAdmin = async (uid) => {
     if (!uid) return;
-    await deleteUserAdminById(uid);
-    fetchAllUsers();
+
+    toast
+      .promise(deleteUserAdminById(uid), {
+        loading: "Removendo acesso de Admin...",
+        success: "Removido o acesso de admin",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao remover acesso de admin";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchAllUsers();
+      });
   };
 
   useEffect(() => {
@@ -195,12 +362,14 @@ export default function useParameterization() {
     squad,
     setSquad,
     allSquads,
+    squadsOptimistic,
     handleSubmitSquad,
     handleDeleteSquad,
 
     supervisor,
     setSupervisor,
     allSuper,
+    superOptimistic,
     handleSubmitSuper,
     handleDeleteSuper,
 
@@ -209,11 +378,13 @@ export default function useParameterization() {
     setStartTime,
     setEndTime,
     workShifts,
+    workOptimistic,
     handleSubmitWorkShift,
     handleDeleteWorkShift,
 
     fetchAllUsers,
     allUsers,
+    userOptimistic,
     selectedUserUid,
     setSelectedUserUid,
     handlePromoteToAdmin,

@@ -28,28 +28,30 @@ export default function Parameterization() {
     setSquad,
     handleSubmitSquad,
     allSquads,
+    squadsOptimistic,
     handleDeleteSquad,
     supervisor,
     setSupervisor,
     handleSubmitSuper,
     allSuper,
+    superOptimistic,
     handleDeleteSuper,
     startTime,
     endTime,
     setStartTime,
     setEndTime,
     workShifts,
+    workOptimistic,
     handleSubmitWorkShift,
     handleDeleteWorkShift,
     allUsers,
+    userOptimistic,
     selectedUserUid,
     setSelectedUserUid,
     userAdmin,
     handlePromoteToAdmin,
     handleRemoveAdmin,
   } = useParameterization();
-
-  
 
   useEffect(() => {
     const updateUnderline = () => {
@@ -92,7 +94,7 @@ export default function Parameterization() {
         ))}
 
         <span
-          className="absolute bottom-0 h-1 bg-white/65 transition-all duration-300 rounded-full"
+          className="absolute bottom-0 h-1 bg-bubble-blue transition-all duration-300 rounded-full"
           style={{
             left: underlineStyle.left,
             width: underlineStyle.width,
@@ -136,7 +138,7 @@ export default function Parameterization() {
                   {positionsOptimistic.map((position) => (
                     <div
                       key={position._id}
-                      className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"
+                      className="hover:bg-card-bg flex rounded px-5 py-3 items-cente justify-between gap-3 bg-button-hover transition-colors duration-200"
                     >
                       <span className="flex justify-center items-center text-lg tracking-wider">
                         <span className="inline-block rounded-full bg-bubble-red relative w-2 h-8 mr-4"></span>
@@ -145,13 +147,13 @@ export default function Parameterization() {
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
                     hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        onClick={() => handleDeletePosition(position._id)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
                           color="white"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleDeletePosition(position._id)}
                         />
                       </div>
                     </div>
@@ -191,10 +193,10 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {allSquads.map((squad) => (
+                  {squadsOptimistic.map((squad) => (
                     <div
                       key={squad._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
                       <span className="flex items-center text-lg tracking-wider">
                         <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
@@ -203,12 +205,12 @@ export default function Parameterization() {
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
               hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        onClick={() => handleDeleteSquad(squad._id)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleDeleteSquad(squad._id)}
                         />
                       </div>
                     </div>
@@ -248,10 +250,10 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {allSuper.map((supervisor) => (
+                  {superOptimistic.map((supervisor) => (
                     <div
                       key={supervisor._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
                       <span className="flex items-center text-lg tracking-wider">
                         <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
@@ -340,10 +342,10 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {workShifts.map((works) => (
+                  {workOptimistic.map((works) => (
                     <div
                       key={works._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-2 items-center justify-between gap-3 border-2 border-border-color"
+                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
                       <span className="flex items-center text-lg tracking-wider">
                         <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
@@ -352,12 +354,12 @@ export default function Parameterization() {
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
               hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        onClick={() => handleDeleteWorkShift(works._id)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleDeleteWorkShift(works._id)}
                         />
                       </div>
                     </div>
@@ -383,7 +385,7 @@ export default function Parameterization() {
                     <option className="bg-backgound" value="">
                       Selecione um usuário
                     </option>
-                    {allUsers.map((user) => (
+                    {userOptimistic.map((user) => (
                       <option
                         key={user.id}
                         value={user.uid}
@@ -407,7 +409,7 @@ export default function Parameterization() {
                   {userAdmin.map((user) => (
                     <div
                       key={user.id}
-                      className="hover:bg-card-bg flex rounded px-5 py-2 items-cente justify-between gap-3 border-2 border-border-color transition-colors duration-200"
+                      className="hover:bg-card-bg flex rounded px-5 py-3 items-cente justify-between gap-3 bg-button-hover transition-colors duration-200"
                     >
                       <span className="flex justify-center items-center text-lg tracking-wider">
                         <img
@@ -419,13 +421,13 @@ export default function Parameterization() {
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
                     hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        onClick={() => handleRemoveAdmin(user.uid)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
                           color="white"
                           size={20}
                           strokeWidth={2}
-                          onClick={() => handleRemoveAdmin(user.uid)}
                         />
                       </div>
                     </div>
