@@ -22,48 +22,49 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
 
   const [loggedUserData, setLoggedUserData] = useState(null);
   const [selectedUserData, setSelectedUserData] = useState(null);
+  const [scheduleData, setScheduleData] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
+  const fetchUserData = async () => {
+    try {
+      const loggedUserResponse = await fetch(
+        `${API_URL}/user/${googleUser.uid}`
+      );
+      const loggedUser = await loggedUserResponse.json();
+
+      setLoggedUserData(loggedUser);
+
+      const userUIDToFetch = loggedUser.admin && uid ? uid : googleUser.uid;
+
+      const userResponse = await fetch(`${API_URL}/user/${userUIDToFetch}`);
+      const selectedUser = await userResponse.json();
+      setSelectedUserData(selectedUser);
+
+      const scheduleResponse = await fetch(
+        `${API_URL}/schedule/${userUIDToFetch}`
+      );
+      const schedule = await scheduleResponse.json();
+
+      const workedDaysArray = [];
+      schedule.forEach((item) => {
+        const dayData = item.schedule;
+
+        for (const [date, uids] of Object.entries(dayData)) {
+          if (uids.includes(userUIDToFetch))
+            workedDaysArray.push(parseInt(date.split("-")[0], 10));
+        }
+      });
+
+      setWorkedDays(workedDaysArray);
+    } catch (error) {
+      console.error("Erro ao buscar dados ou usuário não está escala", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const loggedUserResponse = await fetch(
-          `${API_URL}/user/${googleUser.uid}`
-        );
-        const loggedUser = await loggedUserResponse.json();
-
-        setLoggedUserData(loggedUser);
-
-        const userUIDToFetch = loggedUser.admin && uid ? uid : googleUser.uid;
-
-        const userResponse = await fetch(`${API_URL}/user/${userUIDToFetch}`);
-        const selectedUser = await userResponse.json();
-        setSelectedUserData(selectedUser);
-
-        const scheduleResponse = await fetch(
-          `${API_URL}/schedule/${userUIDToFetch}`
-        );
-        const schedule = await scheduleResponse.json();
-
-        const workedDaysArray = [];
-        schedule.forEach((item) => {
-          const dayData = item.schedule;
-
-          for (const [date, uids] of Object.entries(dayData)) {
-            if (uids.includes(userUIDToFetch))
-              workedDaysArray.push(parseInt(date.split("-")[0], 10));
-          }
-        });
-
-        setWorkedDays(workedDaysArray);
-      } catch (error) {
-        console.error("Erro ao buscar dados ou usuário não está escala", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchUserData();
   }, [uid, googleUser]);
 
@@ -73,8 +74,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
 
   // 🔄 Função para atualizar a escala
   const handleDayClick = async (day) => {
-
-    if(!day) return
+    if (!day) return;
     if (!isAdmin) {
       toast.error("Você não possui permissão parar alterar escala");
       return;
@@ -147,6 +147,17 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     await logOut();
     navigate("/");
   };
+
+  // const fetchSchedule = async () => {
+  //   const res = await fetch(`${API_URL}/schedule`);
+  //   const data = await res.json();
+  //   setScheduleData(data);
+  // };
+
+  // useEffect(() => {
+  //   fetchSchedule();
+  // }, []);
+
   return (
     <div className="container w-[90%] m-auto min-h-screen">
       {!isLoading ? (
@@ -160,7 +171,7 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
             onDayClick={handleDayClick}
             loadingDays={loadingDays}
           />
-          {isAdmin && <ButtonsSendSchedule />}
+          {isAdmin && <ButtonsSendSchedule onScheduleChange={fetchUserData} setWorkedDays={setWorkedDays} />}
         </>
       ) : (
         <Loader />

@@ -4,20 +4,25 @@ import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function ButtonsSendSchedule() {
+export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays} ) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [file, setFile] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScheduleJson = (e) => {
+
     const selectedFile = e.target.files[0];
+
     if (selectedFile && selectedFile.type === "application/json") {
       setFile(selectedFile);
     } else {
       console.log("Por favor, selecione um arquivo JSON válido.");
       setFile(null);
+
     }
+
+    e.target.value = null;
   };
 
   const handleUpload = async () => {
@@ -35,6 +40,7 @@ export default function ButtonsSendSchedule() {
         const response = await uploadScheduleToBD(jsonData);
 
         toast.success("Escalda inserida com sucesso!")
+        onScheduleChange?.()
       } catch (error) {
         toast.error("Erro ao processar o arquivo JSON");
       }
@@ -59,6 +65,8 @@ export default function ButtonsSendSchedule() {
       }
 
       toast.success("Escala deletada com sucesso");
+      setWorkedDays("")
+      onScheduleChange?.()
     } catch (error) {
       console.error("Erro: ", error);
     }
