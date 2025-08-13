@@ -21,26 +21,22 @@ export default function Parameterization() {
     position,
     setPosition,
     handleSubmitPosition,
-    allPositions,
     positionsOptimistic,
     handleDeletePosition,
     squad,
     setSquad,
     handleSubmitSquad,
-    allSquads,
     squadsOptimistic,
     handleDeleteSquad,
     supervisor,
     setSupervisor,
     handleSubmitSuper,
-    allSuper,
     superOptimistic,
     handleDeleteSuper,
     startTime,
     endTime,
     setStartTime,
     setEndTime,
-    workShifts,
     workOptimistic,
     handleSubmitWorkShift,
     handleDeleteWorkShift,
@@ -48,7 +44,6 @@ export default function Parameterization() {
     userOptimistic,
     selectedUserUid,
     setSelectedUserUid,
-    userAdmin,
     handlePromoteToAdmin,
     handleRemoveAdmin,
   } = useParameterization();
@@ -67,32 +62,25 @@ export default function Parameterization() {
 
     // Atualiza ao redimensionar
     window.addEventListener("resize", updateUnderline);
-
-    // Remove o listener quando o componente desmontar
-    return () => {
-      window.removeEventListener("resize", updateUnderline);
-    };
+    return () => window.removeEventListener("resize", updateUnderline);
   }, [activeTab]);
 
   return (
     <div className="relative h-screen">
       <Breadcrumb />
-      <nav className="relative top-8 justify-center flex gap-5">
+      <nav className="relative flex overflow-auto w-[90%] px-5 lg:w-full md:justify-center gap-3 lg:top-8 lg:gap-5">
         {tabs.map(({ key, label }) => (
           <li
             key={key}
             ref={(el) => (tabRefs.current[key] = el)}
-            className={`list-none p-3 px-6 cursor-pointer tracking-widest text-xl relative z-10
-            ${
-              activeTab === key ? "text-blue-white font-semibold" : "text-white"
-            }
-            // hover:bg-button-hover hover:rounded-md transition-all`}
+            className={`list-none py-2 px-4 lg:p-3 lg:px-6 cursor-pointer tracking-widest text-lg lg:text-xl relative z-10
+              ${activeTab === key ? "text-blue-white font-semibold" : "text-white"}
+              hover:bg-button-hover hover:rounded-md transition-all`}
             onClick={() => setActiveTab(key)}
           >
             {label}
           </li>
         ))}
-
         <span
           className="absolute bottom-0 h-1 bg-bubble-blue transition-all duration-300 rounded-full"
           style={{
@@ -102,33 +90,29 @@ export default function Parameterization() {
         />
       </nav>
 
-      <section className="w-[90%] relative top-0 left-0 m-auto xl:mt-20 2xl:mt-40">
+      <section className="w-full lg:px-4 lg:w-[90%] mt-12 lg:m-auto lg:mt-20 2xl:mt-30">
         <div className="relative flex justify-center">
+          {/* ===== Cargo ===== */}
           {activeTab === "cargo" && (
             <div className="">
-              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+              <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
                 Cadastro dos cargos
               </h2>
-              <div className="relative flex-col space-y-10">
-                <div className="flex gap-3">
+              <div className="flex flex-col w-full gap-5 lg:space-y-10">
+                <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row">
                   <input
                     value={position}
-                    placeholder={"JR I"}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleSubmitPosition();
-                      }
-                    }}
+                    placeholder="JR I"
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmitPosition()}
                     onChange={(e) => setPosition(e.target.value)}
-                    className=" relative peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
-                    p-3 w-[500px] text-xl font-medium"
+                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
+                      p-3 w-full text-lg lg:w-[500px] lg:text-xl font-medium"
                     type="text"
                   />
-
                   <button
                     onClick={handleSubmitPosition}
                     className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-                    rounded w-[150px] font-semibold text-lg tracking-wide"
+                      rounded w-full py-3 font-semibold text-lg tracking-wide lg:w-[150px]"
                   >
                     Salvar Cargo
                   </button>
@@ -138,20 +122,18 @@ export default function Parameterization() {
                   {positionsOptimistic.map((position) => (
                     <div
                       key={position._id}
-                      className="hover:bg-card-bg flex rounded px-5 py-3 items-cente justify-between gap-3 bg-button-hover transition-colors duration-200"
+                      className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover transition-colors duration-200"
                     >
-                      <span className="flex justify-center items-center text-lg tracking-wider">
-                        <span className="inline-block rounded-full bg-bubble-red relative w-2 h-8 mr-4"></span>
+                      <span className="flex items-center text-base lg:text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-6 lg:h-8 mr-4"></span>
                         {position.name}
                       </span>
                       <div
-                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
-                    hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900 hover:bg-red-800 cursor-pointer"
                         onClick={() => handleDeletePosition(position._id)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
-                          color="white"
                           size={20}
                           strokeWidth={2}
                         />
@@ -163,55 +145,46 @@ export default function Parameterization() {
             </div>
           )}
 
+          {/* ===== Squad ===== */}
           {activeTab === "squad" && (
             <div>
-              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+              <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
                 Cadastro dos Squads
               </h2>
-
-              <div className="relative flex-col space-y-10">
-                <div className="flex gap-3">
+              <div className="flex flex-col gap-5 lg:space-y-10">
+                <div className="flex flex-col gap-3 lg:flex-row w-[calc(100vw-2rem)] md:w-[600px] lg:w-full ">
                   <input
                     value={squad}
-                    placeholder={"@squad-suporte"}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSubmitSquad();
-                    }}
+                    placeholder="@squad-suporte"
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmitSquad()}
                     onChange={(e) => setSquad(e.target.value)}
                     className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
-          p-3 w-[500px] text-xl font-medium"
+                      p-3 w-full text-lg lg:text-xl font-medium"
                     type="text"
                   />
-
                   <button
                     onClick={handleSubmitSquad}
-                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-          rounded w-[150px] font-semibold text-lg tracking-wide"
+                    className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[150px]"
                   >
                     Salvar Squad
                   </button>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {squadsOptimistic.map((squad) => (
+                  {squadsOptimistic.map((s) => (
                     <div
-                      key={squad._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
+                      key={s._id}
+                      className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
-                      <span className="flex items-center text-lg tracking-wider">
-                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
-                        {squad.name}
+                      <span className="flex items-center text-base lg:text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-6 lg:h-8 mr-4"></span>
+                        {s.name}
                       </span>
                       <div
-                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
-              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
-                        onClick={() => handleDeleteSquad(squad._id)}
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
+                        onClick={() => handleDeleteSquad(s._id)}
                       >
-                        <Trash
-                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
-                          size={20}
-                          strokeWidth={2}
-                        />
+                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
                       </div>
                     </div>
                   ))}
@@ -220,55 +193,46 @@ export default function Parameterization() {
             </div>
           )}
 
+          {/* ===== Supervisor ===== */}
           {activeTab === "supervisor" && (
             <div>
-              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+              <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
                 Cadastro dos Supervisores
               </h2>
-
-              <div className="relative flex-col space-y-10">
-                <div className="flex gap-3">
+              <div className="flex flex-col gap-5 lg:space-y-10">
+                <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row">
                   <input
                     value={supervisor}
-                    placeholder={"Nome super"}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") handleSubmitSuper();
-                    }}
+                    placeholder="Nome super"
+                    onKeyDown={(e) => e.key === "Enter" && handleSubmitSuper()}
                     onChange={(e) => setSupervisor(e.target.value)}
                     className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
-          p-3 w-[500px] text-xl font-medium"
+                      p-3 w-full text-lg lg:w-[500px] lg:text-xl font-medium"
                     type="text"
                   />
-
                   <button
                     onClick={handleSubmitSuper}
-                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-          rounded w-[150px] font-semibold text-lg tracking-wide"
+                    className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[150px]"
                   >
                     Salvar Super
                   </button>
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {superOptimistic.map((supervisor) => (
+                  {superOptimistic.map((sup) => (
                     <div
-                      key={supervisor._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
+                      key={sup._id}
+                      className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
-                      <span className="flex items-center text-lg tracking-wider">
-                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
-                        {supervisor.name}
+                      <span className="flex items-center text-base lg:text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-6 lg:h-8 mr-4"></span>
+                        {sup.name}
                       </span>
                       <div
-                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
-              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
+                        onClick={() => handleDeleteSuper(sup._id)}
                       >
-                        <Trash
-                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
-                          size={20}
-                          strokeWidth={2}
-                          onClick={() => handleDeleteSuper(supervisor._id)}
-                        />
+                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
                       </div>
                     </div>
                   ))}
@@ -277,32 +241,24 @@ export default function Parameterization() {
             </div>
           )}
 
+          {/* ===== Horário ===== */}
           {activeTab === "horario" && (
             <div>
-              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+              <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
                 Cadastro dos horários do suporte
               </h2>
-
-              <div className="relative flex-col space-y-10">
-                <div className="flex gap-3">
+              <div className="flex flex-col gap-5 lg:space-y-10">
+                <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row">
                   <select
-                    className="w-[220px] text-xl font-medium bg-transparent border-2 border-border-color rounded p-3
-          focus:bg-button-hover outline-none"
+                    className="w-full lg:w-[220px] text-lg lg:text-xl font-medium bg-transparent border-2 border-border-color rounded p-3 focus:bg-button-hover outline-none"
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                   >
                     {Array.from({ length: 15 }, (_, i) => {
                       const hour = 10 + i;
-                      const label =
-                        hour >= 24
-                          ? "00:00"
-                          : `${hour.toString().padStart(2, "0")}:00`;
+                      const label = hour >= 24 ? "00:00" : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option
-                          className="bg-backgound border-none"
-                          key={label}
-                          value={label}
-                        >
+                        <option className="bg-backgound" key={label} value={label}>
                           {label}
                         </option>
                       );
@@ -310,22 +266,15 @@ export default function Parameterization() {
                   </select>
 
                   <select
-                    className="focus:outline-none bg-backgound w-[220px] text-xl font-medium bg-transparent border-2 border-border-color rounded p-3"
+                    className="w-full lg:w-[220px] text-lg lg:text-xl font-medium bg-transparent border-2 border-border-color rounded p-3 focus:bg-button-hover outline-none"
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                   >
                     {Array.from({ length: 15 }, (_, i) => {
                       const hour = 10 + i;
-                      const label =
-                        hour >= 24
-                          ? "00:00"
-                          : `${hour.toString().padStart(2, "0")}:00`;
+                      const label = hour >= 24 ? "00:00" : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option
-                          className="bg-backgound border-none"
-                          key={label}
-                          value={label}
-                        >
+                        <option className="bg-backgound" key={label} value={label}>
                           {label}
                         </option>
                       );
@@ -334,8 +283,7 @@ export default function Parameterization() {
 
                   <button
                     onClick={handleSubmitWorkShift}
-                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-          rounded w-[200px] font-semibold text-lg tracking-wide"
+                    className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[200px]"
                   >
                     Salvar Horário
                   </button>
@@ -345,22 +293,17 @@ export default function Parameterization() {
                   {workOptimistic.map((works) => (
                     <div
                       key={works._id}
-                      className="hover:bg-card-bg transition-colors duration-200 flex rounded px-5 py-3 items-center justify-between gap-3 bg-button-hover"
+                      className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
-                      <span className="flex items-center text-lg tracking-wider">
-                        <span className="inline-block rounded-full bg-bubble-red w-2 h-8 mr-4"></span>
+                      <span className="flex items-center text-base lg:text-lg tracking-wider">
+                        <span className="inline-block rounded-full bg-bubble-red w-2 h-6 lg:h-8 mr-4"></span>
                         {works.startTime} - {works.endTime}
                       </span>
                       <div
-                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
-              hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleDeleteWorkShift(works._id)}
                       >
-                        <Trash
-                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
-                          size={20}
-                          strokeWidth={2}
-                        />
+                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
                       </div>
                     </div>
                   ))}
@@ -369,16 +312,16 @@ export default function Parameterization() {
             </div>
           )}
 
+          {/* ===== Admin ===== */}
           {activeTab === "admin" && (
-            <div className="">
-              <h2 className="text-center text-2xl text-gray-400 tracking-wider mb-20">
+            <div>
+              <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
                 Cadastro dos Admin's
               </h2>
-              <div className="relative flex-col space-y-10 min-w-[500px]">
-                <div className="flex gap-3">
+              <div className="flex flex-col gap-5 lg:space-y-10">
+                <div className="flex w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex-col gap-3 lg:flex-row">
                   <select
-                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
-          p-3 w-[500px] text-xl font-medium"
+                    className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover p-3 w-full text-lg lg:w-[500px] lg:text-xl font-medium"
                     value={selectedUserUid}
                     onChange={(e) => setSelectedUserUid(e.target.value)}
                   >
@@ -386,11 +329,7 @@ export default function Parameterization() {
                       Selecione um usuário
                     </option>
                     {allUsers.map((user) => (
-                      <option
-                        key={user.id}
-                        value={user.uid}
-                        className="bg-backgound border-none"
-                      >
+                      <option key={user.id} value={user.uid} className="bg-backgound">
                         {user.name}
                       </option>
                     ))}
@@ -398,8 +337,7 @@ export default function Parameterization() {
 
                   <button
                     onClick={() => handlePromoteToAdmin(selectedUserUid)}
-                    className="bg-green-600 hover:bg-green-700 transition-all duration-200 text-white
-          rounded w-[150px] font-semibold text-lg tracking-wide"
+                    className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[150px]"
                   >
                     Inserir admin
                   </button>
@@ -409,26 +347,17 @@ export default function Parameterization() {
                   {userOptimistic.map((user) => (
                     <div
                       key={user.id}
-                      className="hover:bg-card-bg flex rounded px-5 py-3 items-cente justify-between gap-3 bg-button-hover transition-colors duration-200"
+                      className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
-                      <span className="flex justify-center items-center text-lg tracking-wider">
-                        <img
-                          src={user.profile}
-                          className="inline-block rounded-full relative w-8 h-8 mr-4"
-                        />
+                      <span className="flex items-center text-base lg:text-lg tracking-wider">
+                        <img src={user.profile} className="inline-block rounded-full w-8 h-8 mr-4" />
                         {user.name}
                       </span>
                       <div
-                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:border-red-900
-                    hover:bg-red-800 transition-colors duration-200 cursor-pointer"
+                        className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleRemoveAdmin(user.uid)}
                       >
-                        <Trash
-                          className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
-                          color="white"
-                          size={20}
-                          strokeWidth={2}
-                        />
+                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
                       </div>
                     </div>
                   ))}

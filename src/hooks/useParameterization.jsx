@@ -49,8 +49,7 @@ export default function useParameterization() {
     setSquadsOptimistic(allSquads);
     setSuperOptimistic(allSuper);
     setWorkOptimistic(workShifts);
-    setUserOptimistic(allUsers);
-  }, [allPositions, allSquads, allSuper, workShifts, allUsers]);
+  }, [allPositions, allSquads, allSuper, workShifts]);
 
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
@@ -322,8 +321,7 @@ export default function useParameterization() {
 
   const handleRemoveAdmin = async (uid) => {
     if (!uid) return;
-    await deleteUserAdminById(uid);
-    fetchAllUsers();
+    
     toast
       .promise(deleteUserAdminById(uid), {
         loading: "Removendo acesso de Admin...",
