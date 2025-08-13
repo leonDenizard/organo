@@ -2,6 +2,7 @@ import { uploadScheduleToBD } from "../services/schedule";
 import { useState } from "react";
 import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
+import toast from "react-hot-toast";
 
 export default function ButtonsSendSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -21,7 +22,7 @@ export default function ButtonsSendSchedule() {
 
   const handleUpload = async () => {
     if (!file) {
-      alert("Nenhum arquivo encontrado");
+      toast.error("Nenhum arquivo encontrado!")
       return;
     }
 
@@ -33,9 +34,9 @@ export default function ButtonsSendSchedule() {
 
         const response = await uploadScheduleToBD(jsonData);
 
-        alert("Escala inserida com sucesso");
+        toast.success("Escalda inserida com sucesso!")
       } catch (error) {
-        console.log("Erro ao processar o arquivo JSON");
+        toast.error("Erro ao processar o arquivo JSON");
       }
     };
     reader.readAsText(file);
@@ -56,8 +57,8 @@ export default function ButtonsSendSchedule() {
           `Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`
         );
       }
-      console.log(`Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`);
-      alert("Escala deletada com sucesso");
+
+      toast.success("Escala deletada com sucesso");
     } catch (error) {
       console.error("Erro: ", error);
     }

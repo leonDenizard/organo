@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import LegendSchedule from "./LegendSchedule";
 
-const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
+const Calendar = ({ workedDays, onDayClick, loadingDays }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [daysInMonth, setDaysInMonth] = useState([]);
 
@@ -65,7 +65,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
             {daysInMonth.map((day, index) => {
               const isWeekend = index % 7 === 5 || index % 7 === 6;
               const isWorked = workedDays.includes(day);
-              const isLoading = loadindDay === day && day !== null
+              const isLoading = loadingDays.has(day)
               //;
               
 
@@ -81,7 +81,7 @@ const Calendar = ({ workedDays, onDayClick, loadindDay }) => {
                     md:px-10 md:p-6 md:text-2xl
                     lg:p-6 lg:px-10 lg:text-3xl 
                      `}
-                  onClick={() => onDayClick(day)}
+                  onClick={() => day && onDayClick(day)}
                 >
                   {isLoading ? 
                     (

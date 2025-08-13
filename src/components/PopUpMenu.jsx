@@ -8,7 +8,7 @@ export default function PopUpMenu({ options, onSelect, closeModal }) {
           <li key={index}>
             <button
               onClick={() => onSelect(option._id || option.startTime)}
-              className="bg-secundary-color font-semibold text-lg text-start p-1 px-12 rounded-md
+              className="bg-secundary-color font-semibold text-lg text-start p-3 px-12 rounded-md
                hover:bg-border-color transition duration-300 ease-in-out border  border-border-color min-w-full"
             >
               {option.name || `${option.startTime} às ${option.endTime}`}

@@ -152,14 +152,14 @@ export default function Parameterization() {
                 Cadastro dos Squads
               </h2>
               <div className="flex flex-col gap-5 lg:space-y-10">
-                <div className="flex flex-col gap-3 lg:flex-row w-[calc(100vw-2rem)] md:w-[600px] lg:w-full ">
+                <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row ">
                   <input
                     value={squad}
                     placeholder="@squad-suporte"
                     onKeyDown={(e) => e.key === "Enter" && handleSubmitSquad()}
                     onChange={(e) => setSquad(e.target.value)}
                     className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
-                      p-3 w-full text-lg lg:text-xl font-medium"
+                      p-3 w-full text-lg lg:w-[500px] lg:text-xl font-medium"
                     type="text"
                   />
                   <button
