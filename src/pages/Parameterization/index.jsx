@@ -2,10 +2,22 @@ import { useEffect, useRef, useState } from "react";
 import useParameterization from "../../hooks/useParameterization";
 import { Trash } from "lucide-react";
 import Breadcrumb from "../../components/Breadcrumb";
+import { useAuth } from "../../context/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
 export default function Parameterization() {
   const [activeTab, setActiveTab] = useState("cargo");
   const [underlineStyle, setUnderlineStyle] = useState({ left: 0, width: 0 });
+
+  const { isFirstUser, setIsFirstUser } = useAuth();
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  function updateUser() {
+    setIsFirstUser(false);
+    navigate("/register");
+  }
 
   const tabRefs = useRef({});
 
@@ -15,6 +27,7 @@ export default function Parameterization() {
     { key: "supervisor", label: "Supervisor" },
     { key: "horario", label: "Horário" },
     { key: "admin", label: "Admin" },
+    ...(isFirstUser ? [{ key: "register", label: "Registre-se" }] : []),
   ];
 
   const {
@@ -49,6 +62,12 @@ export default function Parameterization() {
   } = useParameterization();
 
   useEffect(() => {
+    if (isFirstUser) {
+      setShowWelcomeModal(true);
+    }
+  }, []);
+
+  useEffect(() => {
     const updateUnderline = () => {
       const currentRef = tabRefs.current[activeTab];
       if (currentRef) {
@@ -74,7 +93,11 @@ export default function Parameterization() {
             key={key}
             ref={(el) => (tabRefs.current[key] = el)}
             className={`list-none py-2 px-4 lg:p-3 lg:px-6 cursor-pointer tracking-widest text-lg lg:text-xl relative z-10
-              ${activeTab === key ? "text-blue-white font-semibold" : "text-white"}
+              ${
+                activeTab === key
+                  ? "text-blue-white font-semibold"
+                  : "text-white"
+              }
               hover:bg-button-hover hover:rounded-md transition-all`}
             onClick={() => setActiveTab(key)}
           >
@@ -92,6 +115,29 @@ export default function Parameterization() {
 
       <section className="w-full lg:px-4 lg:w-[90%] mt-12 lg:m-auto lg:mt-20 2xl:mt-30">
         <div className="relative flex justify-center">
+          {/* ===== Show modal ===== */}
+          {showWelcomeModal && (
+            <div className="fixed inset-0 flex items-center justify-center backdrop-blur-xl z-50">
+              <div className="relative flex flex-col justify-center items-center bg-card-bg p-6 rounded shadow-lg h-[30%] text-center w-[60%]">
+                <h2 className="text-xl font-bold mb-12">Seja bem-vindo!</h2>
+                <p className="mb-4">
+                  Complete a parametrização antes de se registrar. 
+                  
+                  Depois clique
+                  em "Registrar-se".
+                </p>
+                <button
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  onClick={() => {
+                    setShowWelcomeModal(false);
+                  }}
+                >
+                  Entendi
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* ===== Cargo ===== */}
           {activeTab === "cargo" && (
             <div className="">
@@ -103,7 +149,9 @@ export default function Parameterization() {
                   <input
                     value={position}
                     placeholder="JR I"
-                    onKeyDown={(e) => e.key === "Enter" && handleSubmitPosition()}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && handleSubmitPosition()
+                    }
                     onChange={(e) => setPosition(e.target.value)}
                     className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
                       p-3 w-full text-lg lg:w-[500px] lg:text-xl font-medium"
@@ -184,7 +232,10 @@ export default function Parameterization() {
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleDeleteSquad(s._id)}
                       >
-                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300"
+                          size={20}
+                        />
                       </div>
                     </div>
                   ))}
@@ -232,7 +283,10 @@ export default function Parameterization() {
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleDeleteSuper(sup._id)}
                       >
-                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300"
+                          size={20}
+                        />
                       </div>
                     </div>
                   ))}
@@ -256,9 +310,16 @@ export default function Parameterization() {
                   >
                     {Array.from({ length: 15 }, (_, i) => {
                       const hour = 10 + i;
-                      const label = hour >= 24 ? "00:00" : `${hour.toString().padStart(2, "0")}:00`;
+                      const label =
+                        hour >= 24
+                          ? "00:00"
+                          : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option className="bg-backgound" key={label} value={label}>
+                        <option
+                          className="bg-backgound"
+                          key={label}
+                          value={label}
+                        >
                           {label}
                         </option>
                       );
@@ -272,9 +333,16 @@ export default function Parameterization() {
                   >
                     {Array.from({ length: 15 }, (_, i) => {
                       const hour = 10 + i;
-                      const label = hour >= 24 ? "00:00" : `${hour.toString().padStart(2, "0")}:00`;
+                      const label =
+                        hour >= 24
+                          ? "00:00"
+                          : `${hour.toString().padStart(2, "0")}:00`;
                       return (
-                        <option className="bg-backgound" key={label} value={label}>
+                        <option
+                          className="bg-backgound"
+                          key={label}
+                          value={label}
+                        >
                           {label}
                         </option>
                       );
@@ -303,7 +371,10 @@ export default function Parameterization() {
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleDeleteWorkShift(works._id)}
                       >
-                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300"
+                          size={20}
+                        />
                       </div>
                     </div>
                   ))}
@@ -329,7 +400,11 @@ export default function Parameterization() {
                       Selecione um usuário
                     </option>
                     {allUsers.map((user) => (
-                      <option key={user.id} value={user.uid} className="bg-backgound">
+                      <option
+                        key={user.id}
+                        value={user.uid}
+                        className="bg-backgound"
+                      >
                         {user.name}
                       </option>
                     ))}
@@ -350,20 +425,30 @@ export default function Parameterization() {
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
                       <span className="flex items-center text-base lg:text-lg tracking-wider">
-                        <img src={user.profile} className="inline-block rounded-full w-8 h-8 mr-4" />
+                        <img
+                          src={user.profile}
+                          className="inline-block rounded-full w-8 h-8 mr-4"
+                        />
                         {user.name}
                       </span>
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
                         onClick={() => handleRemoveAdmin(user.uid)}
                       >
-                        <Trash className="stroke-white group-hover:stroke-red-300" size={20} />
+                        <Trash
+                          className="stroke-white group-hover:stroke-red-300"
+                          size={20}
+                        />
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+          )}
+
+          {activeTab === "register" && (
+            <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={updateUser}>Concluir Cadastro</button>
           )}
         </div>
       </section>

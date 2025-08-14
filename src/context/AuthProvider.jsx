@@ -34,7 +34,7 @@ function AuthProvider({ children }) {
               name: user.displayName,
               email: user.email,
               admin: true,
-              
+              hasConfigured: false
             };
 
             const createUserResponse = await fetch(`${API_URL}/user`, {
@@ -91,6 +91,7 @@ function AuthProvider({ children }) {
         isLoading,
         logOut,
         isFirstUser,
+        setIsFirstUser,
         isAdmin: backendUser?.admin ?? false,
       }}
     >
