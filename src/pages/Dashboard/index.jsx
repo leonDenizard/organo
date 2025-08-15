@@ -174,8 +174,11 @@ export default function Dashboard() {
   };
 
   const sortBySquadI = (squadId) => {
-    const sortedUsers = [...allUsers].filter((user) => user.squad === squadId)
-    console.log(sortedUsers)
+    const sortedUsers = allUsers.filter(user =>
+      Array.isArray(user.squad) &&
+      user.squad.some(id => String(id) === String(squadId))
+    )
+
     setSortedUsers(sortedUsers)
     closeModal()
   }
