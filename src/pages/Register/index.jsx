@@ -63,7 +63,7 @@ export default function Register() {
   const [selectedManager, setSelectedManager] = useState(null);
   const [selectedChild, setSelectedChild] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
-  const [selectedSquad, setSelectedSquad] = useState(null);
+  const [selectedSquad, setSelectedSquad] = useState([]);
 
   //Pegando infos do hook pra renderizar
   const { workShifts, allPositions, allSuper, allSquads } =
@@ -86,8 +86,11 @@ export default function Register() {
   };
 
   const handleChangeSquad = (id) => {
-    setSelectedSquad((prev) => (prev === id ? null : id));
-    console.log(selectedSquad);
+    setSelectedSquad((prev) => {
+      const exists = prev.includes(id);
+      const next = exists ? prev.filter((s) => s !== id) : [...prev, id];
+      return next;
+    });
   };
 
   const handleFileChange = (e) => {
@@ -162,7 +165,7 @@ export default function Register() {
       setSelectedRole(exists.role);
       setSelectedSquad(exists.squad);
       setSelectedChild(exists.child);
-      setAdmin(exists.admin)
+      setAdmin(exists.admin);
     }
 
     setIsFetchingImage(false);
@@ -340,13 +343,12 @@ export default function Register() {
               {allSquads.map((squad) => (
                 <CheckBox
                   key={squad._id}
-                  isChecked={selectedSquad === squad._id}
+                  isChecked={selectedSquad.includes(squad._id)}
                   onChange={() => handleChangeSquad(squad._id)}
                   id={squad._id}
                   title={squad.name}
                 />
               ))}
-              {console.log(selectedSquad)}
             </div>
           </div>
           <div className="Horario">
