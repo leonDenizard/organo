@@ -30,7 +30,7 @@ export const checkUserExists = async (uid) => {
 
   //console.log("UID firebase.js checkUserExists", uid)
   try {
-    const response = await fetch(`${API_URL}/user/${uid}`, {
+    const response = await fetch(`${API_URL}/user/sigin/${uid}`, {
       method: "GET",
       headers: {
         'Content-Type': 'application/json'

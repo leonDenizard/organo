@@ -24,7 +24,7 @@ function AuthProvider({ children }) {
           const response = await fetch(`${API_URL}/user`);
           const users = await response.json();
 
-          if (users.length === 0) {
+          if (!users.data || (Array.isArray(users.data) && users.data.length === 0)) {
             console.log("Ninguem nessa bagaça");
             console.log("Estado do FirstUser dentro do Auth", isFirstUser);
             setIsFirstUser(true)
@@ -92,7 +92,7 @@ function AuthProvider({ children }) {
         logOut,
         isFirstUser,
         setIsFirstUser,
-        isAdmin: backendUser?.admin ?? false,
+        isAdmin: backendUser?.data.admin ?? false,
       }}
     >
       {children}

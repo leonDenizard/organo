@@ -45,7 +45,7 @@ export default function Dashboard() {
     const fetchUserData = async () => {
       if (googleUser) {
         //Retorna somente 1 usuário
-        const userUIDQuery = await fetch(`${API_URL}/user/${googleUser.uid}`, {
+        const userUIDQuery = await fetch(`${API_URL}/user/sigin/${googleUser.uid}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export default function Dashboard() {
           if (!allUserResponse.empty) {
             let allUserData = [];
 
-            allUserData = [...allUserResponse];
+            allUserData = [...allUserResponse.data];
 
             setAllUser(allUserData);
 
@@ -81,7 +81,7 @@ export default function Dashboard() {
             if (!userUIDQuery.empty) {
               const userData = userUIDResponse;
 
-              setUserDataLogged(userData);
+              setUserDataLogged(userData.data);
             }
           } else {
             console.log("Nenhum documento encontrado");
@@ -100,7 +100,8 @@ export default function Dashboard() {
   }, [googleUser]);
 
   let firstName = "";
-  let profilePhoto = backendUser?.photoUrl ? backendUser.photoUrl : userDataLogged?.photoUrl
+  let profilePhoto = backendUser?.data.photoUrl ? backendUser.data.photoUrl : userDataLogged?.photoUrl
+
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {

@@ -9,11 +9,7 @@ export async function createPosition(data) {
 
   const result = await response.json();
 
-  if (!response.ok) {
-    throw new Error(result.message || "Erro ao criar cargo");
-  }
-
-  return result;
+  return result.data;
 }
 
 
@@ -25,9 +21,8 @@ export async function getAllPosition() {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) throw new Error("Erro ao buscar cargos");
-
-    return await response.json();
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("getAllPosition error:", error);
     return [];
@@ -42,9 +37,8 @@ export async function deletePositionById(id) {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (!response.ok) throw new Error("Erro ao deletar cargo");
-
-    return await response.json();
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("deletePositionById error:", error);
     return null;
@@ -60,9 +54,8 @@ export async function createSquad(data) {
       body: JSON.stringify({ name: data }),
     });
 
-    if (!response.ok) throw new Error("Erro ao criar squad");
-
-    return await response.json();
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("createSquad error:", error);
     return null;
@@ -76,9 +69,9 @@ export async function getAllSquad() {
       headers: { "Content-Type": "application/json" }, // Corrigido Content-Type
     });
 
-    if (!response.ok) throw new Error("Erro ao buscar squads");
 
-    return await response.json();
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("Erro ao buscar squads:", error);
     return null;
@@ -91,10 +84,9 @@ export async function deleteSquadById(id){
       method: "DELETE",
       headers: {"Content-type": "application/json"}
     })
-
-    if(!response.ok) throw new Error("Erro ao deletar squad")
     
-    return await response.json()
+    const result = await response.json();
+    return result.data
 
   } catch (error) {
     console.error("Erro ao deletar Squad", error)
@@ -108,10 +100,9 @@ export async function createSupervisor(data){
       headers: {"Content-type": "application/json"},
       body: JSON.stringify({name: data})
     })
-
-    if(!response.ok) throw new Error("Erro ao criar super")
     
-    return await response.json()
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("Erro ao criar super", error)
   }
@@ -124,9 +115,8 @@ export async function getAllSuper() {
       headers: { "Content-Type": "application/json" }, // Corrigido Content-Type
     });
 
-    if (!response.ok) throw new Error("Erro ao buscar Supervisores");
-
-    return await response.json();
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("Erro ao buscar supervisores:", error);
     return null;
@@ -139,10 +129,9 @@ export async function deleteSuperById(id){
       method: "DELETE",
       headers: {"Content-type": "application/json"}
     })
-
-    if(!response.ok) throw new Error("Erro ao deletar Super")
     
-    return await response.json()
+    const result = await response.json();
+    return result.data
 
   } catch (error) {
     console.error("Erro ao deletar Super", error)
@@ -161,9 +150,9 @@ export async function createWorkShift(startTime, endTime){
       
     })
 
-    if(!response.ok) throw new Error ("Erro ao cadastrar horário")
 
-    return await response.json()
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.log("Erro ao cadastrar horário", error)
   }
@@ -177,9 +166,9 @@ export async function getAllWorkShift(){
       headers: {"Content-type" : "application/json"}
     })
 
-    if(!response.ok) throw new Error("Erro ao buscar horário")
     
-    return response.json()
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.log("Erro ao buscar horários", error)
   }
@@ -192,9 +181,9 @@ export async function deleteWorkShiftById(id){
         headers: {"Content-type": "application/json"}
     })
 
-    if(!response.ok) throw new Error("Erro ao deletar Horário", id)
     
-    return await response.json()
+    const result = await response.json();
+    return result.data
 
   } catch (error) {
     console.error("Erro ao deletar horário", error)
@@ -208,9 +197,8 @@ export async function getAllUsers(){
       headers: {"Content-type": "application/json"}
     })
 
-    if(!response.ok) throw new Error("Não foi possível buscar usuários")
-
-    return await response.json()
+    const result = await response.json();
+    return result.data
   } catch (error) {
     console.error("Erro ao buscar usuários", error)
   }
@@ -225,10 +213,9 @@ export async function updateUserAdminById(uid){
         admin: true
       })
     })
-
-    if(!response.ok) throw new Error("Erro ao atualizar admin")
     
-    return await response.json()
+    const result = await response.json();
+    result.data
 
   }catch(error){
     console.error("Erro ao atualizar usuário", uid, error)
@@ -244,10 +231,9 @@ export async function deleteUserAdminById(uid){
         admin: false
       })
     })
-
-    if(!response.ok) throw new Error("Erro ao atualizar admin")
     
-    return await response.json()
+    const result = await response.json();
+    return result.data
 
   }catch(error){
     console.error("Erro ao atualizar usuário", uid, error)

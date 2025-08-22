@@ -86,11 +86,11 @@ export default function Register() {
   };
 
   const handleChangeSquad = (id) => {
-    setSelectedSquad((prev) => {
-      const exists = prev.includes(id);
-      const next = exists ? prev.filter((s) => s !== id) : [...prev, id];
-      return next;
-    });
+    setSelectedSquad((prev = []) => {
+      const exists =prev.includes(id)
+      const next = exists ? prev.filter((s) => s !== id) : [...prev, id]
+      return next
+    })
   };
 
   const handleFileChange = (e) => {
@@ -133,7 +133,7 @@ export default function Register() {
   const fetchImage = async (uid, photoUrl, setSelectedPhoto) => {
     setIsFetchingImage(true);
     try {
-      const response = await fetch(`${API_URL}/user/${uid}`, {
+      const response = await fetch(`${API_URL}/user/sigin/${uid}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -142,8 +142,9 @@ export default function Register() {
 
       const data = await response.json();
 
-      if (data.photoUrl) {
-        setSelectedPhoto(data.photoUrl);
+      console.log("FETCHIMAGE", data.data.photoUrl)
+      if (data.data.photoUrl) {
+        setSelectedPhoto(data.data.photoUrl);
       } else {
         setSelectedPhoto(photoUrl);
       }
@@ -153,19 +154,19 @@ export default function Register() {
     }
 
     const exists = await checkUserExists(uid);
-
+    
     if (exists) {
-      setName(exists.name);
-      setWhatsApp(exists.whatsapp);
-      setSlack(exists.slack);
-      setSurname(exists.surname);
-      setBirthday(exists.birthday);
-      setSelectedShiftId(exists.time);
-      setSelectedManager(exists.manager);
-      setSelectedRole(exists.role);
-      setSelectedSquad(exists.squad);
-      setSelectedChild(exists.child);
-      setAdmin(exists.admin);
+      setName(exists.data.name);
+      setWhatsApp(exists.data.whatsapp);
+      setSlack(exists.data.slack);
+      setSurname(exists.data.surname);
+      setBirthday(exists.data.birthday);
+      setSelectedShiftId(exists.data.time);
+      setSelectedManager(exists.data.manager);
+      setSelectedRole(exists.data.role);
+      setSelectedSquad(exists.data.squad);
+      setSelectedChild(exists.data.child);
+      setAdmin(exists.data.admin);
     }
 
     setIsFetchingImage(false);
@@ -187,10 +188,11 @@ export default function Register() {
 
     try {
       const exists = await checkUserExists(uid);
+      console.log("EXISTS", exists)
 
       let response;
       if (exists) {
-        response = await fetch(`${API_URL}/user/${uid}`, {
+        response = await fetch(`${API_URL}/user/${exists.data._id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -230,9 +232,9 @@ export default function Register() {
   }
   //setIsLoading(false)
 
-  const roleExists = allPositions.some((pos) => pos._id === selectedRole);
-  const superExists = allSuper.some((sup) => sup._id === selectedManager);
-  const squadExists = allSquads.some((squad) => squad._id === selectedSquad);
+  const roleExists = allPositions?.some((pos) => pos._id === selectedRole);
+  const superExists = allSuper?.some((sup) => sup._id === selectedManager);
+  //const squadExists = allSquads?.some((squad) => squad._id === selectedSquad);
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
@@ -280,7 +282,7 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mb-5">
               Horário de expediente
             </h1>
-            {workShifts.map((works) => (
+            {workShifts?.map((works) => (
               <CheckBox
                 key={works._id}
                 id={works._id}
@@ -297,7 +299,7 @@ export default function Register() {
               <h1 className="text-3xl font-semibold mt-4">Cargo Atual</h1>
               <div className="flex mt-5 gap-7">
                 <div>
-                  {allPositions.map((position) => (
+                  {allPositions?.map((position) => (
                     <CheckBox
                       key={position._id}
                       isChecked={selectedRole === position._id}
@@ -319,7 +321,7 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mt-4">Gestor</h1>
             <div className="lg:flex mt-5 gap-10">
               <div>
-                {allSuper.map((sup) => (
+                {allSuper?.map((sup) => (
                   <CheckBox
                     key={sup._id}
                     isChecked={selectedManager === sup._id}
@@ -340,10 +342,10 @@ export default function Register() {
             <h1 className="text-3xl font-semibold mt-4">Squad</h1>
 
             <div className="relative mt-5">
-              {allSquads.map((squad) => (
+              {allSquads?.map((squad) => (
                 <CheckBox
                   key={squad._id}
-                  isChecked={selectedSquad.includes(squad._id)}
+                  isChecked={selectedSquad?.includes(squad._id)}
                   onChange={() => handleChangeSquad(squad._id)}
                   id={squad._id}
                   title={squad.name}

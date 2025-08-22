@@ -115,7 +115,7 @@ export default function useParameterization() {
 
   const fetchSquad = async () => {
     const data = await getAllSquad();
-    setAllSquads(data.message);
+    setAllSquads(data);
   };
 
   const handleDeletePosition = async (id) => {
@@ -156,8 +156,7 @@ export default function useParameterization() {
 
   const fetchPosition = async () => {
     const data = await getAllPosition();
-    //console.log(data.AllPosition)
-    setAllPositions(data.AllPosition);
+    setAllPositions(data);
   };
 
   const handleSubmitSuper = async () => {

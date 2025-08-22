@@ -167,7 +167,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {positionsOptimistic.map((position) => (
+                  {positionsOptimistic?.map((position) => (
                     <div
                       key={position._id}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover transition-colors duration-200"
@@ -219,7 +219,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {squadsOptimistic.map((s) => (
+                  {squadsOptimistic?.map((s) => (
                     <div
                       key={s._id}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
@@ -270,7 +270,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {superOptimistic.map((sup) => (
+                  {superOptimistic?.map((sup) => (
                     <div
                       key={sup._id}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
@@ -358,7 +358,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {workOptimistic.map((works) => (
+                  {workOptimistic?.map((works) => (
                     <div
                       key={works._id}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
@@ -399,7 +399,7 @@ export default function Parameterization() {
                     <option className="bg-backgound" value="">
                       Selecione um usuário
                     </option>
-                    {allUsers.map((user) => (
+                    {allUsers?.map((user) => (
                       <option
                         key={user.id}
                         value={user.uid}
@@ -419,7 +419,7 @@ export default function Parameterization() {
                 </div>
 
                 <div className="flex flex-col gap-3">
-                  {userOptimistic.map((user) => (
+                  {userOptimistic?.map((user) => (
                     <div
                       key={user.id}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
