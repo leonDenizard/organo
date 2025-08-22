@@ -288,12 +288,12 @@ export default function useParameterization() {
     setUserOptimistic(admins);
   };
 
-  const handlePromoteToAdmin = async (uid) => {
-    if (!uid) return;
+  const handlePromoteToAdmin = async (id) => {
+    if (!id) return;
 
     // Verifica se já é admin na lista completa
     const userAlreadyAdmin = allUsers.some(
-      (user) => user.uid === uid && user.admin === true
+      (user) => user._id === id && user.admin === true
     );
 
     if (userAlreadyAdmin) {
@@ -302,27 +302,27 @@ export default function useParameterization() {
     }
 
     // Pega o usuário para adicionar no estado otimista
-    const userToPromote = allUsers.find((user) => user.uid === uid);
+    const userToPromote = allUsers.find((user) => user._id === id);
 
     // Atualiza otimista adicionando o usuário com admin=true
     setUserOptimistic((old) => [...old, { ...userToPromote, admin: true }]);
 
     try {
-      await updateUserAdminById(uid);
+      await updateUserAdminById(id);
       await fetchAllUsers(); // Sincroniza a lista completa após update
       toast.success("Usuário promovido para admin");
     } catch (err) {
       // Reverte estado otimista em caso de erro
-      setUserOptimistic((old) => old.filter((user) => user.uid !== uid));
+      setUserOptimistic((old) => old.filter((user) => user._id !== id));
       toast.error(err?.message || "Erro ao promover usuário");
     }
   };
 
-  const handleRemoveAdmin = async (uid) => {
-    if (!uid) return;
+  const handleRemoveAdmin = async (id) => {
+    if (!id) return;
     
     toast
-      .promise(deleteUserAdminById(uid), {
+      .promise(deleteUserAdminById(id), {
         loading: "Removendo acesso de Admin...",
         success: "Removido o acesso de admin",
         error: (err) => {

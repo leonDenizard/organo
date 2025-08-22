@@ -7,8 +7,8 @@ export const AdminRoute = () => {
 
   if(isLoading) return <Loader/>
 
-  if(backendUser.admin != true){
-    return <Navigate to={"/dashboard"}/>
+  if(backendUser.data.admin != true){
+    return <Navigate to={"/admin"}/>
   }
   return <Outlet />;
 };

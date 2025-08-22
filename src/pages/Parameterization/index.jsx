@@ -402,14 +402,14 @@ export default function Parameterization() {
                     {allUsers?.map((user) => (
                       <option
                         key={user.id}
-                        value={user.uid}
+                        value={user.id}
                         className="bg-backgound"
                       >
                         {user.name}
                       </option>
                     ))}
                   </select>
-
+            
                   <button
                     onClick={() => handlePromoteToAdmin(selectedUserUid)}
                     className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[150px]"
@@ -427,13 +427,13 @@ export default function Parameterization() {
                       <span className="flex items-center text-base lg:text-lg tracking-wider">
                         <img
                           src={user.profile}
-                          className="inline-block rounded-full w-8 h-8 mr-4"
+                          className="inline-block rounded-full w-8 h-8 mr-4 object-cover"
                         />
                         {user.name}
                       </span>
                       <div
                         className="group rounded-full p-2 bg-card-bg border border-border-color hover:bg-red-800 cursor-pointer"
-                        onClick={() => handleRemoveAdmin(user.uid)}
+                        onClick={() => handleRemoveAdmin(user.id)}
                       >
                         <Trash
                           className="stroke-white group-hover:stroke-red-300"
