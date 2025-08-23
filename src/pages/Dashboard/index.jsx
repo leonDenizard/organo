@@ -271,7 +271,7 @@ export default function Dashboard() {
                 birthday={user.birthday}
                 iconChild={<ChildIcon />}
                 child={user.child}
-                onClick={() => isAdmin && navigate(`/user/${user._id}`)}
+                onClick={() => navigate(`/user/${user._id}`)}
               />
             ))}
           </div>

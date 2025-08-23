@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import Schedule from "../Schedule";
 import { useAuth } from "../../context/AuthProvider";
 import useParameterization from "../../hooks/useParameterization";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function UserDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -49,10 +50,10 @@ export default function UserDetail() {
     (sq) => allSquads.find((s) => s._id === sq)?.name || "Squad não encontrado"
   );
 
-
   return (
     <div className="container w-[90%] m-auto">
       <Header name={backendUser.data?.name} img={backendUser.data?.photoUrl} />
+      <Breadcrumb />
       <h1 className="text-2xl font-bold">Detalhes do Usuário</h1>
       <p className="flex items-center gap-3">
         <img

@@ -14,6 +14,7 @@ import Loader from "../../components/Loader";
 import { checkUserExists } from "../../services/firebase";
 import resizeImage from "../../functions/resizeImage";
 import useParameterization from "../../hooks/useParameterization";
+import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Register() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -34,6 +35,8 @@ export default function Register() {
   const [isFetchingImage, setIsFetchingImage] = useState(false);
   const [interval, setInterval] = useState("13:00");
   const [admin, setAdmin] = useState(false);
+
+  const [userExists, setUserExists] = useState(false);
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -141,8 +144,6 @@ export default function Register() {
       });
 
       const data = await response.json();
-
-      console.log("FETCHIMAGE", data.data.photoUrl)
       if (data.data.photoUrl) {
         setSelectedPhoto(data.data.photoUrl);
       } else {
@@ -167,6 +168,7 @@ export default function Register() {
       setSelectedSquad(exists.data.squad);
       setSelectedChild(exists.data.child);
       setAdmin(exists.data.admin);
+      setUserExists(true)
     }
 
     setIsFetchingImage(false);
@@ -235,8 +237,10 @@ export default function Register() {
   const roleExists = allPositions?.some((pos) => pos._id === selectedRole);
   const superExists = allSuper?.some((sup) => sup._id === selectedManager);
   //const squadExists = allSquads?.some((squad) => squad._id === selectedSquad);
+  
   return (
     <form onSubmit={handleSubmit} className="relative">
+      {userExists && <Breadcrumb/>}
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">

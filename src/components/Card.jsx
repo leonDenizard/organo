@@ -55,14 +55,14 @@ function Card({
 
   return (
     <div className="group relative pt-2 pb-12 px-10 bg-card-bg">
-      {isAdmin && (
+      
         <div className=" top-3 right-4 absolute cursor-pointer">
           <SquareArrowOutUpRight
             className="stroke-transparent group-hover:stroke-white transition-colors duration-500"
             onClick={onClick}
           />
         </div>
-      )}
+
 
       <div className="w-full flex justify-center">
         <img
