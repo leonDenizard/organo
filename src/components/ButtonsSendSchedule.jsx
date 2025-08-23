@@ -37,8 +37,7 @@ export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays} )
         //converte o arquivo em objeto JS
         const jsonData = JSON.parse(event.target.result);
 
-        const response = await uploadScheduleToBD(jsonData);
-
+        await uploadScheduleToBD(jsonData);
         toast.success("Escalda inserida com sucesso!")
         onScheduleChange?.()
       } catch (error) {

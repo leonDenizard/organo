@@ -24,7 +24,7 @@ function App() {
           <Route path="/register" element={<AuthRedirectHandler />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/schedule" element={<Schedule />} />
-          <Route path="/user/:uid" element={<UserDetail />} />
+          <Route path="/user/:id" element={<UserDetail />} />
           <Route element={<AdminOrFirstUserRoute />}>
             <Route path="/parameterization" element={<Parameterization />} />
           </Route>

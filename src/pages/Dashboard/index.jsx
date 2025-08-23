@@ -259,7 +259,7 @@ export default function Dashboard() {
                     ? `${shift.startTime} - ${shift.endTime}`
                     : "Horário não definido";
                 })()}
-
+                
                 iconSuper={<Check />}
                 manager={
                   allSuper.find((sup) => sup._id === user.manager)?.name ||
@@ -271,7 +271,7 @@ export default function Dashboard() {
                 birthday={user.birthday}
                 iconChild={<ChildIcon />}
                 child={user.child}
-                onClick={() => isAdmin && navigate(`/user/${user.uid}`)}
+                onClick={() => isAdmin && navigate(`/user/${user._id}`)}
               />
             ))}
           </div>

@@ -8,90 +8,103 @@ import ButtonsSendSchedule from "../../components/ButtonsSendSchedule";
 import Breadcrumb from "../../components/Breadcrumb";
 import toast from "react-hot-toast";
 
-export default function Schedule({ showHeader = true, onDayClick, uid }) {
+export default function Schedule({ showHeader = true, userId }) {
   const { googleUser, logOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
   const [loadingDays, setLoadingDays] = useState(new Set());
-  const [userDataLogged, setUserDataLogged] = useState(null);
-  const [workedDays, setWorkedDays] = useState([]);
-
-  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1); // Mês atual (1-12)
-  const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Ano atual
-
   const [loggedUserData, setLoggedUserData] = useState(null);
   const [selectedUserData, setSelectedUserData] = useState(null);
-  const [scheduleData, setScheduleData] = useState(null);
+  const [workedDays, setWorkedDays] = useState([]);
+
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  const fetchUserData = async () => {
-    try {
-      const loggedUserResponse = await fetch(
-        `${API_URL}/user/${googleUser.uid}`
-      );
-      const loggedUser = await loggedUserResponse.json();
-
-      setLoggedUserData(loggedUser);
-
-      const userUIDToFetch = loggedUser.admin && uid ? uid : googleUser.uid;
-
-      const userResponse = await fetch(`${API_URL}/user/${userUIDToFetch}`);
-      const selectedUser = await userResponse.json();
-      setSelectedUserData(selectedUser);
-
-      const scheduleResponse = await fetch(
-        `${API_URL}/schedule/${userUIDToFetch}`
-      );
-      const schedule = await scheduleResponse.json();
-
-      const workedDaysArray = [];
-      schedule.forEach((item) => {
-        const dayData = item.schedule;
-
-        for (const [date, uids] of Object.entries(dayData)) {
-          if (uids.includes(userUIDToFetch))
-            workedDaysArray.push(parseInt(date.split("-")[0], 10));
-        }
-      });
-
-      setWorkedDays(workedDaysArray);
-    } catch (error) {
-      console.error("Erro ao buscar dados ou usuário não está escala", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+  // 🔹 Busca dados do usuário logado e do selecionado
   useEffect(() => {
-    fetchUserData();
-  }, [uid, googleUser]);
+    const fetchUser = async () => {
+      try {
+        setIsLoading(true);
 
-  if (isLoading) {
-    <Loader />;
-  }
+        // 1. Pega usuário logado pelo Google UID
+        const res = await fetch(`${API_URL}/user/sigin/${googleUser.uid}`);
+        const loggedUser = await res.json();
+        setLoggedUserData(loggedUser.data);
 
-  // 🔄 Função para atualizar a escala
+        // 2. Decide qual usuário buscar
+        const targetId = isAdmin && userId ? userId : loggedUser.data._id;
+
+        // 3. Pega dados do usuário alvo
+        const userRes = await fetch(`${API_URL}/user/${targetId}`);
+        const selectedUser = await userRes.json();
+        setSelectedUserData(selectedUser);
+
+      } catch (error) {
+        console.error("❌ Erro ao buscar usuário:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (googleUser) fetchUser();
+  }, [googleUser, userId, isAdmin]);
+
+  // 🔹 Busca a escala do usuário selecionado
+  useEffect(() => {
+    const fetchSchedule = async () => {
+      if (!selectedUserData?.data?._id) return;
+
+      try {
+        setIsLoading(true);
+
+        const userId = selectedUserData.data._id;
+        const scheduleResponse = await fetch(`${API_URL}/schedule/${userId}`);
+        const schedule = await scheduleResponse.json();
+
+        const workedDaysArray = [];
+        schedule?.data?.forEach((item) => {
+          const dayData = item.schedule;
+          for (const [date, ids] of Object.entries(dayData)) {
+            if (ids.includes(userId)) {
+              workedDaysArray.push(parseInt(date.split("-")[0], 10));
+            }
+          }
+        });
+
+        setWorkedDays(workedDaysArray);
+      } catch (error) {
+        console.error("❌ Erro ao buscar escala:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchSchedule();
+  }, [selectedUserData]);
+
+  // 🔹 Atualiza a escala ao clicar no dia
   const handleDayClick = async (day) => {
     if (!day) return;
     if (!isAdmin) {
-      toast.error("Você não possui permissão parar alterar escala");
+      toast.error("Você não possui permissão para alterar escala");
       return;
     }
-    // Bloqueia clique duplo no mesmo dia
-    if (loadingDays.has(day)) return;
+    if (loadingDays.has(day)) return; // evita duplo clique
 
     const formattedDate = `${String(day).padStart(2, "0")}-${String(
       currentMonth
     ).padStart(2, "0")}-${currentYear}`;
 
-    // Guarda estado anterior para rollback se der erro
+    const userId = selectedUserData?.data?._id;
+    if (!userId) return;
+
     const prevWorkedDays = [...workedDays];
     const alreadyWorked = workedDays.includes(day);
 
     try {
-      // Marca dia como "carregando"
       setLoadingDays((prev) => new Set(prev).add(day));
 
       // Atualiza UI otimisticamente
@@ -99,15 +112,13 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
         alreadyWorked ? prev.filter((d) => d !== day) : [...prev, day]
       );
 
-      // Chama backend
-      //await new Promise(resolve => setTimeout(resolve, 2000))
-
+      // Atualiza no backend
       const response = await fetch(`${API_URL}/schedule/update`, {
         method: "POST",
         headers: { "Content-type": "application/json" },
         body: JSON.stringify({
           date: formattedDate,
-          uid: selectedUserData.uid,
+          id: userId,
         }),
       });
 
@@ -119,10 +130,8 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
       console.warn("✅ Escala atualizada", data);
     } catch (error) {
       console.error("❌ Erro ao atualizar escala:", error);
-      // Rollback para estado anterior
-      setWorkedDays(prevWorkedDays);
+      setWorkedDays(prevWorkedDays); // rollback
     } finally {
-      // Remove do loading
       setLoadingDays((prev) => {
         const newSet = new Set(prev);
         newSet.delete(day);
@@ -131,32 +140,14 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
     }
   };
 
-  let firstName = "";
-  let profilePhoto = "";
+  // 🔹 Dados básicos do header
+  const firstName = loggedUserData?.name?.split(" ")[0] || "";
+  const profilePhoto = loggedUserData?.photoUrl || "";
 
-  // Verificação se os dados foram carregados antes de acessar
-  if (loggedUserData && loggedUserData.name) {
-    firstName = loggedUserData.name.split(" ")[0];
-    //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
-  }
-
-  if (loggedUserData && loggedUserData.photoUrl) {
-    profilePhoto = loggedUserData.photoUrl;
-  }
   const handleLogOut = async () => {
     await logOut();
     navigate("/");
   };
-
-  // const fetchSchedule = async () => {
-  //   const res = await fetch(`${API_URL}/schedule`);
-  //   const data = await res.json();
-  //   setScheduleData(data);
-  // };
-
-  // useEffect(() => {
-  //   fetchSchedule();
-  // }, []);
 
   return (
     <div className="container w-[90%] m-auto min-h-screen">
@@ -171,7 +162,12 @@ export default function Schedule({ showHeader = true, onDayClick, uid }) {
             onDayClick={handleDayClick}
             loadingDays={loadingDays}
           />
-          {isAdmin && <ButtonsSendSchedule onScheduleChange={fetchUserData} setWorkedDays={setWorkedDays} />}
+          {isAdmin && (
+            <ButtonsSendSchedule
+              onScheduleChange={() => selectedUserData && setWorkedDays([])}
+              setWorkedDays={setWorkedDays}
+            />
+          )}
         </>
       ) : (
         <Loader />

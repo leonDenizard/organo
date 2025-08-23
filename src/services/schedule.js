@@ -9,13 +9,11 @@ export const uploadScheduleToBD = async (json) => {
       }
     })
 
-    console.log("API_URL:", API_URL)
 
     const response = await schedule.json()
 
-    console.log("Resposta do GET:", response)
 
-    if (response.length === 0) {
+    if (!response.data || (Array.isArray(response.data) && response.data.length === 0)) {
       const uploadSchedule = await fetch(`${API_URL}/schedule/`, {
         method: 'POST',
         headers: {
@@ -23,6 +21,7 @@ export const uploadScheduleToBD = async (json) => {
         },
         body: JSON.stringify(json)
       })
+      
 
       if (!uploadSchedule.ok) {
         const errorText = await uploadSchedule.text()
