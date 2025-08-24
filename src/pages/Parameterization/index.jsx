@@ -87,7 +87,7 @@ export default function Parameterization() {
   return (
     <div className="relative h-screen">
       <Breadcrumb />
-      <nav className="relative flex overflow-auto w-[90%] px-5 lg:w-full md:justify-center gap-3 lg:top-8 lg:gap-5">
+      <nav className="relative flex overflow-auto w-[90%] px-5 lg:w-full md:justify-center gap-3 lg:top-8 lg:gap-5 scrollbar pb-3">
         {tabs.map(({ key, label }) => (
           <li
             key={key}
@@ -104,13 +104,20 @@ export default function Parameterization() {
             {label}
           </li>
         ))}
+        
         <span
-          className="absolute bottom-0 h-1 bg-bubble-blue transition-all duration-300 rounded-full"
+          className="absolute bottom-3 h-1 bg-bubble-blue transition-all duration-300 rounded-full"
           style={{
             left: underlineStyle.left,
             width: underlineStyle.width,
           }}
         />
+        <div
+          className="
+      absolute pointer-events-non right-0 top-0 h-full w-16 
+      bg-gradient-to-l from-backgound to-transparent z-10"
+        ></div>
+        
       </nav>
 
       <section className="w-full lg:px-4 lg:w-[90%] mt-12 lg:m-auto lg:mt-20 2xl:mt-30">
@@ -121,9 +128,7 @@ export default function Parameterization() {
               <div className="relative flex flex-col justify-center items-center bg-card-bg p-6 rounded shadow-lg h-[30%] text-center w-[60%]">
                 <h2 className="text-xl font-bold mb-12">Seja bem-vindo!</h2>
                 <p className="mb-4">
-                  Complete a parametrização antes de se registrar. 
-                  
-                  Depois clique
+                  Complete a parametrização antes de se registrar. Depois clique
                   em "Registrar-se".
                 </p>
                 <button
@@ -409,7 +414,7 @@ export default function Parameterization() {
                       </option>
                     ))}
                   </select>
-            
+
                   <button
                     onClick={() => handlePromoteToAdmin(selectedUserUid)}
                     className="bg-green-600 hover:bg-green-700 text-white rounded w-full py-3 font-semibold text-lg lg:w-[150px]"
@@ -421,7 +426,7 @@ export default function Parameterization() {
                 <div className="flex flex-col gap-3">
                   {userOptimistic?.map((user) => (
                     <div
-                      key={user.id}
+                      key={user.uid}
                       className="hover:bg-card-bg flex rounded px-4 py-3 items-center justify-between gap-3 bg-button-hover"
                     >
                       <span className="flex items-center text-base lg:text-lg tracking-wider">
@@ -448,7 +453,12 @@ export default function Parameterization() {
           )}
 
           {activeTab === "register" && (
-            <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600" onClick={updateUser}>Concluir Cadastro</button>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={updateUser}
+            >
+              Concluir Cadastro
+            </button>
           )}
         </div>
       </section>

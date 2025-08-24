@@ -98,3 +98,29 @@
   caret: 3px;
   caret-shape: bar;
 } */
+
+@layer utilities {
+  /* Scroll customizado */
+  .scrollbar::-webkit-scrollbar {
+    width: 22px;
+    height: 8px;
+  }
+  .scrollbar::-webkit-scrollbar-thumb {
+    background-color: #4f4f4f; /* gray-500 */
+    border-radius: 9999px;
+  }
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: #262626; /* gray-500 */
+    border-radius: 9999px;
+    cursor: pointer;
+  }
+  .scrollbar::-webkit-scrollbar-track {
+    background: #302f2f; /* gray-200 */
+  }
+  
+}
+@layer utilities {
+  .scrollbar-gutter {
+    scrollbar-gutter: stable both-edges;
+  }
+}

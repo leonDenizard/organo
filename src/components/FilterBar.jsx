@@ -16,17 +16,18 @@ export default function FilterBar({
   return (
     <div className="relative top-14">
       <div
-        className="relative flex w-full xl:justify-center gap-10 overflow-x-scroll md:overflow-x-auto
-        
+        className="relative pr-12 flex w-full 2xl:justify-center gap-10 overflow-x-scroll md:overflow-x-auto md:pr-12
+        scrollbar pb-3
         items-center"
+        
       >
-        <p
+        {/* <p
           className="
           text-nowrap
           lg:font-bold lg:text-xl lg:tracking-wide"
         >
           Filtrar por:
-        </p>
+        </p> */}
 
         <ButtonFilter name={"A-Z"} onClick={orderByName} />
         <ButtonFilter name={"Cargo"} onClick={orderByRole} />
@@ -47,8 +48,7 @@ export default function FilterBar({
       <div
         className="
       absolute pointer-events-none right-0 top-0 h-full w-16 
-      bg-gradient-to-l from-backgound to-transparent
-      lg:hidden"
+      bg-gradient-to-l from-backgound to-transparent"
       ></div>
     </div>
   );
