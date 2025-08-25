@@ -1,8 +1,10 @@
-import { Copy, SquareArrowOutUpRight } from "lucide-react";
+import { Copy, SquareArrowOutUpRight, Trash } from "lucide-react";
 import { formatWhatsAppLink } from "../functions/regex";
 import { useAuth } from "../context/AuthProvider";
 import toast from "react-hot-toast";
 import { toastEmail, toastSlack } from "../services/toastService.jsx";
+import { useState } from "react";
+import ConfirmDeleteModal from "./ConfirmDeletedModal.jsx";
 
 function Card({
   imgProfile,
@@ -26,9 +28,11 @@ function Card({
   iconInterval,
   interval,
   onClick,
+  onDelete,
 }) {
   const link = formatWhatsAppLink(whats);
   const { isAdmin } = useAuth();
+  const [isOpen, setIsOpen] = useState(false)
 
   const childFormat = (child) => {
     if (child === "yes") {
@@ -53,16 +57,31 @@ function Card({
     toastEmail("E-mail copiado!");
   };
 
+
   return (
     <div className="group relative pt-6 pb-12 px-10 bg-card-bg">
-      
-        <div className=" top-3 right-4 absolute cursor-pointer">
-          <SquareArrowOutUpRight
-            className="stroke-transparent group-hover:stroke-white transition-colors duration-500"
-            onClick={onClick}
+      <div className=" top-3 right-4 absolute cursor-pointer">
+        <SquareArrowOutUpRight
+          className="stroke-transparent group-hover:stroke-white transition-colors duration-500"
+          onClick={onClick}
+        />
+      </div>
+      <div className=" top-3 left-4 absolute cursor-pointer">
+        <Trash 
+          className="stroke-transparent group-hover:stroke-white transition-colors duration-500"
+          onClick={() => setIsOpen(true)}
+        />
+        {isOpen && (
+          <ConfirmDeleteModal
+            onConfirm={() => {
+              onDelete()
+              setIsOpen(false)
+            }}  
+            onCancel={() => setIsOpen(false)}
+            text={"Tem certeza que deseja excluir a conta?"}
           />
-        </div>
-
+        )}
+      </div>
 
       <div className="w-full flex justify-center">
         <img

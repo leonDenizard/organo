@@ -17,10 +17,13 @@ import PopUpMenu from "../../components/PopUpMenu";
 import { checkUserExists } from "../../services/firebase";
 import Coffe from "../../components/icons/Coffe";
 import useParameterization from "../../hooks/useParameterization";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSlack, faWhatsapp } from '@fortawesome/free-brands-svg-icons'
-import { faClock, faEnvelope } from '@fortawesome/free-solid-svg-icons';
-import { getAllUsers } from "../../services/parameterizationService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSlack, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+import { faClock, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  deleteUserById,
+  getAllUsers,
+} from "../../services/parameterizationService";
 import Breadcrumb from "../../components/Breadcrumb";
 
 export default function Dashboard() {
@@ -45,12 +48,15 @@ export default function Dashboard() {
     const fetchUserData = async () => {
       if (googleUser) {
         //Retorna somente 1 usuário
-        const userUIDQuery = await fetch(`${API_URL}/user/sigin/${googleUser.uid}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const userUIDQuery = await fetch(
+          `${API_URL}/user/sigin/${googleUser.uid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const exists = await checkUserExists(googleUser.uid);
 
@@ -100,16 +106,15 @@ export default function Dashboard() {
   }, [googleUser]);
 
   let firstName = "";
-  let profilePhoto = backendUser?.data.photoUrl ? backendUser.data.photoUrl : userDataLogged?.photoUrl
-
+  let profilePhoto = backendUser?.data.photoUrl
+    ? backendUser.data.photoUrl
+    : userDataLogged?.photoUrl;
 
   // Verificação se os dados foram carregados antes de acessar
   if (userDataLogged && userDataLogged.name) {
     firstName = userDataLogged.name.split(" ")[0];
     //   nameFormated = userDataLogged.name.split(" ").slice(0, 2).join(" ");
   }
-
-  
 
   const nameCardFormatted = (names) => {
     return (names = names.split(" ").slice(0, 2).join(" "));
@@ -150,7 +155,7 @@ export default function Dashboard() {
     const sortedUsers = [...allUsers].filter(
       (user) => user.role === selectedRole
     );
-    
+
     setSortedUsers(sortedUsers);
     closeModal();
   };
@@ -175,14 +180,15 @@ export default function Dashboard() {
   };
 
   const sortBySquadI = (squadId) => {
-    const sortedUsers = allUsers.filter(user =>
-      Array.isArray(user.squad) &&
-      user.squad.some(id => String(id) === String(squadId))
-    )
+    const sortedUsers = allUsers.filter(
+      (user) =>
+        Array.isArray(user.squad) &&
+        user.squad.some((id) => String(id) === String(squadId))
+    );
 
-    setSortedUsers(sortedUsers)
-    closeModal()
-  }
+    setSortedUsers(sortedUsers);
+    closeModal();
+  };
 
   const handleSchedule = () => {
     navigate("/schedule");
@@ -203,16 +209,30 @@ export default function Dashboard() {
     navigate("/");
   };
 
-  
-  const handleAdmin = async() => {
-    
-    if(isAdmin){
-      navigate("/admin")
+  const handleAdmin = async () => {
+    if (isAdmin) {
+      navigate("/admin");
     }
-  }
-  
+  };
 
-  
+  const handleDeleteUser = async (userId) => {
+    try {
+      const deletedUser = await deleteUserById(userId); // retorna o objeto deletado
+      if (deletedUser && deletedUser._id) {
+        // Remove da lista local usando o _id
+        const updatedUsers = allUsers.filter(
+          (user) => user._id !== deletedUser._id
+        );
+        setAllUser(updatedUsers);
+        setSortedUsers(updatedUsers);
+
+        logOut()
+      }
+    } catch (error) {
+      console.error("Erro ao deletar usuário:", error);
+    }
+  };
+
   return (
     <div className="container w-[95%] lg:w-[95%] m-auto lg:h-screen h-dvh">
       {userDataLogged ? (
@@ -233,7 +253,7 @@ export default function Dashboard() {
             handleAdmin={() => handleAdmin()}
             handleSchedule={handleSchedule}
           />
-          
+
           <div className="relative gap-4 top-28 grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
             {sortedUsers.map((user, index) => (
               <Card
@@ -249,17 +269,15 @@ export default function Dashboard() {
                 slack={user.slack}
                 iconWhats={<Whats />}
                 whats={user.whatsapp || ""}
-                iconMail={<Gmail/>}
+                iconMail={<Gmail />}
                 mail={user.email}
-                iconHour={<Clock/>}
-
+                iconHour={<Clock />}
                 hour={(() => {
                   const shift = workShifts.find((ws) => ws._id === user.time);
                   return shift
                     ? `${shift.startTime} - ${shift.endTime}`
                     : "Horário não definido";
                 })()}
-                
                 iconSuper={<Check />}
                 manager={
                   allSuper.find((sup) => sup._id === user.manager)?.name ||
@@ -272,6 +290,7 @@ export default function Dashboard() {
                 iconChild={<ChildIcon />}
                 child={user.child}
                 onClick={() => navigate(`/user/${user._id}`)}
+                onDelete={() => handleDeleteUser(user._id)}
               />
             ))}
           </div>

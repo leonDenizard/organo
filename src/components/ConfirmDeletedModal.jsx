@@ -1,9 +1,9 @@
-export default function ConfirmDeleteModal({ onConfirm, onCancel }) {
+export default function ConfirmDeleteModal({ onConfirm, onCancel, text }) {
   return (
     <div className="fixed w-11/12 lg:w-2/5 m-auto h-1/3 top-0 left-0 right-0 bottom-0 
       backdrop-blur-2xl z-10 bg-modal-color 
       flex flex-col justify-center items-center border rounded-lg border-border-color">
-      <h2 className="text-xl font-semibold mb-8">Tem certeza que deseja excluir a escala? ❌</h2>
+      <h2 className="text-xl font-semibold mb-8">{text}</h2>
       
       <div className="flex gap-6">
         <button

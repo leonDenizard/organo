@@ -3,6 +3,7 @@ import { useState } from "react";
 import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays, showButtonSend} ) {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -117,6 +118,7 @@ export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays, s
             setIsModalOpen(false);
           }}
           onCancel={() => setIsModalOpen(false)}
+          text={"Tem certeza que deseja excluir a escala?"}
         />
       )}
     </div>)

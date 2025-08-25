@@ -239,3 +239,19 @@ export async function deleteUserAdminById(id){
     console.error("Erro ao atualizar usuário", id, error)
   }
 }
+
+export async function deleteUserById(id){
+  try{
+    
+    const response = await fetch(`${API_URL}/user/${id}`, {
+      method: "DELETE",
+      headers: {"Content-type" : "application/json"},
+    })
+
+    const result = await response.json()
+    return result.data
+    
+  } catch (error) {
+    console.log("Erro ao deletar usuário", id, error)
+  }
+}
