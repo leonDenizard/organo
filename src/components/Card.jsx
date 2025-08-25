@@ -54,7 +54,7 @@ function Card({
   };
 
   return (
-    <div className="group relative pt-2 pb-12 px-10 bg-card-bg">
+    <div className="group relative pt-6 pb-12 px-10 bg-card-bg">
       
         <div className=" top-3 right-4 absolute cursor-pointer">
           <SquareArrowOutUpRight
