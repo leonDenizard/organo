@@ -4,7 +4,7 @@ import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays} ) {
+export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays, showButtonSend} ) {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [file, setFile] = useState(null);
@@ -72,7 +72,7 @@ export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays} )
   };
 
   return (
-    <div
+    showButtonSend && (<div
       className="
       relative grid grid-cols-1 gap-3 p-3 top-32
       md:flex md:justify-center
@@ -119,6 +119,6 @@ export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays} )
           onCancel={() => setIsModalOpen(false)}
         />
       )}
-    </div>
+    </div>)
   );
 }

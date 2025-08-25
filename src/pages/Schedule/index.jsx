@@ -7,8 +7,9 @@ import { useNavigate } from "react-router-dom";
 import ButtonsSendSchedule from "../../components/ButtonsSendSchedule";
 import Breadcrumb from "../../components/Breadcrumb";
 import toast from "react-hot-toast";
+import { ScheduleSkeleton } from "../../components/skeleton/ScheduleSkeleton";
 
-export default function Schedule({ showHeader = true, userId }) {
+export default function Schedule({ showHeader = true, userId, showBreadcrumbs = true, showButtonSend = true }) {
   const { googleUser, logOut, isAdmin } = useAuth();
   const navigate = useNavigate();
 
@@ -150,10 +151,10 @@ export default function Schedule({ showHeader = true, userId }) {
   };
 
   return (
-    <div className="container w-[90%] m-auto min-h-screen">
+    <div className="container w-[90%] m-auto">
       {!isLoading ? (
         <>
-          <Breadcrumb />
+          {showBreadcrumbs && <Breadcrumb/>}
           {showHeader && (
             <Header name={firstName} img={profilePhoto} logout={handleLogOut} />
           )}
@@ -166,11 +167,12 @@ export default function Schedule({ showHeader = true, userId }) {
             <ButtonsSendSchedule
               onScheduleChange={() => selectedUserData && setWorkedDays([])}
               setWorkedDays={setWorkedDays}
+              showButtonSend={showButtonSend}
             />
           )}
         </>
       ) : (
-        <Loader />
+        <ScheduleSkeleton />
       )}
     </div>
   );

@@ -102,7 +102,7 @@
 @layer utilities {
   /* Scroll customizado */
   .scrollbar::-webkit-scrollbar {
-    width: 22px;
+    width: 8px;
     height: 8px;
   }
   .scrollbar::-webkit-scrollbar-thumb {
@@ -122,5 +122,10 @@
 @layer utilities {
   .scrollbar-gutter {
     scrollbar-gutter: stable both-edges;
+  }
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
   }
 }

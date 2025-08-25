@@ -6,6 +6,7 @@ import Schedule from "../Schedule";
 import { useAuth } from "../../context/AuthProvider";
 import useParameterization from "../../hooks/useParameterization";
 import Breadcrumb from "../../components/Breadcrumb";
+import { AlarmClock, Coffee, MailIcon, Rocket, Slack, UserCheck } from "lucide-react";
 
 export default function UserDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -54,23 +55,62 @@ export default function UserDetail() {
     <div className="container w-[90%] m-auto">
       <Header name={backendUser.data?.name} img={backendUser.data?.photoUrl} />
       <Breadcrumb />
-      <h1 className="text-2xl font-bold">Detalhes do Usuário</h1>
-      <p className="flex items-center gap-3">
-        <img
-          className="w-8 h-8 rounded-full object-cover"
-          src={userData?.photoUrl}
-          alt=""
-        />
-        {userData?.name}
-      </p>
-      <p>Email: {userData?.email}</p>
-      <p>Cargo: {role}</p>
-      <p>Horário: {shiftText}</p>
-      <p>Supervisor: {supervisor}</p>
-      <p>Squads: {squads.join(", ")}</p>
-      {/* Adicionar mais informações aqui */}
+      <Schedule
+        showHeader={false}
+        onClick={onclick}
+        userId={id}
+        showBreadcrumbs={false}
+        showButtonSend={false}
+      />
 
-      <Schedule showHeader={false} onClick={onclick} userId={id} />
+      <section className="relative top-40 m-auto w-[90%] flex flex-col gap-6 mb-5 p-6 rounded-md shadow-md bg-card-bg border-2 border-border-color">
+
+        {/* Perfil */}
+        <div className="flex items-center gap-4">
+          <img
+            className="w-16 h-16 rounded-full object-cover border-2 border-border-color"
+            src={userData?.photoUrl}
+            alt=""
+          />
+          <div className="flex flex-col">
+            <span className="text-2xl font-semibold">
+              {userData?.name}
+            </span>
+            <span className="text-sm text-gray-400">{role}</span>
+          </div>
+        </div>
+
+        {/* Informações adicionais */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center">
+              <Slack />
+            </div> 
+            <p className="font-semibold text-gray-300">{userData?.slack}</p>
+          </span>
+
+          <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center">
+              <MailIcon/>
+            </div> 
+            <p className="font-semibold text-gray-300">{userData?.email}</p>
+          </span>
+          <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><AlarmClock /></div><p className="font-semibold text-gray-300">{shiftText}</p>
+          </span>
+          <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><UserCheck /></div> <p className="font-semibold text-gray-300">{supervisor}</p>
+          </span>
+          < span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><Rocket /></div> {squads.map((s, i) => (<p className="bg-purple-700/10 px-4 py-1 items-center text-purple-400 rounded-md font-semibold" key={i}>{s}</p>))}
+          </span>
+          <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+            <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><Coffee /></div> <p className="font-semibold text-gray-300">{userData?.interval} hs</p>
+          </span>
+        </div>
+      </section>
+
+      {/* Adicionar mais informações aqui */}
     </div>
   );
 }
