@@ -224,9 +224,9 @@ export default function Dashboard() {
           (user) => user._id !== deletedUser._id
         );
         setAllUser(updatedUsers);
-        setSortedUsers(updatedUsers);
-
-        logOut()
+        
+        userDataLogged._id === deletedUser._id ? logOut() : setSortedUsers(updatedUsers)
+        
       }
     } catch (error) {
       console.error("Erro ao deletar usuário:", error);

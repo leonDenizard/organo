@@ -163,7 +163,7 @@ export default function useParameterization() {
     if (!supervisor.trim()) return;
 
     if (
-      allSuper.some(
+      allSuper?.some(
         (sup) => sup.name.toLocaleLowerCase() === supervisor.toLocaleLowerCase()
       )
     ) {
@@ -173,7 +173,7 @@ export default function useParameterization() {
     }
 
     const newSuper = { _id: Date.now.toString(), name: supervisor };
-    setSuperOptimistic((old) => [...old, newSuper]);
+    setSuperOptimistic((old) => [...(old ?? []), newSuper]);
 
     try {
       await createSupervisor(supervisor);
@@ -217,7 +217,7 @@ export default function useParameterization() {
     const newEnd = endTime.trim();
 
     if (
-      workShifts.some(
+      workShifts?.some(
         (ws) => ws.startTime === newStart && ws.endTime === newEnd
       )
     ) {
@@ -231,7 +231,7 @@ export default function useParameterization() {
       endTime: newEnd,
     };
 
-    setWorkOptimistic((old) => [...old, newWorkShift]);
+    setWorkOptimistic((old) => [...(old ?? []), newWorkShift]);
 
     try {
       await createWorkShift(newStart, newEnd);

@@ -236,7 +236,7 @@ export default function Register() {
 
   const roleExists = allPositions?.some((pos) => pos._id === selectedRole);
   const superExists = allSuper?.some((sup) => sup._id === selectedManager);
-  //const squadExists = allSquads?.some((squad) => squad._id === selectedSquad);
+  const squadExists = allSquads?.some((squad) => squad._id === selectedSquad);
   
   return (
     <form onSubmit={handleSubmit} className="relative">

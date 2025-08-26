@@ -72,11 +72,11 @@ export default function UserDetail() {
             src={userData?.photoUrl}
             alt=""
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col gap-1">
             <span className="text-2xl font-semibold">
               {userData?.name}
             </span>
-            <span className="text-sm text-gray-400">{role}</span>
+            <span className="text-sm text-center text-red-500 bg-red-400/10 rounded-md p-1 px-2">{role}</span>
           </div>
         </div>
 
@@ -101,7 +101,7 @@ export default function UserDetail() {
           <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
             <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><UserCheck /></div> <p className="font-semibold text-gray-300">{supervisor}</p>
           </span>
-          < span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
+          < span className="bg-backgound p-2 rounded-lg shadow-sm flex flex-wrap gap-2 items-center">
             <div className="bg-card-bg h-10 w-10 p-[9px] rounded-full flex items-center justify-center"><Rocket /></div> {squads.map((s, i) => (<p className="bg-purple-700/10 px-4 py-1 items-center text-purple-400 rounded-md font-semibold" key={i}>{s}</p>))}
           </span>
           <span className="bg-backgound p-2 rounded-lg shadow-sm flex gap-2 items-center">
