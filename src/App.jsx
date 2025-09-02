@@ -11,6 +11,7 @@ import { AdminRoute } from "./components/AdminRoute";
 import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AdminOrFirstUserRoute from "./components/AdminOrFirstUserRoute";
 import { Toaster } from "react-hot-toast";
+import GlobalSchedule from "./components/GlobalSchedule";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/register" element={<AuthRedirectHandler />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/schedule" element={<Schedule />} />
+          <Route path="/global-schedule" element={<GlobalSchedule />} />
           <Route path="/user/:id" element={<UserDetail />} />
           <Route element={<AdminOrFirstUserRoute />}>
             <Route path="/parameterization" element={<Parameterization />} />

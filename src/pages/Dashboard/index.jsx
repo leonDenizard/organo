@@ -191,7 +191,7 @@ export default function Dashboard() {
   };
 
   const handleSchedule = () => {
-    navigate("/schedule");
+    navigate("/global-schedule");
   };
 
   const handleInputName = (event) => {

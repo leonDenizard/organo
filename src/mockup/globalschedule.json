@@ -1,0 +1,343 @@
+[
+  {
+    "date": "01-08-2025",
+    "dayOfWeek": "Friday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "02-08-2025",
+    "dayOfWeek": "Saturday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "03-08-2025",
+    "dayOfWeek": "Sunday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "04-08-2025",
+    "dayOfWeek": "Monday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "05-08-2025",
+    "dayOfWeek": "Tuesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "06-08-2025",
+    "dayOfWeek": "Wednesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "07-08-2025",
+    "dayOfWeek": "Thursday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "08-08-2025",
+    "dayOfWeek": "Friday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "09-08-2025",
+    "dayOfWeek": "Saturday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "10-08-2025",
+    "dayOfWeek": "Sunday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "11-08-2025",
+    "dayOfWeek": "Monday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "12-08-2025",
+    "dayOfWeek": "Tuesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "13-08-2025",
+    "dayOfWeek": "Wednesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "14-08-2025",
+    "dayOfWeek": "Thursday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "15-08-2025",
+    "dayOfWeek": "Friday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "16-08-2025",
+    "dayOfWeek": "Saturday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "17-08-2025",
+    "dayOfWeek": "Sunday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "18-08-2025",
+    "dayOfWeek": "Monday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "19-08-2025",
+    "dayOfWeek": "Tuesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "20-08-2025",
+    "dayOfWeek": "Wednesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "21-08-2025",
+    "dayOfWeek": "Thursday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "22-08-2025",
+    "dayOfWeek": "Friday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "23-08-2025",
+    "dayOfWeek": "Saturday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "24-08-2025",
+    "dayOfWeek": "Sunday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "25-08-2025",
+    "dayOfWeek": "Monday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "26-08-2025",
+    "dayOfWeek": "Tuesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "27-08-2025",
+    "dayOfWeek": "Wednesday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "28-08-2025",
+    "dayOfWeek": "Thursday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a86",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "29-08-2025",
+    "dayOfWeek": "Friday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "30-08-2025",
+    "dayOfWeek": "Saturday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af8d8ab8fed86bded55a85",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  },
+  {
+    "date": "31-08-2025",
+    "dayOfWeek": "Sunday",
+    "shifts": [
+      {
+        "userId": "68ae0de3439e2b7ed3435e1f",
+        "status": "68af90b48f879bbf4e895dd8",
+        "time": "68ad18559e7a371dd002d165"
+      }
+    ]
+  }
+]
