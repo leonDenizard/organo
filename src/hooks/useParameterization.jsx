@@ -338,6 +338,7 @@ export default function useParameterization() {
       });
   };
 
+  console.log(workShifts.map(w => w._id))
   useEffect(() => {
     fetchPosition();
     fetchSquad();

@@ -15,8 +15,8 @@ export default function GlobalSchedule() {
     const response = await getSchedule.json();
     const data = response.data;
 
-    // 🔹 Ordenando os objetos pelo campo `date`
-    const sortedSchedule = data.sort((a, b) => {
+    //Ordenando os objetos pelo campo date
+    const sortedSchedule = data?.sort((a, b) => {
       const [dayA, monthA, yearA] = a.date.split("-").map(Number);
       const [dayB, monthB, yearB] = b.date.split("-").map(Number);
 
@@ -26,11 +26,25 @@ export default function GlobalSchedule() {
       return dateA - dateB;
     });
 
-    // 🔹 Pegando o primeiro item já ordenado pra header
-    if (sortedSchedule.length > 0) {
+    //Pegando o primeiro item já ordenado pra header
+    if (sortedSchedule?.length > 0) {
       const [day, month, year] = sortedSchedule[0].date.split("-");
       setDateHeader(`${month}/${year}`);
     }
+
+    // sortedSchedule?.forEach((day) => {
+    //   day.shifts.sort((a, b) => {
+    //     // reordenando pelo horário
+    //     if (a.time.startTime !== b.time.startTime) {
+    //       return a.time.startTime.localeCompare(b.time.startTime);
+    //     }
+
+    //     // mesmo horario compara pelo nome
+    //     // return a.userId.name.localeCompare(b.userId.name);
+    //   });
+    // });
+
+    //console.log(sortedSchedule)
 
     setSchedule(sortedSchedule);
   };
@@ -40,47 +54,70 @@ export default function GlobalSchedule() {
   }, []);
 
   return (
-    <div>
-      <h1>{dateHeader}</h1>
-      <div className="grid grid-cols-5 gap-3">
+    <div className="p-12">
+      <h1 className="text-6xl font-bold mb-11">{dateHeader}</h1>
 
-        {schedule.map((d) => {
+      <div className="grid grid-cols-7 overflow-x-visible gap-1">
+        {schedule?.map((d) => {
           const [day, month] = d.date.split("-");
           return (
-            <div className="text-center text-lg border border-border-color" key={d._id}>
-              <div className="font-bold bg-card-bg border border-border-color">{`${day}/${month}`}</div>
-              <div className="text-sm bg-card-bg border border-border-color">
-                {d.dayOfWeek}
+            <div
+              className="text-center text-lg border border-border-color"
+              key={d._id}
+            >
+              {/* Cabeçalho da data */}
+              <div className="sticky top-0 z-10  backdrop-blur-xl border border-border-color flex flex-col gap-2 p-3">
+                <div className="flex justify-center items-center ">
+                  <p className="text-3xl font-bold text-white px-3 tracking-widest rounded-md shadow-lg">
+                    {`${day}/${month}`}
+                  </p>
+                </div>
+                <div className="text-sm backdrop-blur-xl justify-center items-center flex">
+                  <p className="bg-card-bg tracking-widest px-8 py-1 uppercase rounded-full shadow-lg">
+                    {d.dayOfWeek}
+                  </p>
+                </div>
               </div>
 
-              {/* Aqui iteramos sobre os shifts */}
+              {/* shifts */}
               <div className="flex flex-col">
-                {d.shifts.map((shift) => (
-                  <div key={shift._id} className="border border-border-color"
-                  style={{ backgroundColor: shift.status.color }}>
-                    {console.log(shift.status.color)}
-                    {/* Foto do usuário */}
-                    <div className="flex gap-2 justify-center items-center">
-                      <img
-                        src={shift.userId.photoUrl}
-                        alt={shift.userId.name}
-                        className="w-4 h-4 rounded-full"
-                      />
-                      {/* Nome do usuário */}
-                      <div className="">{shift.userId.name}</div>
-                    </div>
-
-                    {/* Status do usuário */}
-                    <div
-                      className="text-sm px-1 rounded text-gray-400"
-                      style={{ backgroundColor: shift.status.color }}
-                    >
-                      {shift.status.name} {/* ou shift.status.description */}
-                    </div>
-                    {/* Horário */}
-                    <div className="text-sm">
-                      {shift.time.startTime} - {shift.time.endTime}
-                    </div>
+                {d.shifts?.map((shift) => (
+                  <div
+                    key={shift._id}
+                    className="border cursor-pointer border-border-color group h-20 hover:brightness-125 transition"
+                    style={{ backgroundColor: shift.status.color }}
+                  >
+                    {shift.status.code !== 2 && (
+                      <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
+                        <div className=" flex gap-2 justify-center items-center">
+                          {/* <img
+                            src={shift.userId?.photoUrl}
+                            alt={shift.userId?.name}
+                            className="absolute top-5 left-4 h-10 rounded-full invisible group-hover:visible"
+                          /> */}
+                          <p className="font-semibold tracking-wider mt-9 group-hover:mt-0 transition-all duration-200">
+                            {shift.userId?.name}
+                          </p>
+                        </div>
+                        <div
+                          className="
+                            text-sm px-2 rounded relative
+                            opacity-0 scale-95 
+                            group-hover:opacity-100 group-hover:scale-100
+                            transition-all duration-300"
+                          style={{ backgroundColor: shift.status.color }}
+                        >
+                          <p className="text-gray-400">{shift.status?.description}</p>
+                        </div>
+                        <div
+                          className="text-sm px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
+                            group-hover:opacity-100 group-hover:scale-100
+                            transition-all duration-100"
+                        >
+                          {shift.time?.startTime} - {shift.time?.endTime}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

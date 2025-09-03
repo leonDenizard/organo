@@ -25,6 +25,7 @@ import {
   getAllUsers,
 } from "../../services/parameterizationService";
 import Breadcrumb from "../../components/Breadcrumb";
+import { AlarmClock } from "lucide";
 
 export default function Dashboard() {
   const { googleUser, logOut, isAdmin, backendUser } = useAuth();
