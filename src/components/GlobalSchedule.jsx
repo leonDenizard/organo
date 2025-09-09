@@ -81,10 +81,10 @@ export default function GlobalSchedule() {
     { id: "horizontal", name: "Escala Horizontal" },
   ];
   const layoutClasses = {
-    "5cols": "grid grid-cols-5 overflow-x-visible gap-1",
-    "6cols": "grid grid-cols-6 overflow-x-visible gap-1",
-    "7cols": "grid grid-cols-7 overflow-x-visible gap-1",
-    "horizontal": "flex flex-row gap-1"
+    "5cols": "grid grid-cols-5 overflow-x-visible justify-center",
+    "6cols": "grid grid-cols-6 overflow-x-visible",
+    "7cols": "grid grid-cols-7 overflow-x-visible",
+    "horizontal": "flex flex-row"
   };
 
   const handleSelect = (selected) => {
@@ -103,17 +103,21 @@ export default function GlobalSchedule() {
 
   return (
     <div className="p-12">
-      <h1 className="text-6xl  font-bold mb-11">{dateHeader}</h1>
+      <h1 className="text-6xl  font-bold mb-11 " >{dateHeader}</h1>
 
-      <GlobalScheduleMenu onOpenLayout={() => openModal("layout")} />
+      <menu className="flex justify-between">
+        <GlobalScheduleMenu onOpenLayout={() => openModal("layout")} />
+        <div>Trabalhando (X)</div>
+        <div>Folgando (X)</div>
+      </menu>
       <div
-        className={layoutClasses[layout] || layoutClasses["7cols"]}
+        className={layoutClasses[layout] || layoutClasses["7cols"] }
       >
         {schedule?.map((d) => {
           const [day, month] = d.date.split("-");
           return (
             <div
-              className="text-center text-lg border border-border-color "
+              className="text-center"
               key={d._id}
             >
               {/* Cabeçalho da data */}
@@ -123,7 +127,7 @@ export default function GlobalSchedule() {
                     {`${day}/${month}`}
                   </p>
                 </div>
-                <div className="text-sm backdrop-blur-xl justify-center items-center flex">
+                <div className="text-sm backdrop-blur-xl justify-center items-center flex ">
                   <p className="bg-card-bg tracking-widest px-8 py-1 uppercase rounded-full shadow-lg">
                     {d.dayOfWeek}
                   </p>
@@ -131,11 +135,11 @@ export default function GlobalSchedule() {
               </div>
 
               {/* shifts */}
-              <div className="flex flex-col">
+              <div className="flex flex-col ">
                 {d.shifts?.map((shift) => (
                   <div
                     key={shift._id}
-                    className="border cursor-pointer border-border-color group h-[120px] hover:brightness-125 transition"
+                    className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
                     style={{ backgroundColor: shift.status.color }}
                   >
                     {shift.status.code !== 2 && (
@@ -146,24 +150,24 @@ export default function GlobalSchedule() {
                             alt={shift.userId?.name}
                             className="absolute top-5 left-4 h-10 rounded-full invisible group-hover:visible"
                           /> */}
-                          <p className="font-semibold tracking-wider mt-9 group-hover:mt-0 transition-all duration-200">
+                          <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
                             {shift.userId?.name}
                           </p>
                         </div>
                         <div
                           className="
-                            text-sm px-2 rounded relative
+                            text-sm mb-[1px] px-2 rounded relative
                             opacity-0 scale-95 
                             group-hover:opacity-100 group-hover:scale-100
                             transition-all duration-300"
                           style={{ backgroundColor: shift.status.color }}
                         >
-                          <p className="text-gray-400">
+                          <p className="text-xs text-gray-400">
                             {shift.status?.description}
                           </p>
                         </div>
                         <div
-                          className="text-sm px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
+                          className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
                             group-hover:opacity-100 group-hover:scale-100
                             transition-all duration-100"
                         >
