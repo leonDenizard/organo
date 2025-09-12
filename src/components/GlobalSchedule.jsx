@@ -84,7 +84,7 @@ export default function GlobalSchedule() {
     "5cols": "grid grid-cols-5 overflow-x-visible justify-center",
     "6cols": "grid grid-cols-6 overflow-x-visible",
     "7cols": "grid grid-cols-7 overflow-x-visible",
-    "horizontal": "flex flex-row"
+    horizontal: "flex flex-row",
   };
 
   const handleSelect = (selected) => {
@@ -103,23 +103,18 @@ export default function GlobalSchedule() {
 
   return (
     <div className="p-12">
-      <h1 className="text-6xl  font-bold mb-11 " >{dateHeader}</h1>
+      <h1 className="text-6xl  font-bold mb-11 ">{dateHeader}</h1>
 
       <menu className="flex justify-between">
         <GlobalScheduleMenu onOpenLayout={() => openModal("layout")} />
         <div>Trabalhando (X)</div>
         <div>Folgando (X)</div>
       </menu>
-      <div
-        className={layoutClasses[layout] || layoutClasses["7cols"] }
-      >
+      <div className={layoutClasses[layout] || layoutClasses["7cols"]}>
         {schedule?.map((d) => {
           const [day, month] = d.date.split("-");
           return (
-            <div
-              className="text-center"
-              key={d._id}
-            >
+            <div className="text-center" key={d._id}>
               {/* Cabeçalho da data */}
               <div className="sticky top-0 z-10  backdrop-blur-xl border border-border-color flex flex-col gap-2 p-3">
                 <div className="flex justify-center items-center ">
@@ -136,47 +131,51 @@ export default function GlobalSchedule() {
 
               {/* shifts */}
               <div className="flex flex-col ">
-                {d.shifts?.map((shift) => (
-                  <div
-                    key={shift._id}
-                    className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
-                    style={{ backgroundColor: shift.status.color }}
-                  >
-                    {shift.status.code !== 2 && (
-                      <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
-                        <div className=" flex gap-2 justify-center items-center">
-                          {/* <img
-                            src={shift.userId?.photoUrl}
-                            alt={shift.userId?.name}
-                            className="absolute top-5 left-4 h-10 rounded-full invisible group-hover:visible"
-                          /> */}
-                          <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
-                            {shift.userId?.name}
-                          </p>
+                {d.shifts?.map((shift) => {
+                  if (!shift.userId) return null
+
+                  return (
+                    <div
+                      key={shift._id}
+                      className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
+                      style={{ backgroundColor: shift.status.color }}
+                    >
+                      {shift.status.code !== 2 && (
+                        <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
+                          <div className="flex gap-2 justify-center items-center">
+                            {/* <img
+                              src={shift.userId?.photoUrl}
+                              alt={shift.userId?.name}
+                              className="absolute top-5 left-4 h-10 rounded-full invisible group-hover:visible"
+                            /> */}
+                            <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
+                              {shift.userId?.name}
+                            </p>
+                          </div>
+                          <div
+                            className="
+              text-sm mb-[1px] px-2 rounded relative
+              opacity-0 scale-95 
+              group-hover:opacity-100 group-hover:scale-100
+              transition-all duration-300"
+                            style={{ backgroundColor: shift.status.color }}
+                          >
+                            <p className="text-xs text-gray-400">
+                              {shift.status?.description}
+                            </p>
+                          </div>
+                          <div
+                            className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
+              group-hover:opacity-100 group-hover:scale-100
+              transition-all duration-100"
+                          >
+                            {shift.time?.startTime} - {shift.time?.endTime}
+                          </div>
                         </div>
-                        <div
-                          className="
-                            text-sm mb-[1px] px-2 rounded relative
-                            opacity-0 scale-95 
-                            group-hover:opacity-100 group-hover:scale-100
-                            transition-all duration-300"
-                          style={{ backgroundColor: shift.status.color }}
-                        >
-                          <p className="text-xs text-gray-400">
-                            {shift.status?.description}
-                          </p>
-                        </div>
-                        <div
-                          className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
-                            group-hover:opacity-100 group-hover:scale-100
-                            transition-all duration-100"
-                        >
-                          {shift.time?.startTime} - {shift.time?.endTime}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           );
