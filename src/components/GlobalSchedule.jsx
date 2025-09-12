@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PopUpMenu from "./PopUpMenu";
 import GlobalScheduleMenu from "./GlobalScheduleMenu";
+import PopUpMenuUser from "./PopUpMenuUser";
 
 export default function GlobalSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -8,8 +9,10 @@ export default function GlobalSchedule() {
   const [dateHeader, setDateHeader] = useState("");
   const [schedule, setSchedule] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModalUser, setIsOpenModalUser] = useState(false);
   const [layout, setLayout] = useState("7cols");
   const [modalType, setModalType] = useState(null);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const fetchSchedule = async () => {
     const getSchedule = await fetch(`${API_URL}/global-schedule`, {
@@ -65,6 +68,7 @@ export default function GlobalSchedule() {
   const closeModal = () => {
     setIsOpenModal(false);
     setModalType(null);
+    setIsOpenModalUser(false);
   };
 
   const getOptions = () => {
@@ -106,7 +110,10 @@ export default function GlobalSchedule() {
       <h1 className="text-6xl  font-bold mb-11 ">{dateHeader}</h1>
 
       <menu className="flex justify-between">
-        <GlobalScheduleMenu onOpenLayout={() => openModal("layout")} />
+        <GlobalScheduleMenu
+          onOpenLayout={() => openModal("layout")}
+          onOpenModalUser={() => setIsOpenModalUser(true)}
+        />
         <div>Trabalhando (X)</div>
         <div>Folgando (X)</div>
       </menu>
@@ -131,51 +138,63 @@ export default function GlobalSchedule() {
 
               {/* shifts */}
               <div className="flex flex-col ">
-                {d.shifts?.map((shift) => {
-                  if (!shift.userId) return null
+                {d.shifts
+                  ?.filter((shift) => {
+                    // se não tem userId, já elimina
+                    if (!shift.userId) return false;
 
-                  return (
-                    <div
-                      key={shift._id}
-                      className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
-                      style={{ backgroundColor: shift.status.color }}
-                    >
-                      {shift.status.code !== 2 && (
-                        <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
-                          <div className="flex gap-2 justify-center items-center">
-                            {/* <img
+                    // se não tem filtro, retorna tudo
+                    if (filteredUsers.length === 0) return true;
+
+                    // senão, só os que estão no filtro
+                    return filteredUsers.includes(shift.userId._id);
+                  })
+                  .map((shift) => {
+                    if (!shift.userId) return null;
+
+                    return (
+                      <div
+                        key={shift._id}
+                        className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
+                        style={{ backgroundColor: shift.status.color }}
+                      >
+                        {/* {console.log(shift.userId._id)} */}
+                        {shift.status.code !== 2 && (
+                          <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
+                            <div className="flex gap-2 justify-center items-center">
+                              {/* <img
                               src={shift.userId?.photoUrl}
                               alt={shift.userId?.name}
                               className="absolute top-5 left-4 h-10 rounded-full invisible group-hover:visible"
                             /> */}
-                            <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
-                              {shift.userId?.name}
-                            </p>
-                          </div>
-                          <div
-                            className="
+                              <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
+                                {shift.userId?.name}
+                              </p>
+                            </div>
+                            <div
+                              className="
               text-sm mb-[1px] px-2 rounded relative
               opacity-0 scale-95 
               group-hover:opacity-100 group-hover:scale-100
               transition-all duration-300"
-                            style={{ backgroundColor: shift.status.color }}
-                          >
-                            <p className="text-xs text-gray-400">
-                              {shift.status?.description}
-                            </p>
-                          </div>
-                          <div
-                            className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
+                              style={{ backgroundColor: shift.status.color }}
+                            >
+                              <p className="text-xs text-gray-400">
+                                {shift.status?.description}
+                              </p>
+                            </div>
+                            <div
+                              className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
               group-hover:opacity-100 group-hover:scale-100
               transition-all duration-100"
-                          >
-                            {shift.time?.startTime} - {shift.time?.endTime}
+                            >
+                              {shift.time?.startTime} - {shift.time?.endTime}
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                        )}
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           );
@@ -186,6 +205,13 @@ export default function GlobalSchedule() {
           options={getOptions()}
           onSelect={handleSelect}
           closeModal={closeModal}
+        />
+      )}
+      {isOpenModalUser && (
+        <PopUpMenuUser
+          c
+          closeModal={closeModal}
+          onFilter={(users) => setFilteredUsers(users)}
         />
       )}
     </div>
