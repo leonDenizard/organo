@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PopUpMenu from "./PopUpMenu";
 import GlobalScheduleMenu from "./GlobalScheduleMenu";
 import PopUpMenuUser from "./PopUpMenuUser";
+import useParameterization from "../hooks/useParameterization";
 
 export default function GlobalSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -13,6 +14,8 @@ export default function GlobalSchedule() {
   const [layout, setLayout] = useState("7cols");
   const [modalType, setModalType] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
+
+  const { allUsers } = useParameterization()
 
   const fetchSchedule = async () => {
     const getSchedule = await fetch(`${API_URL}/global-schedule`, {
@@ -209,7 +212,7 @@ export default function GlobalSchedule() {
       )}
       {isOpenModalUser && (
         <PopUpMenuUser
-          c
+          allUsers={allUsers}
           closeModal={closeModal}
           onFilter={(users) => setFilteredUsers(users)}
         />
