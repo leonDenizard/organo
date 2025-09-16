@@ -4,6 +4,7 @@ import GlobalScheduleMenu from "./GlobalScheduleMenu";
 import PopUpMenuUser from "./PopUpMenuUser";
 import useParameterization from "../hooks/useParameterization";
 import Loader from "../components/Loader";
+import PopUpChangeSchedule from "./PopUpChangeSchedule";
 
 export default function GlobalSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -12,6 +13,7 @@ export default function GlobalSchedule() {
   const [schedule, setSchedule] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenModalUser, setIsOpenModalUser] = useState(false);
+  const [isOpenModalChangeSchedule, setIsOpenModalChangeSchedule] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
   const [layout, setLayout] = useState("7cols");
   const [modalType, setModalType] = useState(null);
@@ -83,7 +85,18 @@ export default function GlobalSchedule() {
     setIsOpenModal(false);
     setModalType(null);
     setIsOpenModalUser(false);
+    setIsOpenModalChangeSchedule(false)
   };
+
+  const openModalChangeSchedule = (idDay, idUser) => {
+    setIsOpenModalChangeSchedule(true)
+    console.log(schedule)
+    console.log(idDay.date)
+    console.log(idUser)
+
+    //console.log(idDay.shifts.map(user => user._id == idUser))
+     
+  }
 
   const getOptions = () => {
     if (modalType === "layout") return layoutOptions;
@@ -123,7 +136,7 @@ export default function GlobalSchedule() {
     <div className="p-12">
       <h1 className="text-6xl  font-bold mb-11 ">{dateHeader}</h1>
 
-      <menu className="flex justify-between">
+      <menu className="flex justify-between mb-5">
         <GlobalScheduleMenu
           onOpenLayout={() => openModal("layout")}
           onOpenModalUser={() => setIsOpenModalUser(true)}
@@ -171,6 +184,7 @@ export default function GlobalSchedule() {
                         key={shift._id}
                         className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
                         style={{ backgroundColor: shift.status.color }}
+                        onClick={() => openModalChangeSchedule(d, shift._id)}
                       >
                         {/* {console.log(shift.userId._id)} */}
                         {shift.status.code !== 2 && (
@@ -184,6 +198,11 @@ export default function GlobalSchedule() {
                               <p className="text-sm font-semibold tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
                                 {shift.userId?.name}
                               </p>
+                              {/* {shift.userId?.surname && (
+                                <p className="text-xs text-gray-400 tracking-wider mt-7 group-hover:mt-0 transition-all duration-200">
+                                {shift.userId?.surname}
+                                </p>
+                              )} */}
                             </div>
                             <div
                               className="
@@ -199,8 +218,8 @@ export default function GlobalSchedule() {
                             </div>
                             <div
                               className="text-xs px-2 rounded text-gray-300 font-semibold bg-white/5 relative opacity-0 scale-95 
-              group-hover:opacity-100 group-hover:scale-100
-              transition-all duration-100"
+                                group-hover:opacity-100 group-hover:scale-100
+                                transition-all duration-100"
                             >
                               {shift.time?.startTime} - {shift.time?.endTime}
                             </div>
@@ -227,6 +246,9 @@ export default function GlobalSchedule() {
           closeModal={closeModal}
           onFilter={(users) => setFilteredUsers(users)}
         />
+      )}
+      {isOpenModalChangeSchedule && (
+        <PopUpChangeSchedule closeModal={closeModal}/>
       )}
     </div>
   );
