@@ -3,6 +3,7 @@ import PopUpMenu from "./PopUpMenu";
 import GlobalScheduleMenu from "./GlobalScheduleMenu";
 import PopUpMenuUser from "./PopUpMenuUser";
 import useParameterization from "../hooks/useParameterization";
+import Loader from "../components/Loader";
 
 export default function GlobalSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -11,58 +12,68 @@ export default function GlobalSchedule() {
   const [schedule, setSchedule] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenModalUser, setIsOpenModalUser] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [layout, setLayout] = useState("7cols");
   const [modalType, setModalType] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  const { allUsers } = useParameterization()
+  const { allUsers } = useParameterization();
 
   const fetchSchedule = async () => {
-    const getSchedule = await fetch(`${API_URL}/global-schedule`, {
-      method: "GET",
-      headers: { "Content-type": "application/json" },
-    });
+    try {
+      setIsLoading(true);
+      const getSchedule = await fetch(`${API_URL}/global-schedule`, {
+        method: "GET",
+        headers: { "Content-type": "application/json" },
+      });
 
-    const response = await getSchedule.json();
-    const data = response.data;
+      const response = await getSchedule.json();
+      const data = response.data;
 
-    //Ordenando os objetos pelo campo date
-    const sortedSchedule = data?.sort((a, b) => {
-      const [dayA, monthA, yearA] = a.date.split("-").map(Number);
-      const [dayB, monthB, yearB] = b.date.split("-").map(Number);
+      //Ordenando os objetos pelo campo date
+      const sortedSchedule = data?.sort((a, b) => {
+        const [dayA, monthA, yearA] = a.date.split("-").map(Number);
+        const [dayB, monthB, yearB] = b.date.split("-").map(Number);
 
-      const dateA = new Date(yearA, monthA - 1, dayA);
-      const dateB = new Date(yearB, monthB - 1, dayB);
+        const dateA = new Date(yearA, monthA - 1, dayA);
+        const dateB = new Date(yearB, monthB - 1, dayB);
 
-      return dateA - dateB;
-    });
+        return dateA - dateB;
+      });
 
-    //Pegando o primeiro item já ordenado pra header
-    if (sortedSchedule?.length > 0) {
-      const [day, month, year] = sortedSchedule[0].date.split("-");
-      setDateHeader(`${month}/${year}`);
+      //Pegando o primeiro item já ordenado pra header
+      if (sortedSchedule?.length > 0) {
+        const [day, month, year] = sortedSchedule[0].date.split("-");
+        setDateHeader(`${month}/${year}`);
+      }
+
+      // sortedSchedule?.forEach((day) => {
+      //   day.shifts.sort((a, b) => {
+      //     // reordenando pelo horário
+      //     if (a.time.startTime !== b.time.startTime) {
+      //       return a.time.startTime.localeCompare(b.time.startTime);
+      //     }
+
+      //     // mesmo horario compara pelo nome
+      //     // return a.userId.name.localeCompare(b.userId.name);
+      //   });
+      // });
+
+      //console.log(sortedSchedule)
+
+      setSchedule(sortedSchedule);
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
     }
-
-    // sortedSchedule?.forEach((day) => {
-    //   day.shifts.sort((a, b) => {
-    //     // reordenando pelo horário
-    //     if (a.time.startTime !== b.time.startTime) {
-    //       return a.time.startTime.localeCompare(b.time.startTime);
-    //     }
-
-    //     // mesmo horario compara pelo nome
-    //     // return a.userId.name.localeCompare(b.userId.name);
-    //   });
-    // });
-
-    //console.log(sortedSchedule)
-
-    setSchedule(sortedSchedule);
   };
 
   useEffect(() => {
     fetchSchedule();
   }, []);
+
+  if (isLoading) return <Loader />;
 
   const openModal = (type) => {
     setModalType(type);
@@ -176,10 +187,10 @@ export default function GlobalSchedule() {
                             </div>
                             <div
                               className="
-              text-sm mb-[1px] px-2 rounded relative
-              opacity-0 scale-95 
-              group-hover:opacity-100 group-hover:scale-100
-              transition-all duration-300"
+                              text-sm mb-[1px] px-2 rounded relative
+                              opacity-0 scale-95 
+                              group-hover:opacity-100 group-hover:scale-100
+                              transition-all duration-300"
                               style={{ backgroundColor: shift.status.color }}
                             >
                               <p className="text-xs text-gray-400">
