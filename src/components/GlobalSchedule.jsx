@@ -19,6 +19,10 @@ export default function GlobalSchedule() {
   const [modalType, setModalType] = useState(null);
   const [filteredUsers, setFilteredUsers] = useState([]);
 
+  const [selectedShift, setSelectedShift] = useState({})
+  const [selectedDay, setSelectedDay] = useState("")
+
+  
   const { allUsers } = useParameterization();
 
   const fetchSchedule = async () => {
@@ -88,11 +92,15 @@ export default function GlobalSchedule() {
     setIsOpenModalChangeSchedule(false)
   };
 
-  const openModalChangeSchedule = (idDay, idUser) => {
+  const openModalChangeSchedule = (idDay, shiftId) => {
     setIsOpenModalChangeSchedule(true)
-    console.log(schedule)
-    console.log(idDay.date)
-    console.log(idUser)
+
+    //console.log(schedule)
+    //console.log(idDay.date)
+    setSelectedDay(idDay.date)
+    const shift = idDay.shifts.find(u => u._id === shiftId)
+    
+    setSelectedShift(shift)
 
     //console.log(idDay.shifts.map(user => user._id == idUser))
      
@@ -248,7 +256,11 @@ export default function GlobalSchedule() {
         />
       )}
       {isOpenModalChangeSchedule && (
-        <PopUpChangeSchedule closeModal={closeModal}/>
+        <PopUpChangeSchedule 
+          closeModal={closeModal}
+          shiftId={selectedShift}
+          date={selectedDay}
+        />
       )}
     </div>
   );

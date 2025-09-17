@@ -1,6 +1,10 @@
+import useParameterization from "../hooks/useParameterization"
+import CheckBox from "./Checkbox"
 
 
-export default function PopUpChangeSchedule({closeModal}) {
+export default function PopUpChangeSchedule({closeModal, date, shiftId}) {
+
+  const { workShifts } = useParameterization()
   return (
     <div className="fixed w-2/3 m-auto h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
       
@@ -10,6 +14,26 @@ export default function PopUpChangeSchedule({closeModal}) {
       >
         Fechar
       </button>
+
+      <div className="border">
+        <p>{date}</p>
+        <img src={shiftId.userId.photoUrl} alt="" />
+        <p>{shiftId.userId.name}</p>
+        <p>{shiftId.time.startTime} - { shiftId.time.endTime}</p>
+        <p>Shift _id {shiftId._id}</p>
+      </div>
+
+      <div>
+        {workShifts.map((ws) =>(
+          <CheckBox
+            key={ws._id}
+            id={ws._id}
+            title={`${ws.startTime} às ${ws.endTime}`}
+          />
+        ) )}
+      </div>
+      <div>
+      </div>
     </div>
   )
 }
