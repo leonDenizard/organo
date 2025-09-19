@@ -17,13 +17,14 @@ export default function PopUpChangeSchedule({closeModal, date, shiftId}) {
 
       <div className="border">
         <p>{date}</p>
-        <img src={shiftId.userId.photoUrl} alt="" />
-        <p>{shiftId.userId.name}</p>
-        <p>{shiftId.time.startTime} - { shiftId.time.endTime}</p>
+        <img src={shiftId.userId?.photoUrl} alt="" />
+        <p>{shiftId.userId?.name}</p>
+        <p>{shiftId.time?.startTime} - { shiftId.time?.endTime}</p>
         <p>Shift _id {shiftId._id}</p>
       </div>
 
       <div>
+        <p>Mudar horario</p>
         {workShifts.map((ws) =>(
           <CheckBox
             key={ws._id}
