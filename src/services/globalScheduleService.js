@@ -11,4 +11,19 @@ export async function getSchedule () {
     return result.data
 }
 
-window.getSchedule = getSchedule;
+export async function updateSchedule(shiftId, statusId, timeId) {
+    
+    const response = await fetch(`${API_URL}/global-schedule/:shiftId`, {
+        method: "POST",
+        headers: {"Content-type": "application/json"},
+        body: JSON.stringify({
+            shiftId: shiftId,
+            statusId: statusId,
+            timeId: timeId
+        })
+    })
+
+    const result = await response.json()
+
+    return result.data
+}

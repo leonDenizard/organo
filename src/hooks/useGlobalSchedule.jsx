@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { getSchedule } from "../services/globalScheduleService"
+import { getSchedule, updateSchedule } from "../services/globalScheduleService"
 
 export default function useGlobalSchedule(){
     const [isLoading, setIsLoading] = useState(true)
@@ -19,9 +19,23 @@ export default function useGlobalSchedule(){
         }
     }
 
+    const updateSchedule = async(shiftId, statusId, timeId) => {
+
+        try {
+           const response = await updateSchedule(shiftId, statusId, timeId) 
+           console.log(response)
+        } catch (error) {
+            console.log("Erro ao atualizar a escala", error)
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
     useEffect(() => {
         fetchGlobalSchedule()
+        updateSchedule()
     }, [])
 
     return {allSchedule, isLoading}
 }
+
