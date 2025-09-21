@@ -2,9 +2,11 @@ import useParameterization from "../hooks/useParameterization"
 import CheckBox from "./Checkbox"
 
 
-export default function PopUpChangeSchedule({closeModal, date, shiftId}) {
+export default function PopUpChangeSchedule({closeModal, date, shiftId, workShifts}) {
 
-  const { workShifts } = useParameterization()
+  const selectedTime = shiftId.time._id
+  console.log(shiftId.time._id)
+  
   return (
     <div className="fixed w-2/3 m-auto h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
       
@@ -21,16 +23,20 @@ export default function PopUpChangeSchedule({closeModal, date, shiftId}) {
         <p>{shiftId.userId?.name}</p>
         <p>{shiftId.time?.startTime} - { shiftId.time?.endTime}</p>
         <p>Shift _id {shiftId._id}</p>
+       
       </div>
-
+      
       <div>
         <p>Mudar horario</p>
         {workShifts.map((ws) =>(
+
           <CheckBox
             key={ws._id}
             id={ws._id}
             title={`${ws.startTime} às ${ws.endTime}`}
+            isChecked={selectedTime?.includes(ws._id)}
           />
+
         ) )}
       </div>
       <div>

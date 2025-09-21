@@ -33,7 +33,6 @@ export default function useGlobalSchedule(){
 
     useEffect(() => {
         fetchGlobalSchedule()
-        updateSchedule()
     }, [])
 
     return {allSchedule, isLoading}

@@ -19,8 +19,8 @@ export default function GlobalSchedule() {
   const [selectedShift, setSelectedShift] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
 
-  const { allUsers } = useParameterization();
-  const { allSchedule, isLoading } = useGlobalSchedule(); // puxando do hook
+  const { allUsers, workShifts } = useParameterization();
+  const { allSchedule, isLoading } = useGlobalSchedule();
 
   useEffect(() => {
     if (!allSchedule || allSchedule.length === 0) return;
@@ -39,6 +39,7 @@ export default function GlobalSchedule() {
     setDateHeader(`${month}/${year}`);
   }, [allSchedule]);
 
+  console.log(isLoading)
   if (isLoading) return <Loader />;
 
   const openModal = (type) => {
@@ -132,7 +133,7 @@ export default function GlobalSchedule() {
                     return (
                       <div
                         key={shift._id}
-                        className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition"
+                        className="border cursor-pointer border-border-color group h-[65px] hover:brightness-125 transition relative hover:z-10"
                         style={{ backgroundColor: shift.status.color }}
                         onClick={() => openModalChangeSchedule(d, shift._id)}
                       >
@@ -176,7 +177,12 @@ export default function GlobalSchedule() {
         />
       )}
       {isOpenModalChangeSchedule && (
-        <PopUpChangeSchedule closeModal={closeModal} shiftId={selectedShift} date={selectedDay} />
+        <PopUpChangeSchedule 
+          closeModal={closeModal} 
+          shiftId={selectedShift} 
+          date={selectedDay} 
+          workShifts={workShifts}S
+        />
       )}
     </div>
   );
