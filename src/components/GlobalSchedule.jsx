@@ -20,7 +20,7 @@ export default function GlobalSchedule() {
   const [selectedDay, setSelectedDay] = useState("");
 
   const { allUsers, workShifts } = useParameterization();
-  const { allSchedule, isLoading } = useGlobalSchedule();
+  const { allSchedule, allStatus, isLoading, fetchGlobalSchedule } = useGlobalSchedule();
 
   useEffect(() => {
     if (!allSchedule || allSchedule.length === 0) return;
@@ -39,7 +39,6 @@ export default function GlobalSchedule() {
     setDateHeader(`${month}/${year}`);
   }, [allSchedule]);
 
-  console.log(isLoading)
   if (isLoading) return <Loader />;
 
   const openModal = (type) => {
@@ -181,7 +180,9 @@ export default function GlobalSchedule() {
           closeModal={closeModal} 
           shiftId={selectedShift} 
           date={selectedDay} 
-          workShifts={workShifts}S
+          workShifts={workShifts}
+          allStatus={allStatus}
+          fetchGlobalSchedule={fetchGlobalSchedule}
         />
       )}
     </div>
