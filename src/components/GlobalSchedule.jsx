@@ -177,7 +177,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                               <p
                                 className={`text-sm font-semibold tracking-wider ${
                                   isCompact
-                                    ? "truncate w-[55px] font-normal"
+                                    ? "truncate w-[55px]"
                                     : "mt-7 group-hover:mt-0 transition-all duration-200"
                                 }`}
                               >
@@ -232,7 +232,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           onFilter={(users) => setFilteredUsers(users)}
         />
       )}
-      {isOpenModalChangeSchedule && (
+      {isOpenModalChangeSchedule && isAdmin && (
         <PopUpChangeSchedule
           closeModal={closeModal}
           shiftId={selectedShift}

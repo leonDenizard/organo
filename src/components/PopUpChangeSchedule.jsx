@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import CheckBox from "./Checkbox";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
+import { X } from "lucide-react";
+import MultiDayCalendar from "./MultiDayCalendar";
 
 export default function PopUpChangeSchedule({
   closeModal,
@@ -50,15 +52,19 @@ export default function PopUpChangeSchedule({
 
   return (
     <div className="fixed 2xl:w-2/3 m-auto 2xl:h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
-      <button
-        onClick={closeModal}
-        className="absolute top-0 right-3 mt-4 px-4 py-2 bg-red-500 text-white rounded"
-      >
-        Fechar
-      </button>
+      <X
+      onClick={closeModal}
+      
+        className="absolute top-4 right-4 h-10 w-10 cursor-pointer p-1
+             rounded-full bg-red-500 text-white 
+             hover:bg-red-600 
+              transition-transform duration-300
+             hover:rotate-90
+             flex items-center justify-center"
+      />
 
       <div className=" 2xl:w-[80%] w-[60%] mb-8">
-        <p className="text-5xl mb-8 ">{formatDate(date)}</p>
+        <p className="text-5xl 2xl:mb-16 mb-8 font-semibold">{formatDate(date)}</p>
         <div className="flex items-center gap-5">
           <img
             className="rounded-full h-20 w-20"
@@ -76,7 +82,7 @@ export default function PopUpChangeSchedule({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 2xl:w-[80%] w-[60%]">
+      <div className="grid grid-cols-3 2xl:w-[80%] w-[60%]">
         <div className="">
           <p className="text-2xl text-gray-200 mb-3">Mudar horario</p>
           {workShifts.map((ws) => (
@@ -102,7 +108,15 @@ export default function PopUpChangeSchedule({
             />
           ))}
         </div>
+
+        <div>
+          <p className="text-2xl text-gray-200 mb-3 text-center">Alterar em mais dias</p>
+          <MultiDayCalendar onChange={(days) => console.log("Selecionados", days)} />
+        </div>
+
       </div>
+
+      
 
       <div>
         <button className="border-2 border-border-color p-2 w-[350px] hover:bg-white/5 rounded-md hover:transition-all mt-8"

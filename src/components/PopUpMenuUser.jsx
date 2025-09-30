@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import useParameterization from "../hooks/useParameterization";
 import Checkbox from "../components/Checkbox";
-
+import { X } from "lucide-react";
 
 export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
- 
 
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
@@ -20,12 +19,16 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
 
   return (
     <div className="fixed  m-auto  top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
-      <button
-        onClick={closeModal}
-        className="absolute top-0 right-3 mt-4 px-4 py-2 bg-red-500 text-white rounded"
-      >
-        Fechar
-      </button>
+      <X
+      onClick={closeModal}
+      
+        className="absolute top-4 right-4 h-10 w-10 cursor-pointer p-1
+             rounded-full bg-red-500 text-white 
+             hover:bg-red-600 
+              transition-transform duration-300
+             hover:rotate-90
+             flex items-center justify-center"
+      />
 
       <div className="relative flex flex-col items-center justify-center w-[90%]">
         <p className="text-gray-400 mb-3 text-lg">

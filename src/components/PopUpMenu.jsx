@@ -1,3 +1,5 @@
+import { X } from "lucide-react";
+
 export default function PopUpMenu({ options, onSelect, closeModal }) {
 
 
@@ -17,12 +19,17 @@ export default function PopUpMenu({ options, onSelect, closeModal }) {
           </li>
         ))}
       </ul>
-      <button
-        onClick={closeModal}
-        className="absolute top-0 right-3 mt-4 px-4 py-2 bg-red-500 text-white rounded"
-      >
-        Fechar
-      </button>
+      
+      <X
+      onClick={closeModal}
+      
+        className="absolute top-4 right-4 h-10 w-10 cursor-pointer p-1
+             rounded-full bg-red-500 text-white 
+             hover:bg-red-600 
+              transition-transform duration-300
+             hover:rotate-90
+             flex items-center justify-center"
+      />
     </div>
   );
 }
