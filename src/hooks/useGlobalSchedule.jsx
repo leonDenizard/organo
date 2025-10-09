@@ -3,6 +3,7 @@ import {
   getSchedule,
   updateScheduleService,
   getStatus,
+  deleteSchedule,
 } from "../services/globalScheduleService";
 import toast from "react-hot-toast";
 
@@ -43,10 +44,28 @@ export default function useGlobalSchedule() {
     }
   };
 
+  const handleDeleteSchedule = async() => {
+    
+    toast
+      .promise(deleteSchedule (),{
+        loading: "Deletando escala",
+        success: "Escala deletada com sucesso",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar cargo";
+          return msg;
+        }
+      }).then(() => {
+        fetchGlobalSchedule();
+      })
+  }
+
   useEffect(() => {
     fetchGlobalSchedule();
     fetchStatusUserSchedule();
   }, []);
 
-  return { allSchedule, allStatus, updateSchedule, isLoading, fetchGlobalSchedule };
+  return { allSchedule, allStatus, updateSchedule, isLoading, fetchGlobalSchedule, handleDeleteSchedule };
 }

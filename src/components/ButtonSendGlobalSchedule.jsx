@@ -4,15 +4,16 @@ import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import { text } from "@fortawesome/fontawesome-svg-core";
+import useGlobalSchedule from "../hooks/useGlobalSchedule";
 
 export default function ButtonsSendGlobalSchedule() {
   const API_URL = import.meta.env.VITE_API_URL;
 
   const [file, setFile] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { handleDeleteSchedule } = useGlobalSchedule();
 
   const handleScheduleJson = (e) => {
-
     const selectedFile = e.target.files[0];
 
     if (selectedFile && selectedFile.type === "application/json") {
@@ -20,7 +21,6 @@ export default function ButtonsSendGlobalSchedule() {
     } else {
       console.log("Por favor, selecione um arquivo JSON válido.");
       setFile(null);
-
     }
 
     e.target.value = null;
@@ -28,7 +28,7 @@ export default function ButtonsSendGlobalSchedule() {
 
   const handleUpload = async () => {
     if (!file) {
-      toast.error("Nenhum arquivo encontrado!")
+      toast.error("Nenhum arquivo encontrado!");
       return;
     }
 
@@ -39,36 +39,13 @@ export default function ButtonsSendGlobalSchedule() {
         const jsonData = JSON.parse(event.target.result);
 
         await uploadScheduleToBD(jsonData);
-        toast.success("Escalda inserida com sucesso!")
-        
+        toast.success("Escalda inserida com sucesso!");
       } catch (error) {
         toast.error("Erro ao processar o arquivo JSON");
       }
     };
     reader.readAsText(file);
     setFile(null);
-  };
-
-  const handleDeleteSchedule = async () => {
-    try {
-      const response = await fetch(`${API_URL}/schedule`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(
-          `Erro ao deletar escala ROTA DELETE: ${API_URL}/schedule`
-        );
-      }
-
-      toast.success("Escala deletada com sucesso");
-      
-    } catch (error) {
-      console.error("Erro: ", error);
-    }
   };
 
   return (
@@ -89,14 +66,23 @@ export default function ButtonsSendGlobalSchedule() {
         htmlFor="fileInput"
         className="flex gap-1 rounded px-6 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-white cursor-pointer font-semibold"
       >
-        {file ? (file.name) : (<> <CirclePlus />Escolher o arquivo</>)}
+        {file ? (
+          file.name
+        ) : (
+          <>
+            {" "}
+            <CirclePlus />
+            Escolher o arquivo
+          </>
+        )}
       </label>
 
       <button
         className="flex gap-1 px-4 py-2 bg-green-600 hover:bg-green-700 transition-colors text-white rounded md:ml-2 font-semibold"
         onClick={handleUpload}
       >
-        <Upload />Enviar Escala
+        <Upload />
+        Enviar Escala
       </button>
 
       <button
@@ -112,7 +98,7 @@ export default function ButtonsSendGlobalSchedule() {
       </button>
       {isModalOpen && (
         <ConfirmDeleteModal
-          onConfirm={() => {
+          onConfirm={async () => {
             handleDeleteSchedule();
             setIsModalOpen(false);
           }}

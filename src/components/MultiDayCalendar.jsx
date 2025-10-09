@@ -72,7 +72,7 @@ export default function MultiDayCalendar({ onChange }) {
             <button
               key={dayString}
               onClick={() => toggleDay(day)}
-              className={` w-8 h-8 rounded-full transition ${
+              className={` w-8 h-8 2xl:w-11 2xl:h-11 rounded-full transition ${
                 isSelected
                   ? "bg-blue-600 text-white"
                   : "hover:bg-border-color text-gray-300"

@@ -42,3 +42,20 @@ export async function getStatus(){
         console.log("Erro ao buscar os status de trabalho", error)      
     }
 }
+
+export async function deleteSchedule(){
+
+    try {
+        
+        const response = await fetch(`${API_URL}/global-schedule`, {
+            method: "DELETE",
+            headers: {"Content-type" : "application/json"}
+        })
+
+        const result = await response.json()
+
+        return result.data
+    } catch (error) {
+        console.log(error)
+    }
+}
