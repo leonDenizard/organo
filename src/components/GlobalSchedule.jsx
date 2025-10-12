@@ -61,6 +61,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
   };
 
   const openModalChangeSchedule = (idDay, shiftId) => {
+    console.log(shiftId)
     setIsOpenModalChangeSchedule(true);
     setSelectedDay(idDay.date);
     const shift = idDay.shifts.find((u) => u._id === shiftId);
@@ -240,6 +241,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           workShifts={workShifts}
           allStatus={allStatus}
           fetchGlobalSchedule={fetchGlobalSchedule}
+          schedule={schedule}
         />
       )}
       {isAdmin && (

@@ -34,7 +34,12 @@ export default function useGlobalSchedule() {
 
   const updateSchedule = async (shiftId, statusId, timeId) => {
     try {
+      
       const response = await updateScheduleService(shiftId, statusId, timeId);
+      
+      if(shiftId.length === 0){
+        return  toast.error("Precisa ser selecionado algum dia")
+      } 
       toast.success("Escala atualizada");
       return response;
     } catch (err) {

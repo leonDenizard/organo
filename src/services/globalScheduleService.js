@@ -11,12 +11,13 @@ export async function getSchedule () {
     return result.data
 }
 
-export async function updateScheduleService(shiftId, statusId, timeId) {
+export async function updateScheduleService(shiftIds, statusId, timeId) {
     
-    const response = await fetch(`${API_URL}/global-schedule/update-status/${shiftId}`, {
+    const response = await fetch(`${API_URL}/global-schedule/update-status/bulk`, {
         method: "PATCH",
         headers: {"Content-type": "application/json"},
         body: JSON.stringify({
+            shiftId: shiftIds,
             statusId: statusId,
             timeId: timeId
         })

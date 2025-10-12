@@ -7,7 +7,6 @@ import { text } from "@fortawesome/fontawesome-svg-core";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
 
 export default function ButtonsSendGlobalSchedule() {
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const [file, setFile] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);

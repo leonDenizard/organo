@@ -11,15 +11,17 @@ export default function PopUpChangeSchedule({
   workShifts,
   allStatus,
   fetchGlobalSchedule,
+  schedule
 }) {
   const { updateSchedule } = useGlobalSchedule();
 
   const [shift, setShift] = useState(shiftId._id || "");
   const [selectTime, setSelectTime] = useState(shiftId.time._id || "");
   const [selectStatus, setSelectStatus] = useState(shiftId.status._id || "");
+  const [selectUserId, setSelectUserId] = useState(shiftId.userId._id || "");
+  const [selectedShiftIds, setSelectedShiftIds] = useState([])
 
   // console.log(allStatus);
-  // console.log(shiftId);
 
   const formatDate = (date) => {
     
@@ -34,8 +36,13 @@ export default function PopUpChangeSchedule({
     setSelectStatus((prev) => (prev === id ? null : id));
   };
 
+  const handleMultiDaySelect = (shiftIds) => {
+    setSelectedShiftIds(shiftIds);
+  };
+
   const submitUpdateSchedule = async (shiftId, statusId, timeId) => {
     try {
+      console.log("Parametrso",shiftId, statusId, timeId)
       await updateSchedule(shiftId, statusId, timeId);
 
       if (fetchGlobalSchedule) {
@@ -48,7 +55,7 @@ export default function PopUpChangeSchedule({
     }
   };
 
-  
+  //console.log("shift", selectUserId)
 
   return (
     <div className="fixed 2xl:w-2/3 m-auto 2xl:h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
@@ -85,7 +92,7 @@ export default function PopUpChangeSchedule({
       <div className="grid grid-cols-3 2xl:w-[80%] w-[60%]">
         <div className="">
           <p className="text-2xl text-gray-200 mb-3">Mudar horario</p>
-          {workShifts.map((ws) => (
+          {workShifts?.map((ws) => (
             <CheckBox
               key={ws._id}
               id={ws._id}
@@ -111,7 +118,13 @@ export default function PopUpChangeSchedule({
 
         <div>
           <p className="text-2xl text-gray-200 mb-3 text-center">Alterar em mais dias</p>
-          <MultiDayCalendar onChange={(days) => console.log("Selecionados", days)} />
+          <MultiDayCalendar 
+            schedule={schedule} 
+            userId={selectUserId}
+            initialDate={date}
+            initialShiftId={shiftId}
+            onChange={handleMultiDaySelect} 
+          />
         </div>
 
       </div>
@@ -120,7 +133,7 @@ export default function PopUpChangeSchedule({
 
       <div>
         <button className="border-2 border-border-color p-2 w-[350px] hover:bg-white/5 rounded-md hover:transition-all mt-8"
-          onClick={() => submitUpdateSchedule(shift, selectStatus, selectTime)}
+          onClick={() => submitUpdateSchedule(selectedShiftIds, selectStatus, selectTime)}
         >
           Atualizar escala
         </button>

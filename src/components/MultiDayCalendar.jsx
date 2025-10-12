@@ -1,14 +1,11 @@
-import { useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
-export default function MultiDayCalendar({ onChange }) {
+export default function MultiDayCalendar({ onChange, schedule, userId, initialDate, initialShiftId }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([]);
+  const [selectedShifts, setSelectedShifts] = useState([initialShiftId._id]);
 
-  // Função para navegar entre meses
-  const changeMonth = (offset) => {
-    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + offset, 1));
-  };
+
 
   // Função para pegar os dias do mês
   const getDaysInMonth = (date) => {
@@ -27,32 +24,75 @@ export default function MultiDayCalendar({ onChange }) {
     return `${d}-${m}-${y}`;
   };
 
+  // console.log("Dados carregados via prop", schedule)
+  // console.log("Dados carregados via prop", userId)
+
   // Alternar seleção de um dia
   const toggleDay = (day) => {
     const dayString = formatDMY(day);
-    let newSelected;
 
-    if (selectedDays.includes(dayString)) {
-      newSelected = selectedDays.filter((d) => d !== dayString);
-    } else {
-      newSelected = [...selectedDays, dayString];
-    }
+    // alterna seleção de dias
+    const isSelected = selectedDays.includes(dayString);
+    const newSelectedDays = isSelected
+      ? selectedDays.filter((d) => d !== dayString)
+      : [...selectedDays, dayString];
 
-    setSelectedDays(newSelected);
-    onChange && onChange(newSelected); // envia para o pai
+    setSelectedDays(newSelectedDays);
+
+    // encontra o shift do usuário naquele dia
+    const selectedDate = schedule.find((s) => s.date === dayString);
+    if (!selectedDate) return console.warn("Data não encontrada:", dayString);
+
+    const userShift = selectedDate.shifts.find(
+      (shift) => String(shift.userId._id) === String(userId)
+    );
+    if (!userShift)
+      return console.warn("Shift não encontrado para userId:", userId);
+
+    // adiciona ou remove o ID do shift
+    const isShiftSelected = selectedShifts.includes(userShift._id);
+    const newSelectedShifts = isShiftSelected
+      ? selectedShifts.filter((id) => id !== userShift._id)
+      : [...selectedShifts, userShift._id];
+
+    setSelectedShifts(newSelectedShifts);
+
+    // devolve só os IDs pro pai
+    onChange && onChange(newSelectedShifts);
+
+    //console.log("IDs selecionados:", newSelectedShifts);
   };
 
   const days = getDaysInMonth(currentDate);
+
+  useEffect(() => {
+    if (!initialDate) return;
+
+    const dayString = initialDate;
+    setSelectedDays([dayString]); // deixa esse dia azul
+
+    if (initialShiftId?._id) {
+    setSelectedShifts((prev) => {
+      // evita duplicar o id se já estiver no array
+      if (!prev.includes(initialShiftId._id)) {
+        return [...prev, initialShiftId._id];
+      }
+      return prev;
+    })
+  }
+
+  }, [initialDate, initialShiftId]);
 
   return (
     <div className="p-4 bg-card-bg text-white rounded-xl shadow-xl w-full">
       {/* Header do calendário */}
       <div className="flex justify-center items-center mb-4">
-        
         <h2 className="text-lg font-semibold">
-          {currentDate.toLocaleDateString("pt-BR", { month: "long", year: "numeric" })}
+          {currentDate.toLocaleDateString("pt-BR", {
+            month: "long",
+            year: "numeric",
+          })}
         </h2>
-        
       </div>
 
       {/* Dias da semana */}
