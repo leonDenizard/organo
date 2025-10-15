@@ -27,7 +27,6 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     useGlobalSchedule();
 
   const { isAdmin } = useAuth();
-
   useEffect(() => {
     if (!allSchedule || allSchedule.length === 0) return;
 
@@ -249,6 +248,8 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           onScheduleChange={() => console.log("teste")}
           setWorkedDays={"setWorkedDays"}
           showButtonSend={showButtonSend}
+          allUsers={allUsers}
+          closeModal={closeModal}
         />
       )}
     </div>

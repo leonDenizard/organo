@@ -15,17 +15,17 @@ export default function PopUpChangeSchedule({
 }) {
   const { updateSchedule } = useGlobalSchedule();
 
-  const [shift, setShift] = useState(shiftId._id || "");
-  const [selectTime, setSelectTime] = useState(shiftId.time._id || "");
-  const [selectStatus, setSelectStatus] = useState(shiftId.status._id || "");
-  const [selectUserId, setSelectUserId] = useState(shiftId.userId._id || "");
+  const [shift, setShift] = useState(shiftId?._id || "");
+  const [selectTime, setSelectTime] = useState(shiftId?.time?._id || "");
+  const [selectStatus, setSelectStatus] = useState(shiftId?.status?._id || "");
+  const [selectUserId, setSelectUserId] = useState(shiftId?.userId?._id || "");
   const [selectedShiftIds, setSelectedShiftIds] = useState([])
 
   // console.log(allStatus);
 
   const formatDate = (date) => {
     
-    const dateFormated = date.split("-").join("/")
+    const dateFormated = date?.split("-").join("/")
     return dateFormated
   }
   const handleChangeTime = (id) => {
@@ -75,13 +75,13 @@ export default function PopUpChangeSchedule({
         <div className="flex items-center gap-5">
           <img
             className="rounded-full h-20 w-20"
-            src={shiftId.userId?.photoUrl}
+            src={shiftId?.userId?.photoUrl}
             alt=""
           />
           <div>
-            <p className="text-2xl font-semibold tracking-wider">{shiftId.userId?.name}</p>
+            <p className="text-2xl font-semibold tracking-wider">{shiftId?.userId?.name}</p>
             <p className="text-gray-400">
-              {shiftId.time?.startTime} - {shiftId.time?.endTime}
+              {shiftId?.time?.startTime} - {shiftId?.time?.endTime}
             </p>
           </div>
 
@@ -105,7 +105,7 @@ export default function PopUpChangeSchedule({
 
         <div>
           <p className="text-2xl text-gray-200 mb-3">Mudar de status</p>
-          {allStatus.map((st) => (
+          {allStatus?.map((st) => (
             <CheckBox
               key={st._id}
               id={st._id}

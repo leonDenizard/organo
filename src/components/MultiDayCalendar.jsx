@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 export default function MultiDayCalendar({ onChange, schedule, userId, initialDate, initialShiftId }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([]);
-  const [selectedShifts, setSelectedShifts] = useState([initialShiftId._id]);
+  const [selectedShifts, setSelectedShifts] = useState([initialShiftId?._id]);
 
 
 
@@ -44,7 +44,7 @@ export default function MultiDayCalendar({ onChange, schedule, userId, initialDa
     if (!selectedDate) return console.warn("Data não encontrada:", dayString);
 
     const userShift = selectedDate.shifts.find(
-      (shift) => String(shift.userId._id) === String(userId)
+      (shift) => String(shift.userId?._id) === String(userId)
     );
     if (!userShift)
       return console.warn("Shift não encontrado para userId:", userId);

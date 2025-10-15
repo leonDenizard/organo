@@ -280,6 +280,8 @@ export default function useParameterization() {
       name: user.name,
       admin: user.admin,
       profile: user.photoUrl,
+      time: user.time,
+      manager: user.manager
     }));
 
     const admins = users.filter((user) => user.admin === true);

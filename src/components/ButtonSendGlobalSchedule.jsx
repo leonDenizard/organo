@@ -3,13 +3,14 @@ import { useState } from "react";
 import ConfirmDeleteModal from "./ConfirmDeletedModal";
 import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
-import { text } from "@fortawesome/fontawesome-svg-core";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
+import PopUpSendGlobalSchedule from "./PopUpSendGlobalSchedule";
 
-export default function ButtonsSendGlobalSchedule() {
-
+export default function ButtonsSendGlobalSchedule({ allUsers, closeModal }) {
   const [file, setFile] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
   const { handleDeleteSchedule } = useGlobalSchedule();
 
   const handleScheduleJson = (e) => {
@@ -83,10 +84,17 @@ export default function ButtonsSendGlobalSchedule() {
         <Upload />
         Enviar Escala
       </button>
+      <button
+        className="flex gap-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 transition-colors text-white rounded md:ml-2 font-semibold"
+        onClick={() => setIsCreateModalOpen(true)}
+      >
+        <Upload />
+        Criar a escala
+      </button>
 
       <button
         className="px-4 py-2 flex gap-1 bg-bubble-red hover:bg-bubble-red/80 transition-colors text-white rounded md:ml-2 font-semibold row-span-1"
-        onClick={() => setIsModalOpen(true)}
+        onClick={() => setIsDeleteModalOpen(true)}
       >
         <Trash
           className="stroke-white group-hover:stroke-red-300 transition-colors duration-200"
@@ -95,14 +103,25 @@ export default function ButtonsSendGlobalSchedule() {
         />{" "}
         Deletar Escala
       </button>
-      {isModalOpen && (
+      {isDeleteModalOpen && (
         <ConfirmDeleteModal
           onConfirm={async () => {
             handleDeleteSchedule();
-            setIsModalOpen(false);
+            setIsDeleteModalOpen(false);
+            closeModal && closeModal(); // fecha o modal pai, se houver
           }}
-          onCancel={() => setIsModalOpen(false)}
+          onCancel={() => setIsDeleteModalOpen(false)}
           text={"Tem certeza que deseja excluir a escala?"}
+        />
+      )}
+
+      {isCreateModalOpen && (
+        <PopUpSendGlobalSchedule
+          allUsers={allUsers}
+          closeModal={() => {
+            setIsCreateModalOpen(false);
+            closeModal && closeModal(); // garante fechamento total
+          }}
         />
       )}
     </div>

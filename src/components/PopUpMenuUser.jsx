@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useParameterization from "../hooks/useParameterization";
 import Checkbox from "../components/Checkbox";
 import { X } from "lucide-react";
 
@@ -35,7 +34,7 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
           Selecione os usuários que deseja visualizar.
         </p>
         <div className="relative w-full h-[300px] 2xl:h-[500px] grid grid-cols-1 sm:grid-cols-2 items-center justify-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 2xl:w-[80%] gap-1 overflow-y-auto scrollbar mb-8 py-4 px-5">
-          {allUsers.map((user) => (
+          {allUsers?.map((user) => (
             <Checkbox
               key={user.id}
               id={user.id}
