@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import Checkbox from "../components/Checkbox";
 import { X } from "lucide-react";
 import useParameterization from "../hooks/useParameterization";
+import useGlobalSchedule from "../hooks/useGlobalSchedule";
+import createSchedule from "../functions/createSchedule";
 
 export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
+
+  const { allSuper, workShifts } = useParameterization();
+  const { allStatus } = useGlobalSchedule();
 
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
@@ -12,14 +17,34 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
     );
   };
 
+  const workingStatus = allStatus?.find((st) => st.name === "working")
+
+  const selectedShifts = selectedUsers.map((userId) => {
+
+    const user = allUsers.find((u) => u.id === userId)
+    const ws = workShifts.find((w) => w._id === user.time)
+
+    return {
+      userId: userId,
+      status: workingStatus?._id,
+      time: ws?._id
+    }
+  })
+  
+
+
+  const schedule = createSchedule({
+    month: 10,
+    year: 2025,
+    shifts: selectedShifts
+  })
+
+
   useEffect(() => {
+    
     document.body.classList.add("overflow-hidden");
     return () => document.body.classList.remove("overflow-hidden");
   }, []);
-
-  const { allSuper, workShifts } = useParameterization();
-
-  console.log(allSuper, workShifts);
 
   return (
     <div className="fixed  m-auto  top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center">
@@ -35,23 +60,29 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
 
       <div className="relative overflow-y-scroll scrollbar">
         <p className="text-gray-400 mb-3 text-xl">Cadastro da escala</p>
-        <div className="grid grid-cols-1 scrollbar">
-          {allUsers?.map((user) => {
-            const ws = workShifts.find((w) => w._id === user.time);
-            console.log(ws)
-            return (
-              <div key={user._d} className="">
-                <Checkbox
-                  key={user.id}
-                  id={user.id}
-                  title={user.name}
-                  isChecked={selectedUsers.includes(user.id)}
-                  onChange={() => toggleUser(user.id)}
+
+        <div className="border grid grid-cols-2">
+          <div className="grid grid-cols-1 scrollbar border">
+            {allUsers?.map((user) => {
+              const ws = workShifts.find((w) => w._id === user.time);
+              return (
+                <div key={user._d} className="">
+                  <Checkbox
+                    key={user.id}
+                    id={user.id}
+                    title={user.name}
+                    isChecked={selectedUsers.includes(user.id)}
+                    onChange={() => toggleUser(user.id)}
+                    img={user.profile}
                   />
-                  <p className="text-center text-sm text-gray-400 mb-4">{ws ? `${ws.startTime} - ${ws.endTime}`: "Sem horário"}</p>
-              </div>
-            );
-          })}
+                  <p className="text-center text-sm text-gray-400 mb-4">
+                    {ws ? `${ws.startTime} - ${ws.endTime}` : "Sem horário"}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          <div className="grid grid-cols-1 scrollbar"></div>
         </div>
 
         <button
@@ -61,7 +92,7 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
             closeModal([]);
           }}
         >
-          Limpar filtro
+          Criar a escala
         </button>
       </div>
     </div>
