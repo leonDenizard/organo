@@ -1,9 +1,11 @@
+import createSchedule from "../functions/createSchedule"
+
 const API_URL = import.meta.env.VITE_API_URL
 
-export async function getSchedule () {
+export async function getSchedule() {
     const response = await fetch(`${API_URL}/global-schedule`, {
         method: "GET",
-        headers: {"Content-Type": "application/json"}
+        headers: { "Content-Type": "application/json" }
     })
 
     const result = await response.json()
@@ -12,10 +14,10 @@ export async function getSchedule () {
 }
 
 export async function updateScheduleService(shiftIds, statusId, timeId) {
-    
+
     const response = await fetch(`${API_URL}/global-schedule/update-status/bulk`, {
         method: "PATCH",
-        headers: {"Content-type": "application/json"},
+        headers: { "Content-type": "application/json" },
         body: JSON.stringify({
             shiftId: shiftIds,
             statusId: statusId,
@@ -28,29 +30,29 @@ export async function updateScheduleService(shiftIds, statusId, timeId) {
     return result.data
 }
 
-export async function getStatus(){
+export async function getStatus() {
 
     try {
         const response = await fetch(`${API_URL}/status`, {
             method: "GET",
-            headers: {"Content-type": "application/json"},
+            headers: { "Content-type": "application/json" },
         })
 
         const result = await response.json()
-        
+
         return result.data
     } catch (error) {
-        console.log("Erro ao buscar os status de trabalho", error)      
+        console.log("Erro ao buscar os status de trabalho", error)
     }
 }
 
-export async function deleteSchedule(){
+export async function deleteSchedule() {
 
     try {
-        
+
         const response = await fetch(`${API_URL}/global-schedule`, {
             method: "DELETE",
-            headers: {"Content-type" : "application/json"}
+            headers: { "Content-type": "application/json" }
         })
 
         const result = await response.json()
@@ -58,5 +60,26 @@ export async function deleteSchedule(){
         return result.data
     } catch (error) {
         console.log(error)
+    }
+}
+
+export async function generateAndCreateSchedule(schedule) {
+
+    try {
+        const response = await fetch(`${API_URL}/global-schedule`, {
+            method: "POST",
+            headers: { "Content-type": "application/json" },
+            body: JSON.stringify(schedule)
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao criar escala: ${response.statusText}`);
+        }
+
+        const result = await response.json()
+        return result.data
+    } catch (error) {
+        console.error("Erro em generateAndCreateSchedule:", error);
+        throw error; // propaga o erro pro hook/tratamento com toast
     }
 }

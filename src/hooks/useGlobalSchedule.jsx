@@ -4,6 +4,7 @@ import {
   updateScheduleService,
   getStatus,
   deleteSchedule,
+  generateAndCreateSchedule,
 } from "../services/globalScheduleService";
 import toast from "react-hot-toast";
 
@@ -67,10 +68,32 @@ export default function useGlobalSchedule() {
       })
   }
 
+  const handleGenerateSchedule = async(schedule) => {
+
+    toast.promise(
+      generateAndCreateSchedule(schedule),
+      {
+        loading: "Gerando escala...",
+        success: "Escala criada com sucesso",
+        error: "Erro ao criar escala"
+      }.then(() => {
+        fetchGlobalSchedule()
+      })
+    )
+  }
+
   useEffect(() => {
     fetchGlobalSchedule();
     fetchStatusUserSchedule();
   }, []);
 
-  return { allSchedule, allStatus, updateSchedule, isLoading, fetchGlobalSchedule, handleDeleteSchedule };
+  return { 
+    allSchedule, 
+    allStatus, 
+    updateSchedule, 
+    isLoading, 
+    fetchGlobalSchedule, 
+    handleDeleteSchedule,
+    handleGenerateSchedule
+  };
 }

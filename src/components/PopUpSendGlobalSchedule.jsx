@@ -9,7 +9,7 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const { allSuper, workShifts } = useParameterization();
-  const { allStatus } = useGlobalSchedule();
+  const { allStatus, handleGenerateSchedule } = useGlobalSchedule();
 
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
@@ -88,7 +88,9 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
         <button
           className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%]"
           onClick={() => {
-            setSelectedUsers([]);
+
+            const schedule = createSchedule({month: 10, year: 2025, shifts: selectedShifts})
+            handleGenerateSchedule(schedule);
             closeModal([]);
           }}
         >
