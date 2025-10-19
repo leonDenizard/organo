@@ -4,12 +4,16 @@ import { X } from "lucide-react";
 import useParameterization from "../hooks/useParameterization";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
 import createSchedule from "../functions/createSchedule";
+import MonthSelector from "../components/MonthSelector";
+import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
 
-export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
+export default function PopUpMenuUser({ closeModal, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [selectedMonth, setSelectedMonth] = useState("");
 
-  const { allSuper, workShifts } = useParameterization();
-  const { allStatus, handleGenerateSchedule } = useGlobalSchedule();
+  const { workShifts } = useParameterization();
+  const { allStatus, handleGenerateSchedule, fetchGlobalSchedule } =
+    useGlobalScheduleContext();
 
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
@@ -17,31 +21,36 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
     );
   };
 
-  const workingStatus = allStatus?.find((st) => st.name === "working")
+  const workingStatus = allStatus?.find((st) => st.name === "working");
 
   const selectedShifts = selectedUsers.map((userId) => {
-
-    const user = allUsers.find((u) => u.id === userId)
-    const ws = workShifts.find((w) => w._id === user.time)
+    const user = allUsers.find((u) => u.id === userId);
+    const ws = workShifts.find((w) => w._id === user.time);
 
     return {
       userId: userId,
       status: workingStatus?._id,
-      time: ws?._id
+      time: ws?._id,
+    };
+  });
+
+  const handleCreateSchedule = async () => {
+    const schedule = createSchedule({
+      month: selectedMonth,
+      year: 2025,
+      shifts: selectedShifts,
+    });
+
+    try {
+      await handleGenerateSchedule(schedule);
+    } catch (error) {
+      console.error("Erro ao gerar escala:", error);
+    } finally {
+      closeModal([]); // fecha o modal
     }
-  })
-  
-
-
-  const schedule = createSchedule({
-    month: 10,
-    year: 2025,
-    shifts: selectedShifts
-  })
-
+  };
 
   useEffect(() => {
-    
     document.body.classList.add("overflow-hidden");
     return () => document.body.classList.remove("overflow-hidden");
   }, []);
@@ -58,15 +67,31 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
              flex items-center justify-center"
       />
 
-      <div className="relative overflow-y-scroll scrollbar">
-        <p className="text-gray-400 mb-3 text-xl">Cadastro da escala</p>
-
-        <div className="border grid grid-cols-2">
-          <div className="grid grid-cols-1 scrollbar border">
+      <div className="relative overflow-y-scroll scrollbar mb-6">
+        <p className="text-gray-400 mb-3 text-3xl">Cadastro da escala</p>
+        <h1 className="text-gray-400 mb-14 text-md">
+          Selecione os usuários que deseja gerar a escala <br />
+          (Obs: A escala é gerado completa para o mês sendo necessários realizar
+          os ajustes manuais)
+        </h1>
+        <div className="grid grid-cols-2 items-start justify-items-center">
+          <div className="grid grid-cols-3 scrollbar h-[400px] gap-4">
+            <Checkbox
+              id="selectAll"
+              title="Selecionar todos"
+              isChecked={selectedUsers.length === allUsers.length}
+              onChange={() => {
+                if (selectedUsers.length === allUsers.length) {
+                  setSelectedUsers([]); // desmarca todos
+                } else {
+                  setSelectedUsers(allUsers.map((u) => u.id));
+                }
+              }}
+            />
             {allUsers?.map((user) => {
               const ws = workShifts.find((w) => w._id === user.time);
               return (
-                <div key={user._d} className="">
+                <div key={user._id} className="">
                   <Checkbox
                     key={user.id}
                     id={user.id}
@@ -75,28 +100,25 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
                     onChange={() => toggleUser(user.id)}
                     img={user.profile}
                   />
-                  <p className="text-center text-sm text-gray-400 mb-4">
+                  <p className="relative text-sm text-gray-400 mb-4">
                     {ws ? `${ws.startTime} - ${ws.endTime}` : "Sem horário"}
                   </p>
                 </div>
               );
             })}
           </div>
-          <div className="grid grid-cols-1 scrollbar"></div>
+          <div className="grid grid-cols-1 scrollbar">
+            <h1>Selecione o mês da escala</h1>
+            <MonthSelector onChange={(month) => setSelectedMonth(month)} />
+          </div>
         </div>
-
-        <button
-          className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%]"
-          onClick={() => {
-
-            const schedule = createSchedule({month: 10, year: 2025, shifts: selectedShifts})
-            handleGenerateSchedule(schedule);
-            closeModal([]);
-          }}
-        >
-          Criar a escala
-        </button>
       </div>
+      <button
+        className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%] hover:bg-white/10 transition-all"
+        onClick={handleCreateSchedule}
+      >
+        Criar a escala
+      </button>
     </div>
   );
 }

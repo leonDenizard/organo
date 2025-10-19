@@ -5,6 +5,7 @@ import {
   getStatus,
   deleteSchedule,
   generateAndCreateSchedule,
+  getScheduleById,
 } from "../services/globalScheduleService";
 import toast from "react-hot-toast";
 
@@ -12,13 +13,20 @@ export default function useGlobalSchedule() {
   const [isLoading, setIsLoading] = useState(true);
   const [allSchedule, setAllSchedule] = useState();
   const [allStatus, setAllStatus] = useState();
+  const [scheduleUserById, setScheduleUserById] = useState();
 
   const fetchGlobalSchedule = async () => {
     try {
-      const response = await getSchedule();
-      setAllSchedule(response);
+      const response = await getSchedule(); // já vem com data
+      if (response === null) {
+        console.log("Limpei a tela")
+        setAllSchedule([]) // limpa a tela
+      } else {
+        setAllSchedule(response);
+      }
     } catch (error) {
       console.log("Erro ao buscar escala", error);
+      setAllSchedule([]); // também limpa se der erro
     } finally {
       setIsLoading(false);
     }
@@ -35,14 +43,14 @@ export default function useGlobalSchedule() {
 
   const updateSchedule = async (shiftId, statusId, timeId) => {
     try {
-      
-      const response = await updateScheduleService(shiftId, statusId, timeId);
-      
-      if(shiftId.length === 0){
-        return  toast.error("Precisa ser selecionado algum dia")
-      } 
+      if (shiftId.length === 0) {
+        return toast.error("Precisa ser selecionado algum dia");
+      }
+
+      await updateScheduleService(shiftId, statusId, timeId);
+
       toast.success("Escala atualizada");
-      return response;
+      await fetchGlobalSchedule(); // 🔄 Atualiza a tela após sucesso
     } catch (err) {
       toast.error(err?.message || "Erro ao atualizar escala");
     } finally {
@@ -50,50 +58,60 @@ export default function useGlobalSchedule() {
     }
   };
 
-  const handleDeleteSchedule = async() => {
-    
-    toast
-      .promise(deleteSchedule (),{
-        loading: "Deletando escala",
+  const handleDeleteSchedule = async () => {
+    return toast
+      .promise(deleteSchedule(), {
+        loading: "Deletando escala...",
         success: "Escala deletada com sucesso",
         error: (err) => {
           const msg =
             err?.response?.data?.message ||
             err?.message ||
-            "Erro ao deletar cargo";
+            "Erro ao deletar escala";
           return msg;
-        }
-      }).then(() => {
-        fetchGlobalSchedule();
+        },
       })
-  }
+      .then(() => fetchGlobalSchedule()); // 🔄 agora retorna a Promise corretamente
+  };
 
-  const handleGenerateSchedule = async(schedule) => {
-
-    toast.promise(
-      generateAndCreateSchedule(schedule),
-      {
+  const handleGenerateSchedule = async (schedule) => {
+    try {
+      await toast.promise(generateAndCreateSchedule(schedule), {
         loading: "Gerando escala...",
         success: "Escala criada com sucesso",
-        error: "Erro ao criar escala"
-      }.then(() => {
-        fetchGlobalSchedule()
-      })
-    )
-  }
+        error: "Erro ao criar escala",
+      });
+
+      // Atualiza o contexto **depois que a escala for criada**
+      await fetchGlobalSchedule();
+    } catch (error) {
+      console.error("Erro ao gerar escala:", error);
+    }
+  };
+
+  const handleGetScheduleById = async (id) => {
+    try {
+      const response = await getScheduleById(id);
+      setScheduleUserById(response);
+      fetchGlobalSchedule();
+    } catch (error) {
+      console.log("Erro ao buscar status");
+    }
+  };
 
   useEffect(() => {
     fetchGlobalSchedule();
     fetchStatusUserSchedule();
   }, []);
 
-  return { 
-    allSchedule, 
-    allStatus, 
-    updateSchedule, 
-    isLoading, 
-    fetchGlobalSchedule, 
+  return {
+    allSchedule,
+    allStatus,
+    updateSchedule,
+    isLoading,
+    fetchGlobalSchedule,
     handleDeleteSchedule,
-    handleGenerateSchedule
+    handleGenerateSchedule,
+    handleGetScheduleById,
   };
 }

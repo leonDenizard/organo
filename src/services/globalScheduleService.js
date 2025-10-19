@@ -83,3 +83,23 @@ export async function generateAndCreateSchedule(schedule) {
         throw error; // propaga o erro pro hook/tratamento com toast
     }
 }
+
+export async function getScheduleById(id){
+
+    try {
+        const response = await fetch(`${API_URL}/global-schedule/${id}`, {
+            method: "GET",
+            headers: { "Content-type": "application/json" },
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao criar escala: ${response.statusText}`);
+        }
+
+        const result = await response.json()
+        return result.data
+    } catch (error) {
+        console.error("Erro em getScheduleById:", error);
+        throw error;
+    }
+}

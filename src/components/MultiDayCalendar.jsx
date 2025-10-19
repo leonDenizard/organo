@@ -66,22 +66,22 @@ export default function MultiDayCalendar({ onChange, schedule, userId, initialDa
   const days = getDaysInMonth(currentDate);
 
   useEffect(() => {
-    if (!initialDate) return;
+  if (!initialDate) return;
 
-    const dayString = initialDate;
-    setSelectedDays([dayString]); // deixa esse dia azul
+  const dayString = initialDate;
+  setSelectedDays([dayString]);
 
-    if (initialShiftId?._id) {
-    setSelectedShifts((prev) => {
-      // evita duplicar o id se já estiver no array
-      if (!prev.includes(initialShiftId._id)) {
-        return [...prev, initialShiftId._id];
-      }
-      return prev;
-    })
+  if (initialShiftId?._id) {
+    setSelectedShifts([initialShiftId._id]); // inicializa o shift
   }
+}, [initialDate, initialShiftId]);
 
-  }, [initialDate, initialShiftId]);
+// 🔹 Aqui garantimos que o pai seja notificado sempre que selectedShifts mudar
+useEffect(() => {
+  if (selectedShifts.length > 0) {
+    onChange && onChange(selectedShifts);
+  }
+}, [selectedShifts, onChange]);
 
   return (
     <div className="p-4 bg-card-bg text-white rounded-xl shadow-xl w-full">

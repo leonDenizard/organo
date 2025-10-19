@@ -12,30 +12,32 @@ import AuthRedirectHandler from "./components/AuthRedirectHandler";
 import AdminOrFirstUserRoute from "./components/AdminOrFirstUserRoute";
 import { Toaster } from "react-hot-toast";
 import GlobalSchedule from "./components/GlobalSchedule";
+import { GlobalScheduleProvider } from "./context/GlobalScheduleProvider";
 
 function App() {
   return (
     <Router>
+      <Toaster />
 
-    <Toaster/>
-
-      <Routes>
-        <Route path={"/"} element={<Signin />} />
-        <Route element={<ProtectedRoute />}>
-          <Route path="/register" element={<AuthRedirectHandler />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/global-schedule" element={<GlobalSchedule />} />
-          <Route path="/user/:id" element={<UserDetail />} />
-          <Route element={<AdminOrFirstUserRoute />}>
-            <Route path="/parameterization" element={<Parameterization />} />
+      <GlobalScheduleProvider>
+        <Routes>
+          <Route path={"/"} element={<Signin />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/register" element={<AuthRedirectHandler />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/global-schedule" element={<GlobalSchedule />} />
+            <Route path="/user/:id" element={<UserDetail />} />
+            <Route element={<AdminOrFirstUserRoute />}>
+              <Route path="/parameterization" element={<Parameterization />} />
+            </Route>
           </Route>
-        </Route>
 
-        <Route element={<AdminRoute />}>
-          <Route path="/admin" element={<Parameterization />} />
-        </Route>
-      </Routes>
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<Parameterization />} />
+          </Route>
+        </Routes>
+      </GlobalScheduleProvider>
     </Router>
   );
 }

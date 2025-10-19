@@ -8,6 +8,7 @@ import Loader from "../components/Loader";
 import PopUpChangeSchedule from "./PopUpChangeSchedule";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
 import { useAuth } from "../context/AuthProvider";
+import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
 
 export default function GlobalSchedule({ showButtonSend = true }) {
   const [dateHeader, setDateHeader] = useState("");
@@ -24,27 +25,34 @@ export default function GlobalSchedule({ showButtonSend = true }) {
 
   const { allUsers, workShifts } = useParameterization();
   const { allSchedule, allStatus, isLoading, fetchGlobalSchedule } =
-    useGlobalSchedule();
+    useGlobalScheduleContext();
 
   const { isAdmin } = useAuth();
   useEffect(() => {
-    if (!allSchedule || allSchedule.length === 0) return;
+  if (!allSchedule || allSchedule.length === 0) {
+    setSchedule([]); // limpa a tela
+    setDateHeader(""); // limpa o header
+    return;
+  }
 
-    // Ordena pelo campo date
-    const sortedSchedule = allSchedule.sort((a, b) => {
-      const [dayA, monthA, yearA] = a.date.split("-").map(Number);
-      const [dayB, monthB, yearB] = b.date.split("-").map(Number);
-      return (
-        new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB)
-      );
-    });
+  // Ordena pelo campo date
+  const sortedSchedule = [...allSchedule].sort((a, b) => {
+    const [dayA, monthA, yearA] = a.date.split("-").map(Number);
+    const [dayB, monthB, yearB] = b.date.split("-").map(Number);
+    return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+  });
 
-    setSchedule(sortedSchedule);
+  setSchedule(sortedSchedule);
 
-    // Atualiza o header
+  // Atualiza o header apenas se houver elementos
+  if (sortedSchedule.length > 0 && sortedSchedule[0].date) {
     const [day, month, year] = sortedSchedule[0].date.split("-");
     setDateHeader(`${month}/${year}`);
-  }, [allSchedule]);
+  } else {
+    setDateHeader(""); // caso contrário, limpa
+  }
+}, [allSchedule]);
+
 
   if (isLoading) return <Loader />;
 

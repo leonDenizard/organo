@@ -34,9 +34,9 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
           Selecione os usuários que deseja visualizar.
         </p>
         <div className="relative w-full h-[300px] 2xl:h-[500px] grid grid-cols-1 sm:grid-cols-2 items-center justify-center lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 2xl:w-[80%] gap-1 overflow-y-auto scrollbar mb-8 py-4 px-5">
-          {allUsers?.map((user) => (
+          {allUsers?.map((user, index) => (
             <Checkbox
-              key={user.id}
+              key={`${user.id}-${index}`}
               id={user.id}
               title={user.name}
               isChecked={selectedUsers.includes(user.id)}
@@ -55,7 +55,7 @@ export default function PopUpMenuUser({ closeModal, onFilter, allUsers }) {
           Filtrar
         </button>
         <button
-          className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%]"
+          className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%] hover:bg-white/10 transition-all"
           onClick={() => {
             setSelectedUsers([]);
             onFilter([]);

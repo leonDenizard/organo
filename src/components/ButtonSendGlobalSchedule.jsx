@@ -5,13 +5,14 @@ import { CirclePlus, Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
 import useGlobalSchedule from "../hooks/useGlobalSchedule";
 import PopUpSendGlobalSchedule from "./PopUpSendGlobalSchedule";
+import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
 
 export default function ButtonsSendGlobalSchedule({ allUsers, closeModal }) {
   const [file, setFile] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
-  const { handleDeleteSchedule } = useGlobalSchedule();
+  const { handleDeleteSchedule } = useGlobalScheduleContext();
 
   const handleScheduleJson = (e) => {
     const selectedFile = e.target.files[0];
@@ -106,7 +107,7 @@ export default function ButtonsSendGlobalSchedule({ allUsers, closeModal }) {
       {isDeleteModalOpen && (
         <ConfirmDeleteModal
           onConfirm={async () => {
-            handleDeleteSchedule();
+            await handleDeleteSchedule();
             setIsDeleteModalOpen(false);
             closeModal && closeModal(); // fecha o modal pai, se houver
           }}

@@ -28,7 +28,7 @@ export default function CheckBox({
 
         {img && (
           <img
-            className="w-10 rounded-full border border-border-color"
+            className="w-10 h-10 object-cover rounded-full border border-border-color"
             src={img}
             alt=""
           />
