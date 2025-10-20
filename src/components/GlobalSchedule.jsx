@@ -87,7 +87,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     { id: "6cols", name: "Escala 6 colunas" },
     { id: "7cols", name: "Escala 7 colunas" },
     { id: "horizontal", name: "Escala Horizontal" },
-    { id: "compacta", name: "Escala Compacta" }, // 👈 Novo layout
+    { id: "compacta", name: "Escala Compacta" },
   ];
 
   const layoutClasses = {
@@ -172,14 +172,14 @@ export default function GlobalSchedule({ showButtonSend = true }) {
 
                     return (
                       <div
-                        key={shift._id}
+                        key={shift?._id}
                         className={`border cursor-pointer border-border-color group hover:brightness-125 transition relative hover:z-10 ${
                           isCompact ? "h-[45px]" : "h-[65px]"
                         }`}
-                        style={{ backgroundColor: shift.status.color }}
-                        onClick={() => openModalChangeSchedule(d, shift._id)}
+                        style={{ backgroundColor: shift?.status?.color }}
+                        onClick={() => openModalChangeSchedule(d, shift?._id)}
                       >
-                        {shift.status.code !== 2 && (
+                        {shift?.status?.code !== 2 && (
                           <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
                             <div className="flex gap-2 justify-center items-center">
                               <p
@@ -201,7 +201,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                                 <div
                                   className="text-sm mb-[1px] px-2 rounded relative opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300"
                                   style={{
-                                    backgroundColor: shift.status.color,
+                                    backgroundColor: shift.status?.color,
                                   }}
                                 >
                                   <p className="text-xs text-gray-400">
