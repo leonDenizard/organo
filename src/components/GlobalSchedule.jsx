@@ -15,6 +15,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
   const [schedule, setSchedule] = useState([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isOpenModalUser, setIsOpenModalUser] = useState(false);
+  const [isOpenModalDeleteUser, setIsOpenModalDeleteUser] = useState(false);
   const [isOpenModalChangeSchedule, setIsOpenModalChangeSchedule] =
     useState(false);
   const [layout, setLayout] = useState("7cols");
@@ -29,30 +30,31 @@ export default function GlobalSchedule({ showButtonSend = true }) {
 
   const { isAdmin } = useAuth();
   useEffect(() => {
-  if (!allSchedule || allSchedule.length === 0) {
-    setSchedule([]); // limpa a tela
-    setDateHeader(""); // limpa o header
-    return;
-  }
+    if (!allSchedule || allSchedule.length === 0) {
+      setSchedule([]); // limpa a tela
+      setDateHeader(""); // limpa o header
+      return;
+    }
 
-  // Ordena pelo campo date
-  const sortedSchedule = [...allSchedule].sort((a, b) => {
-    const [dayA, monthA, yearA] = a.date.split("-").map(Number);
-    const [dayB, monthB, yearB] = b.date.split("-").map(Number);
-    return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
-  });
+    // Ordena pelo campo date
+    const sortedSchedule = [...allSchedule].sort((a, b) => {
+      const [dayA, monthA, yearA] = a.date.split("-").map(Number);
+      const [dayB, monthB, yearB] = b.date.split("-").map(Number);
+      return (
+        new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB)
+      );
+    });
 
-  setSchedule(sortedSchedule);
+    setSchedule(sortedSchedule);
 
-  // Atualiza o header apenas se houver elementos
-  if (sortedSchedule.length > 0 && sortedSchedule[0].date) {
-    const [day, month, year] = sortedSchedule[0].date.split("-");
-    setDateHeader(`${month}/${year}`);
-  } else {
-    setDateHeader(""); // caso contrário, limpa
-  }
-}, [allSchedule]);
-
+    // Atualiza o header apenas se houver elementos
+    if (sortedSchedule.length > 0 && sortedSchedule[0].date) {
+      const [day, month, year] = sortedSchedule[0].date.split("-");
+      setDateHeader(`${month}/${year}`);
+    } else {
+      setDateHeader(""); // caso contrário, limpa
+    }
+  }, [allSchedule]);
 
   if (isLoading) return <Loader />;
 
@@ -65,10 +67,10 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     setModalType(null);
     setIsOpenModalUser(false);
     setIsOpenModalChangeSchedule(false);
+    setIsOpenModalDeleteUser(false);
   };
 
   const openModalChangeSchedule = (idDay, shiftId) => {
-    console.log(shiftId)
     setIsOpenModalChangeSchedule(true);
     setSelectedDay(idDay.date);
     const shift = idDay.shifts.find((u) => u._id === shiftId);
@@ -94,14 +96,14 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     "5cols": "grid grid-cols-5 overflow-x-visible justify-center",
     "6cols": "grid grid-cols-6 overflow-x-visible",
     "7cols": "grid grid-cols-7 overflow-x-visible",
-    horizontal: "flex flex-row", // antigo horizontal restaurado
-    compacta: "flex flex-row", // novo layout enxuto
+    horizontal: "flex flex-row",
+    compacta: "flex flex-row",
   };
 
   const handleSelect = (selected) => {
     if (modalType === "layout") setLayout(selected);
     if (modalType === "user") console.log("Filtro por usuário:", selected);
-    if (modalType === "date") console.log("Filtro por data:", selected);
+    if (modalType === "delete-user") console.log("Filtro por data:", selected);
     closeModal();
   };
 
@@ -113,6 +115,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
         <GlobalScheduleMenu
           onOpenLayout={() => openModal("layout")}
           onOpenModalUser={() => setIsOpenModalUser(true)}
+          onOpenModalDeleteUser={() => setIsOpenModalDeleteUser(true)}
         />
         <div>Trabalhando (X)</div>
         <div>Folgando (X)</div>
@@ -238,6 +241,21 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           allUsers={allUsers}
           closeModal={closeModal}
           onFilter={(users) => setFilteredUsers(users)}
+          textBtn={"Filtrar"}
+          textHeader={"Selecione os usuários que deseja filtrar"}
+        />
+      )}
+      {isOpenModalDeleteUser && (
+        <PopUpMenuUser
+          allUsers={allUsers}
+          closeModal={closeModal}
+          onFilter={(users) => setFilteredUsers(users)}
+          textBtn={"Deletar escala"}
+          textHeader={"Selecione o usuário que deseja remover da escala"}
+          color={"#FA6262"}
+          onDelete={() => {
+            fetchGlobalSchedule()
+          }}
         />
       )}
       {isOpenModalChangeSchedule && isAdmin && (

@@ -6,6 +6,7 @@ import {
   deleteSchedule,
   generateAndCreateSchedule,
   getScheduleById,
+  deleteScheduleById
 } from "../services/globalScheduleService";
 import toast from "react-hot-toast";
 
@@ -71,7 +72,23 @@ export default function useGlobalSchedule() {
           return msg;
         },
       })
-      .then(() => fetchGlobalSchedule()); // 🔄 agora retorna a Promise corretamente
+      .then(() => fetchGlobalSchedule());
+  };
+
+  const handleDeleteScheduleById = async (ids) => {
+    return toast
+      .promise(deleteScheduleById(ids), {
+        loading: "Deletando usuário(s) da escala...",
+        success: "Usuários deletados com sucesso",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar escala";
+          return msg;
+        },
+      })
+      .then(() => fetchGlobalSchedule());
   };
 
   const handleGenerateSchedule = async (schedule) => {
@@ -113,5 +130,6 @@ export default function useGlobalSchedule() {
     handleDeleteSchedule,
     handleGenerateSchedule,
     handleGetScheduleById,
+    handleDeleteScheduleById,
   };
 }

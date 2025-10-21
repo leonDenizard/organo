@@ -103,3 +103,24 @@ export async function getScheduleById(id){
         throw error;
     }
 }
+
+export async function deleteScheduleById(ids){
+    try {
+        const response = await fetch(`${API_URL}/global-schedule/ids`, {
+            method: "DELETE",
+            headers: {"Content-type": "application/json"},
+            body: JSON.stringify({ids:ids})
+        })
+
+        if (!response.ok) {
+            throw new Error(`Erro ao criar escala: ${response.statusText}`);
+        }
+
+        const result = await response.json()
+        return result.data
+
+    } catch (error) {
+        console.error("Erro em deleteScheduleById:", error);
+        throw error;
+    }
+}
