@@ -9,7 +9,7 @@ import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
 
 export default function PopUpMenuUser({ closeModal, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
 
   const { workShifts } = useParameterization();
   const { allStatus, handleGenerateSchedule, fetchGlobalSchedule } =
@@ -52,6 +52,7 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
 
   useEffect(() => {
     document.body.classList.add("overflow-hidden");
+    //console.log("Mes selecionado no pai",selectedMonth)
     return () => document.body.classList.remove("overflow-hidden");
   }, []);
 
@@ -68,7 +69,7 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
       />
 
       <div className="relative overflow-y-scroll scrollbar mb-6">
-        <p className="text-gray-400 mb-3 text-3xl">Cadastro da escala</p>
+        <p className="text-gray-200 mb-3 text-3xl">Cadastro da escala</p>
         <h1 className="text-gray-400 mb-14 text-md">
           Selecione os usuários que deseja gerar a escala <br />
           (Obs: A escala é gerado completa para o mês sendo necessários realizar
@@ -107,7 +108,7 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
               );
             })}
           </div>
-          <div className="grid grid-cols-1 scrollbar">
+          <div className="fixed ml-[450px] grid grid-cols-1 scrollbar">
             <h1>Selecione o mês da escala</h1>
             <MonthSelector onChange={(month) => setSelectedMonth(month)} />
           </div>

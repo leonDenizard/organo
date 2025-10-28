@@ -9,7 +9,7 @@ export default function MonthSelector({ onChange }) {
   ];
 
   const currentMonthIndex = new Date().getMonth();
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+  const [selectedMonth, setSelectedMonth] = useState(currentMonthIndex);
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -21,10 +21,8 @@ export default function MonthSelector({ onChange }) {
     onChange?.(index + 1);
   };
 
-  useEffect(() => {
-    onChange?.(currentMonthIndex + 1)
-  }, [currentMonthIndex, onChange])
-
+  // console.log(new Date().getMonth())
+  // console.log(currentMonthIndex)
   // Fechar dropdown clicando fora
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -37,7 +35,7 @@ export default function MonthSelector({ onChange }) {
   }, []);
 
   return (
-    <div className="relative w-72" ref={dropdownRef}>
+    <div className=" w-72" ref={dropdownRef}>
       <button
         onClick={toggleOpen}
         className="w-full p-2 flex justify-between items-center rounded bg-card-bg text-white hover:bg-black/45"

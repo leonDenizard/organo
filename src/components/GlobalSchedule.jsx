@@ -128,7 +128,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
             <div className="text-center" key={d._id}>
               {/* Cabeçalho */}
               <div
-                className={`sticky top-0 z-10 backdrop-blur-xl border border-border-color flex flex-col gap-2 p-3 ${
+                className={`sticky top-0 z-10 backdrop-blur-xl border border-border-color flex flex-col gap-2 p-1 ${
                   layout === "compacta" ? "w-[60px] py-2" : ""
                 }`}
               >
