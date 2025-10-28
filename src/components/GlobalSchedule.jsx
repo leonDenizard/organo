@@ -3,6 +3,7 @@ import PopUpMenu from "./PopUpMenu";
 import ButtonSendGlobalSchedule from "./ButtonSendGlobalSchedule";
 import GlobalScheduleMenu from "./GlobalScheduleMenu";
 import PopUpMenuUser from "./PopUpMenuUser";
+import Breadcrumb from "./Breadcrumb";
 import useParameterization from "../hooks/useParameterization";
 import Loader from "../components/Loader";
 import PopUpChangeSchedule from "./PopUpChangeSchedule";
@@ -109,6 +110,9 @@ export default function GlobalSchedule({ showButtonSend = true }) {
 
   return (
     <div className="p-12">
+      <div className="relative -top-12">
+        <Breadcrumb />
+      </div>
       <h1 className="text-6xl font-bold mb-11">{dateHeader}</h1>
 
       <menu className="flex justify-between mb-5">
@@ -137,7 +141,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                     className={
                       layout === "compacta"
                         ? "text-sm font-semibold"
-                        : "text-3xl font-bold text-white px-3 tracking-widest rounded-md shadow-lg"
+                        : "text-xs md:text-2xl font-bold text-white px-3 tracking-widest rounded-md shadow-lg"
                     }
                   >
                     {`${day}/${month}`}
@@ -148,7 +152,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                     className={
                       layout === "compacta"
                         ? "text-xs bg-black/50 rounded-xl py-[1px] truncate w-[60px] px-[2px] font-thin"
-                        : "bg-card-bg tracking-widest px-8 py-1 uppercase rounded-full shadow-lg"
+                        : "bg-card-bg tracking-widest text-xs md:px-4 md:py-1 uppercase rounded-full shadow-lg truncate w-[50px] md:w-[100px]"
                     }
                   >
                     {d.dayOfWeek}
@@ -254,7 +258,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           textHeader={"Selecione o usuário que deseja remover da escala"}
           color={"#FA6262"}
           onDelete={() => {
-            fetchGlobalSchedule()
+            fetchGlobalSchedule();
           }}
         />
       )}
