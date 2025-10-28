@@ -258,6 +258,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           }}
         />
       )}
+
       {isOpenModalChangeSchedule && isAdmin && (
         <PopUpChangeSchedule
           closeModal={closeModal}

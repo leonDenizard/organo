@@ -57,8 +57,18 @@ export default function PopUpChangeSchedule({
 
   //console.log("shift", selectUserId)
 
+  useEffect(() => {
+    // Bloqueia scroll do body
+    document.body.style.overflow = "hidden";
+
+    // Ao desmontar o componente, restaura
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className="fixed 2xl:w-2/3 m-auto 2xl:h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
+    <div className="fixed inset-0 scrollbar z-10 h-screen bg-modal-color backdrop-blur-3xl overflow-auto flex flex-col items-center lg:justify-center p-4">
       <X
       onClick={closeModal}
       
@@ -70,8 +80,8 @@ export default function PopUpChangeSchedule({
              flex items-center justify-center"
       />
 
-      <div className=" 2xl:w-[80%] w-[60%] mb-8">
-        <p className="text-5xl 2xl:mb-16 mb-8 font-semibold">{formatDate(date)}</p>
+      <div className="w-[80%] 2xl:w-[60%] mb-2">
+        <p className="text-5xl 2xl:mb-16 mb-4 font-semibold">{formatDate(date)}</p>
         <div className="flex items-center gap-5">
           <img
             className="rounded-full h-20 w-20"
@@ -89,7 +99,7 @@ export default function PopUpChangeSchedule({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 2xl:w-[80%] w-[60%]">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-[80%] 2xl:w-[60%]">
         <div className="">
           <p className="text-2xl text-gray-200 mb-3">Mudar horario</p>
           {workShifts?.map((ws) => (
@@ -116,7 +126,8 @@ export default function PopUpChangeSchedule({
           ))}
         </div>
 
-        <div>
+        <div className="md:col-span-2 lg:col-span-1">
+
           <p className="text-2xl text-gray-200 mb-3 text-center">Alterar em mais dias</p>
           <MultiDayCalendar 
             schedule={schedule} 
