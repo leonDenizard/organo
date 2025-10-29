@@ -42,7 +42,6 @@ export default function PopUpChangeSchedule({
 
   const submitUpdateSchedule = async (shiftId, statusId, timeId) => {
     try {
-      console.log("Parametrso",shiftId, statusId, timeId)
       await updateSchedule(shiftId, statusId, timeId);
 
       if (fetchGlobalSchedule) {
@@ -119,7 +118,7 @@ export default function PopUpChangeSchedule({
             <CheckBox
               key={st._id}
               id={st._id}
-              title={st.description}
+              title={st.name}
               isChecked={selectStatus === st._id}
               onChange={() => handleChangeStatus(st._id)}
             />

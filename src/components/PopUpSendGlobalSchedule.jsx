@@ -21,7 +21,7 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
     );
   };
 
-  const workingStatus = allStatus?.find((st) => st.name === "working");
+  const workingStatus = allStatus[0]
 
   const selectedShifts = selectedUsers.map((userId) => {
     const user = allUsers.find((u) => u.id === userId);

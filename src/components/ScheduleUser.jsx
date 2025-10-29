@@ -46,7 +46,7 @@ export default function ScheduleUser({ id }) {
 
       const shift = item.shifts?.[0]; // pega o primeiro turno (se houver)
       const color = shift?.status?.color || null;
-      const statusName = shift?.status?.description || "";
+      const statusName = shift?.status?.name || "";
       const startTime = shift?.time?.startTime || "";
       const endTime = shift?.time?.endTime || "";
 
@@ -80,7 +80,7 @@ export default function ScheduleUser({ id }) {
     new Map(
       scheduleUser
         .flatMap((item) => item.shifts)
-        .map((shift) => [shift.status.description, shift.status.color])
+        .map((shift) => [shift.status.name, shift.status.color])
     )
   );
 
@@ -88,7 +88,7 @@ export default function ScheduleUser({ id }) {
     <div className="relative top-20 m-auto w-[calc(90%+1.5rem)]">
       {scheduleUser.length > 0 && (
         <div className="p-4">
-          <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-20">
+          <h2 className="text-3xl md:text-4xl lg:text-6xl font-bold mb-16">
             {monthFormatted}
           </h2>
 
@@ -123,14 +123,14 @@ export default function ScheduleUser({ id }) {
                 >
                   {cell && (
                     <>
-                      <div className="font-bold md:text-xl 2xl:text-2xl">
+                      <div className="font-bold md:text-xl xl:text-2xl">
                         {cell.day}
                       </div>
                       {cell.startTime && cell.endTime && (
                         <div
                           className="text-xs md:absolute md:bottom-1 md:left-1/2 md:-translate-x-1/2
                         md:opacity-0 md:scale-95 md:group-hover:opacity-100 md:group-hover:scale-100
-                        md:transition-all md:duration-300 text-white/60 2xl:text-sm"
+                        md:transition-all md:duration-300 text-white/60 2xl:text-sm md:bg-border-color w-[60%] rounded"
                         >
                           {cell.startTime} : {cell.endTime}
                         </div>
