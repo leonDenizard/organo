@@ -255,3 +255,68 @@ export async function deleteUserById(id){
     console.log("Erro ao deletar usuário", id, error)
   }
 }
+
+export async function createStatus(name, color){
+
+  try {
+    const response = await fetch(`${API_URL}/status`, {
+      method: "POST",
+      headers: {"Content-type" : "application/json"},
+      body: JSON.stringify({
+        name,
+        color
+      })
+    })
+
+    const result = await response.json()
+
+    return result.data
+
+  } catch (error) {
+    console.log("Erro ao criar status", error)
+  }
+}
+
+export async function getAllStatus(){
+  try {
+    const response = await fetch(`${API_URL}/status`, {
+      method: "GET",
+      headers: {"Content-type": "application/json"}
+    })
+
+    const result = await response.json();
+    return result.data
+  } catch (error) {
+    console.error("Erro ao buscar usuários", error)
+  }
+}
+
+export async function getStatusById(id){
+  try {
+    const response = await fetch(`${API_URL}/status/${id}`, {
+      method: "GET",
+      headers: {"Content-type": "application/json"}
+    })
+
+    const result = await response.json();
+    return result.data
+  } catch (error) {
+    console.error("Erro ao buscar usuários", error)
+  }
+}
+
+export async function deleteStatusById(id){
+  try{
+    
+    const response = await fetch(`${API_URL}/status/${id}`, {
+      method: "DELETE",
+      headers: {"Content-type" : "application/json"},
+    })
+
+    const result = await response.json()
+    return result.data
+    
+  } catch (error) {
+    console.log("Erro ao deletar usuário", id, error)
+  }
+}

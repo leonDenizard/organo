@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import {
   createPosition,
   createSquad,
+  createStatus,
   createSupervisor,
   createWorkShift,
   deletePositionById,
   deleteSquadById,
+  deleteStatusById,
   deleteSuperById,
   deleteUserAdminById,
   deleteWorkShiftById,
   getAllPosition,
   getAllSquad,
+  getAllStatus,
   getAllSuper,
   getAllUsers,
   getAllWorkShift,
@@ -36,6 +39,11 @@ export default function useParameterization() {
   const [selectedUserUid, setSelectedUserUid] = useState("");
   const [userAdmin, setUsersAdmin] = useState("");
 
+  const [status, setStatus] = useState("")
+  const [allStatus, setAllStatus] = useState([])
+  const [selectedColor, setSelectedColor] = useState("");
+  const colorStatus = ["#2b3f54", "#3c726a", "#553737", "#4a4f34", "#2f522f", "#463c56", "#6a7046", "#779396", "#504364", "#3c5a72"]
+
   //Handler submit
 
   const [positionsOptimistic, setPositionsOptimistic] = useState([]);
@@ -43,13 +51,15 @@ export default function useParameterization() {
   const [superOptimistic, setSuperOptimistic] = useState([]);
   const [workOptimistic, setWorkOptimistic] = useState([]);
   const [userOptimistic, setUserOptimistic] = useState([]);
+  const [statusOptimistic, setStatusOptimistic] = useState([]);
 
   useEffect(() => {
     setPositionsOptimistic(allPositions);
     setSquadsOptimistic(allSquads);
     setSuperOptimistic(allSuper);
     setWorkOptimistic(workShifts);
-  }, [allPositions, allSquads, allSuper, workShifts]);
+    setStatusOptimistic(allStatus)
+  }, [allPositions, allSquads, allSuper, workShifts, allStatus]);
 
   const handleSubmitPosition = async () => {
     if (!position.trim()) return;
@@ -340,12 +350,68 @@ export default function useParameterization() {
       });
   };
 
+  const handleSubmitStatus = async () => {
+    if (!status.trim() || !selectedColor) return;
+    if (
+      allStatus?.some(
+        (pos) => pos.name.toLowerCase() === status.toLowerCase()
+      )
+    ) {
+      toast.error("Status já existe");
+      setStatus("");
+      return;
+    }
+
+    const newStatus = { name: status, color: selectedColor };
+
+    // Adiciona OTIMISTA
+    setStatusOptimistic((old) => [...old, newStatus]);
+    setStatus("");
+
+    try {
+      await createStatus(status, selectedColor);
+      toast.success("Status cadastrado com sucesso");
+      fetchStatus();
+    } catch (err) {
+      // Remove o item otimista que falhou
+      setPositionsOptimistic((old) =>
+        old.filter((pos) => pos._id !== newStatus._id)
+      );
+
+      toast.error(err.message || "Erro ao salvar Status");
+    }
+  };
+
+  const handleDeleteStatusById = async (id) => {
+    toast
+      .promise(deleteStatusById(id), {
+        loading: "Deletando Status...",
+        success: "Status deletado com sucesso",
+        error: (err) => {
+          const msg =
+            err?.response?.data?.message ||
+            err?.message ||
+            "Erro ao deletar status";
+          return msg;
+        },
+      })
+      .then(() => {
+        fetchStatus();
+      });
+  };
+
+  const fetchStatus = async () => {
+    const data = await getAllStatus();
+    setAllStatus (data);
+  };
+
   useEffect(() => {
     fetchPosition();
     fetchSquad();
     fetchSuper();
     fetchWorkShift();
     fetchAllUsers();
+    fetchStatus();
   }, []);
 
   return {
@@ -386,5 +452,14 @@ export default function useParameterization() {
     handlePromoteToAdmin,
     handleRemoveAdmin,
     userAdmin,
+
+    status,
+    statusOptimistic,
+    handleSubmitStatus,
+    colorStatus,
+    setStatus,
+    setSelectedColor,
+    selectedColor,
+    handleDeleteStatusById
   };
 }
