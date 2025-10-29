@@ -14,7 +14,7 @@ export default function useGlobalSchedule() {
   const [isLoading, setIsLoading] = useState(true);
   const [allSchedule, setAllSchedule] = useState();
   const [allStatus, setAllStatus] = useState();
-  const [scheduleUserById, setScheduleUserById] = useState();
+  const [scheduleUserById, setScheduleUserById] = useState([]);
 
   const fetchGlobalSchedule = async () => {
     try {
@@ -108,11 +108,16 @@ export default function useGlobalSchedule() {
 
   const handleGetScheduleById = async (id) => {
     try {
+
+      setIsLoading(true)
+      setScheduleUserById([])
       const response = await getScheduleById(id);
       setScheduleUserById(response);
       fetchGlobalSchedule();
     } catch (error) {
-      console.log("Erro ao buscar status");
+      console.log("Erro ao buscar escala do usuário");
+    }finally{
+      setIsLoading(false)
     }
   };
 
@@ -124,6 +129,7 @@ export default function useGlobalSchedule() {
   return {
     allSchedule,
     allStatus,
+    scheduleUserById,
     updateSchedule,
     isLoading,
     fetchGlobalSchedule,
