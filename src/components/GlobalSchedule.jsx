@@ -212,7 +212,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                                   }}
                                 >
                                   <p className="text-xs text-gray-400">
-                                    {shift.status?.description}
+                                    {shift.status?.name}
                                   </p>
                                 </div>
 

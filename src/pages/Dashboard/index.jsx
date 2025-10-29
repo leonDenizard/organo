@@ -263,7 +263,7 @@ export default function Dashboard() {
                 name={nameCardFormatted(user.name)}
                 surname={user.surname}
                 role={
-                  allPositions.find((position) => position._id === user.role)
+                  allPositions?.find((position) => position._id === user.role)
                     ?.name || "Sem cargo"
                 }
                 iconSlack={<Slack />}
@@ -274,14 +274,14 @@ export default function Dashboard() {
                 mail={user.email}
                 iconHour={<Clock />}
                 hour={(() => {
-                  const shift = workShifts.find((ws) => ws._id === user.time);
+                  const shift = workShifts?.find((ws) => ws._id === user.time);
                   return shift
                     ? `${shift.startTime} - ${shift.endTime}`
                     : "Horário não definido";
                 })()}
                 iconSuper={<Check />}
                 manager={
-                  allSuper.find((sup) => sup._id === user.manager)?.name ||
+                  allSuper?.find((sup) => sup._id === user.manager)?.name ||
                   "Sem Super"
                 }
                 iconInterval={<Coffe />}
