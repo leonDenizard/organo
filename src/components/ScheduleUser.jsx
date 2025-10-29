@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
+import { ScheduleSkeleton } from "./skeleton/ScheduleSkeleton";
 
 export default function ScheduleUser({ id }) {
-  const { handleGetScheduleById, scheduleUserById } =
+  const { handleGetScheduleById, scheduleUserById, isLoading } =
     useGlobalScheduleContext();
   const [scheduleUser, setScheduleUser] = useState([]);
   const dayInWeek = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
@@ -28,6 +29,10 @@ export default function ScheduleUser({ id }) {
     const month = scheduleUser?.[0]?.date?.slice(3, 11);
     return month ? month.replace("-", "/") : "";
   }, [scheduleUser]);
+
+  if(isLoading){
+    return <ScheduleSkeleton/>
+  }
 
   // Gera a matriz do mês, agora com status e horários
   function generateMonthMatrix(scheduleUser, dayInWeek) {
@@ -92,7 +97,7 @@ export default function ScheduleUser({ id }) {
             {dayInWeek.map((day) => (
               <div
                 key={day}
-                className=" text-xs font-bold md:text-xl text-center mb-7"
+                className=" text-sm font-bold md:text-xl text-center mb-7"
               >
                 {day}
               </div>
@@ -127,7 +132,7 @@ export default function ScheduleUser({ id }) {
                         md:opacity-0 md:scale-95 md:group-hover:opacity-100 md:group-hover:scale-100
                         md:transition-all md:duration-300 text-white/60 2xl:text-sm"
                         >
-                          {cell.startTime} - {cell.endTime}
+                          {cell.startTime} : {cell.endTime}
                         </div>
                       )}
                     </>
@@ -138,8 +143,8 @@ export default function ScheduleUser({ id }) {
           ))}
 
           {/* Legenda */}
-          <div className="relative mt-16 m-auto  flex flex-col gap-6 mb-5 p-6 rounded-md shadow-xl  border-border-color">
-            <div className="flex gap-3 flex-col md:flex-row  flex-wrap md:justify-around lg:justify-between">
+          <div className="relative mt-16 m-auto  flex flex-col gap-6 mb-5 py-4 px-6 shadow-xl">
+            <div className="flex gap-3 md:items-center flex-col md:flex-row  flex-wrap md:justify-start lg:justify-between ">
               <h3 className=" w-full md:w-auto text-lg font-semibold">Legenda</h3>
               {uniqueLegends.map(([name, color], idx) => (
                 <div
@@ -147,10 +152,10 @@ export default function ScheduleUser({ id }) {
                   className="flex items-center gap-2 px-2 py-1 rounded mt-4 md:mt-0"
                 >
                   <div
-                    className="w-8 h-8 rounded"
+                    className="w-8 h-8 2xl:w-10 2xl:h-10 rounded shadow-md border border-white/5"
                     style={{ backgroundColor: color }}
                   />
-                  <span>{name}</span>
+                  <span className="tracking-wider text-white/90">{name}</span>
                 </div>
               ))}
             </div>

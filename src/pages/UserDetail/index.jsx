@@ -7,6 +7,7 @@ import { useAuth } from "../../context/AuthProvider";
 import useParameterization from "../../hooks/useParameterization";
 import Breadcrumb from "../../components/Breadcrumb";
 import { AlarmClock, Coffee, MailIcon, Rocket, Slack, UserCheck } from "lucide-react";
+import ScheduleUser from "../../components/ScheduleUser";
 
 export default function UserDetail() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -36,6 +37,7 @@ export default function UserDetail() {
     fetchUserData();
   }, [id]);
 
+  
   if (isLoading) return <Loader />;
 
   const role =
@@ -55,15 +57,16 @@ export default function UserDetail() {
     <div className="container w-[90%] m-auto">
       <Header name={backendUser.data?.name} img={backendUser.data?.photoUrl} />
       <Breadcrumb />
-      <Schedule
+      {/* <Schedule
         showHeader={false}
         onClick={onclick}
         userId={id}
         showBreadcrumbs={false}
         showButtonSend={false}
-      />
+      /> */}
 
-      <section className="relative top-40 m-auto w-[90%] flex flex-col gap-6 mb-5 p-6 rounded-md shadow-md bg-card-bg border-2 border-border-color">
+      <ScheduleUser id={id}/>
+      <section className="relative top-40 m-auto w-[90%] flex flex-col gap-6 mb-14 p-6 rounded-md shadow-md bg-card-bg border-2 border-border-color">
 
         {/* Perfil */}
         <div className="flex items-center gap-4">

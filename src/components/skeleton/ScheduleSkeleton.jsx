@@ -2,7 +2,7 @@ import { Skeleton } from "../ui/skeleton";
 
 export function ScheduleSkeleton() {
   return (
-    <div className="relative flex flex-col gap-6 w-[80%] m-auto top-5 overflow-hidden p-4 bg-card-bg rounded-md">
+    <div className="relative flex flex-col gap-6 w-[90%] m-auto top-5 overflow-hidden p-4 bg-card-bg rounded-md">
       {/* Data do mês */}
       <div className="flex flex-col gap-2">
         <div className="relative w-[270px] overflow-hidden">

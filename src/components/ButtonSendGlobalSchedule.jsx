@@ -1,9 +1,8 @@
 import { uploadScheduleToBD } from "../services/schedule";
 import { useState } from "react";
 import ConfirmDeleteModal from "./ConfirmDeletedModal";
-import { CirclePlus, Trash, Upload } from "lucide-react";
+import { Trash, Upload } from "lucide-react";
 import toast from "react-hot-toast";
-import useGlobalSchedule from "../hooks/useGlobalSchedule";
 import PopUpSendGlobalSchedule from "./PopUpSendGlobalSchedule";
 import { useGlobalScheduleContext } from "../context/GlobalScheduleProvider";
 
@@ -56,35 +55,8 @@ export default function ButtonsSendGlobalSchedule({ allUsers, closeModal }) {
       md:flex md:justify-center
       "
     >
-      <input
-        type="file"
-        accept=".json"
-        onChange={handleScheduleJson}
-        style={{ display: "none" }}
-        id="fileInput"
-      />
-      <label
-        htmlFor="fileInput"
-        className="flex gap-1 rounded px-6 py-2 bg-blue-500 hover:bg-blue-600 transition-colors text-white cursor-pointer font-semibold"
-      >
-        {file ? (
-          file.name
-        ) : (
-          <>
-            {" "}
-            <CirclePlus />
-            Escolher o arquivo
-          </>
-        )}
-      </label>
 
-      <button
-        className="flex gap-1 px-4 py-2 bg-green-600 hover:bg-green-700 transition-colors text-white rounded md:ml-2 font-semibold"
-        onClick={handleUpload}
-      >
-        <Upload />
-        Enviar Escala
-      </button>
+      
       <button
         className="flex gap-1 px-4 py-2 bg-yellow-600 hover:bg-yellow-700 transition-colors text-white rounded md:ml-2 font-semibold"
         onClick={() => setIsCreateModalOpen(true)}
