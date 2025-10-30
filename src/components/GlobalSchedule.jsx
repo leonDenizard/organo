@@ -121,8 +121,6 @@ export default function GlobalSchedule({ showButtonSend = true }) {
           onOpenModalUser={() => setIsOpenModalUser(true)}
           onOpenModalDeleteUser={() => setIsOpenModalDeleteUser(true)}
         />
-        <div>Trabalhando (X)</div>
-        <div>Folgando (X)</div>
       </menu>
 
       <div className={layoutClasses[layout] || layoutClasses["7cols"]}>
@@ -186,7 +184,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                         style={{ backgroundColor: shift?.status?.color }}
                         onClick={() => openModalChangeSchedule(d, shift?._id)}
                       >
-                        {shift?.status?.code !== 2 && (
+                        {shift?.status && (
                           <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
                             <div className="flex gap-2 justify-center items-center">
                               <p

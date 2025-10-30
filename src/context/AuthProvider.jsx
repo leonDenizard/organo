@@ -25,8 +25,8 @@ function AuthProvider({ children }) {
           const users = await response.json();
 
           if (!users.data || (Array.isArray(users.data) && users.data.length === 0)) {
-            console.log("Ninguem nessa bagaça");
-            console.log("Estado do FirstUser dentro do Auth", isFirstUser);
+            // console.log("Ninguem nessa bagaça");
+            // console.log("Estado do FirstUser dentro do Auth", isFirstUser);
             setIsFirstUser(true)
 
             const firstUser = {
@@ -45,7 +45,7 @@ function AuthProvider({ children }) {
               body: JSON.stringify(firstUser),
             });
             if (!createUserResponse.ok) {
-              console.log(`Erro na requisição: ${response.status}`);
+   
               const errorData = await response.json();
               console.log(errorData);
 
@@ -53,7 +53,7 @@ function AuthProvider({ children }) {
             }
 
             const data = await createUserResponse.json();
-            console.log(data, isFirstUser);
+            // console.log(data, isFirstUser);
           }
 
           const backendData = await checkUserExists(user.uid);

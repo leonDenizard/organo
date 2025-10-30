@@ -44,6 +44,8 @@ export default function useParameterization() {
   const [selectedColor, setSelectedColor] = useState("");
   const colorStatus = ["#2b3f54", "#3c726a", "#553737", "#4a4f34", "#2f522f", "#463c56", "#6a7046", "#779396", "#504364", "#3c5a72"]
 
+  const [loading, setLoading] = useState(true)
+
   //Handler submit
 
   const [positionsOptimistic, setPositionsOptimistic] = useState([]);
@@ -406,12 +408,24 @@ export default function useParameterization() {
   };
 
   useEffect(() => {
-    fetchPosition();
-    fetchSquad();
-    fetchSuper();
-    fetchWorkShift();
-    fetchAllUsers();
-    fetchStatus();
+
+    const fetchAll = async () => {
+      try {
+        fetchPosition();
+        fetchSquad();
+        fetchSuper();
+        fetchWorkShift();
+        fetchAllUsers();
+        fetchStatus();
+        
+      } catch (error) {
+        console.log("Erro ao carregar parametrização incial")
+      }finally{
+        setLoading(false)
+      }
+    }
+
+    fetchAll()
   }, []);
 
   return {
@@ -454,12 +468,15 @@ export default function useParameterization() {
     userAdmin,
 
     status,
+    allStatus,
     statusOptimistic,
     handleSubmitStatus,
     colorStatus,
     setStatus,
     setSelectedColor,
     selectedColor,
-    handleDeleteStatusById
+    handleDeleteStatusById,
+
+    loading
   };
 }

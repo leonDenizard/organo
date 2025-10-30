@@ -18,7 +18,7 @@ export default function ButtonsSendSchedule( {onScheduleChange, setWorkedDays, s
     if (selectedFile && selectedFile.type === "application/json") {
       setFile(selectedFile);
     } else {
-      console.log("Por favor, selecione um arquivo JSON válido.");
+
       setFile(null);
 
     }

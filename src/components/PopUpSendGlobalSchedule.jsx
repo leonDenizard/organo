@@ -11,9 +11,8 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
 
-  const { workShifts } = useParameterization();
-  const { allStatus, handleGenerateSchedule, fetchGlobalSchedule } =
-    useGlobalScheduleContext();
+  const { allStatus, workShifts, loading } = useParameterization();
+  const { handleGenerateSchedule } = useGlobalScheduleContext();
 
   const toggleUser = (id) => {
     setSelectedUsers((prev) =>
@@ -21,20 +20,27 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
     );
   };
 
-  const workingStatus = allStatus[0]
+  const isReady =
+    !loading &&
+    allUsers.length > 0 &&
+    workShifts.length > 0 &&
+    allStatus.length > 0;
 
-  const selectedShifts = selectedUsers.map((userId) => {
-    const user = allUsers.find((u) => u.id === userId);
-    const ws = workShifts.find((w) => w._id === user.time);
-
-    return {
-      userId: userId,
-      status: workingStatus?._id,
-      time: ws?._id,
-    };
-  });
+  console.log({ allUsers, workShifts, allStatus });
 
   const handleCreateSchedule = async () => {
+    const workingStatus = allStatus?.[0];
+    const selectedShifts = selectedUsers.map((userId) => {
+      const user = allUsers.find((u) => u.id === userId);
+      const ws = workShifts.find((w) => w._id === user.time);
+
+      return {
+        userId: userId,
+        status: workingStatus?._id,
+        time: ws?._id,
+      };
+    });
+
     const schedule = createSchedule({
       month: selectedMonth,
       year: 2025,
@@ -115,10 +121,11 @@ export default function PopUpMenuUser({ closeModal, allUsers }) {
         </div>
       </div>
       <button
+        disabled={!isReady}
         className="bg-transparent border-2 border-border-color text-white rounded py-2 font-semibold text-lg w-[40%] hover:bg-white/10 transition-all"
         onClick={handleCreateSchedule}
       >
-        Criar a escala
+        {isReady ? "Criar escala" : "Carregando dados"}
       </button>
     </div>
   );

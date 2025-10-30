@@ -19,7 +19,7 @@ const AuthRedirectHandler = () => {
 
   if (isLoading) return <Loader />;
 
-  console.log("Estado do primeiro user vindo do Auth", isFirstUser)
+
   return <Register />;
 };
 

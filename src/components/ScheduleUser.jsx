@@ -80,7 +80,7 @@ export default function ScheduleUser({ id }) {
     new Map(
       scheduleUser
         .flatMap((item) => item.shifts)
-        .map((shift) => [shift.status.name, shift.status.color])
+        .map((shift) => [shift.status?.name, shift.status?.color])
     )
   );
 

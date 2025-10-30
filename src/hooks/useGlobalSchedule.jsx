@@ -12,15 +12,15 @@ import toast from "react-hot-toast";
 
 export default function useGlobalSchedule() {
   const [isLoading, setIsLoading] = useState(true);
-  const [allSchedule, setAllSchedule] = useState();
-  const [allStatus, setAllStatus] = useState();
+  const [allSchedule, setAllSchedule] = useState([]);
+  const [allStatus, setAllStatus] = useState([]);
   const [scheduleUserById, setScheduleUserById] = useState([]);
 
   const fetchGlobalSchedule = async () => {
     try {
       const response = await getSchedule(); // já vem com data
       if (response === null) {
-        console.log("Limpei a tela")
+        // console.log("Limpei a tela")
         setAllSchedule([]) // limpa a tela
       } else {
         setAllSchedule(response);
