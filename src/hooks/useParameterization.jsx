@@ -31,8 +31,8 @@ export default function useParameterization() {
   const [supervisor, setSupervisor] = useState("");
   const [allSuper, setAllSuper] = useState([]);
 
-  const [startTime, setStartTime] = useState("10:00");
-  const [endTime, setEndTime] = useState("19:00");
+  const [startTime, setStartTime] = useState("08:00");
+  const [endTime, setEndTime] = useState("18:00");
   const [workShifts, setWorkShifts] = useState([]);
 
   const [allUsers, setAllUser] = useState([]);

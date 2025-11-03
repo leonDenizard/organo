@@ -172,7 +172,7 @@ export default function Parameterization() {
                 <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row">
                   <input
                     value={position}
-                    placeholder="JR I"
+                    placeholder="Dev front-end"
                     onKeyDown={(e) =>
                       e.key === "Enter" && handleSubmitPosition()
                     }
@@ -227,7 +227,7 @@ export default function Parameterization() {
                 <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row ">
                   <input
                     value={squad}
-                    placeholder="@squad-suporte"
+                    placeholder="@squad-payment"
                     onKeyDown={(e) => e.key === "Enter" && handleSubmitSquad()}
                     onChange={(e) => setSquad(e.target.value)}
                     className="peer rounded bg-transparent outline-none border-2 border-border-color focus:bg-button-hover
@@ -323,7 +323,7 @@ export default function Parameterization() {
           {activeTab === "horario" && (
             <div>
               <h2 className="text-center text-xl lg:text-2xl text-gray-400 tracking-wider mb-8 lg:mb-20">
-                Cadastro dos horários do suporte
+                Cadastro dos horários de trabalho
               </h2>
               <div className="flex flex-col gap-5 lg:space-y-10">
                 <div className="w-[calc(100vw-2rem)] md:w-[600px] lg:w-full flex flex-col gap-3 lg:flex-row">
@@ -332,8 +332,8 @@ export default function Parameterization() {
                     value={startTime}
                     onChange={(e) => setStartTime(e.target.value)}
                   >
-                    {Array.from({ length: 15 }, (_, i) => {
-                      const hour = 10 + i;
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i + 1;
                       const label =
                         hour >= 24
                           ? "00:00"
@@ -355,8 +355,8 @@ export default function Parameterization() {
                     value={endTime}
                     onChange={(e) => setEndTime(e.target.value)}
                   >
-                    {Array.from({ length: 15 }, (_, i) => {
-                      const hour = 10 + i;
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = 1 + i;
                       const label =
                         hour >= 24
                           ? "00:00"
