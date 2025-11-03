@@ -21,7 +21,7 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  let { googleUser, isLoading } = useAuth();
+  let { googleUser, isLoading, setBackendUser } = useAuth();
 
   const email = googleUser.email;
   const uid = googleUser.uid;
@@ -34,7 +34,7 @@ export default function Register() {
   const [birthday, setBirthday] = useState("");
   const [isFetchingImage, setIsFetchingImage] = useState(false);
   const [interval, setInterval] = useState("13:00");
-  const [admin, setAdmin] = useState(false);
+  const [admin, setAdmin] = useState(true);
 
   const [userExists, setUserExists] = useState(false);
 
@@ -220,7 +220,7 @@ export default function Register() {
         }
 
         const data = await response.json();
-        console.log(data);
+        setBackendUser(data)
 
         navigate("/dashboard");
       }

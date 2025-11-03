@@ -88,6 +88,7 @@ function AuthProvider({ children }) {
       value={{
         googleUser,
         backendUser,
+        setBackendUser,
         isLoading,
         logOut,
         isFirstUser,
