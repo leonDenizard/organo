@@ -9,8 +9,6 @@ export default function AdminOrFirstUserRoute (){
 
   const isAdmin = backendUser.data?.admin === true;
 
-  console.log("IsAdmin?", isAdmin)
-  console.log("IsFisrtsUser", isFirstUser)
   if (!isAdmin || !isFirstUser) {
     return <Navigate to="/dashboard" />;
   }

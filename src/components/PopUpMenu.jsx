@@ -1,34 +1,38 @@
 import { X } from "lucide-react";
 
 export default function PopUpMenu({ options, onSelect, closeModal }) {
-
+  const hasOptions = options && options.length > 0;
 
   return (
     <div className="fixed w-2/3 m-auto h-4/5 top-0 left-0 right-0 bottom-0 backdrop-blur-3xl z-10 bg-modal-color flex flex-col justify-center items-center border rounded-lg border-border-color">
-      <ul className="flex flex-col gap-4">
-        {options?.map((option, index) => (
-          <li key={index}>
-            <button
-              onClick={() => onSelect(option._id || option.startTime || option.id)}
-              className="bg-secundary-color font-semibold text-lg text-start p-3 px-12 rounded-md
-               hover:bg-border-color transition duration-300 ease-in-out border  border-border-color min-w-full"
-            >
-              {option.name || `${option.startTime} às ${option.endTime}`}
-              
-            </button>
-          </li>
-        ))}
-      </ul>
-      
+      {hasOptions ? (
+        <ul className="flex flex-col gap-4">
+          {options.map((option, index) => (
+            <li key={index}>
+              <button
+                onClick={() =>
+                  onSelect(option._id || option.startTime || option.id)
+                }
+                className="bg-secundary-color font-semibold text-lg text-start p-3 px-12 rounded-md
+                hover:bg-border-color transition duration-300 ease-in-out border border-border-color min-w-full"
+              >
+                {option.name || `${option.startTime} às ${option.endTime}`}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-lg text-white font-medium">Sem parametrização cadastrada</p>
+      )}
+
       <X
-      onClick={closeModal}
-      
+        onClick={closeModal}
         className="absolute top-4 right-4 h-10 w-10 cursor-pointer p-1
-             rounded-full bg-red-500 text-white 
-             hover:bg-red-600 
-              transition-transform duration-300
-             hover:rotate-90
-             flex items-center justify-center"
+          rounded-full bg-red-500 text-white 
+          hover:bg-red-600 
+          transition-transform duration-300
+          hover:rotate-90
+          flex items-center justify-center"
       />
     </div>
   );

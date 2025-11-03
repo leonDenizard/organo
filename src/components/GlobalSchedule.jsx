@@ -25,8 +25,8 @@ export default function GlobalSchedule({ showButtonSend = true }) {
   const [selectedShift, setSelectedShift] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
 
-  const { allUsers, workShifts } = useParameterization();
-  const { allSchedule, allStatus, isLoading, fetchGlobalSchedule } =
+  const { allUsers, workShifts, allStatus } = useParameterization();
+  const { allSchedule, isLoading, fetchGlobalSchedule } =
     useGlobalScheduleContext();
 
   const { isAdmin } = useAuth();

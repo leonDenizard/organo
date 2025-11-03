@@ -90,10 +90,10 @@ export default function Register() {
 
   const handleChangeSquad = (id) => {
     setSelectedSquad((prev = []) => {
-      const exists =prev.includes(id)
-      const next = exists ? prev.filter((s) => s !== id) : [...prev, id]
-      return next
-    })
+      const exists = prev.includes(id);
+      const next = exists ? prev.filter((s) => s !== id) : [...prev, id];
+      return next;
+    });
   };
 
   const handleFileChange = (e) => {
@@ -155,7 +155,7 @@ export default function Register() {
     }
 
     const exists = await checkUserExists(uid);
-    
+
     if (exists) {
       setName(exists.data.name);
       setWhatsApp(exists.data.whatsapp);
@@ -168,7 +168,7 @@ export default function Register() {
       setSelectedSquad(exists.data.squad);
       setSelectedChild(exists.data.child);
       setAdmin(exists.data.admin);
-      setUserExists(true)
+      setUserExists(true);
     }
 
     setIsFetchingImage(false);
@@ -190,7 +190,7 @@ export default function Register() {
 
     try {
       const exists = await checkUserExists(uid);
-      console.log("EXISTS", exists)
+      console.log("EXISTS", exists);
 
       let response;
       if (exists) {
@@ -237,10 +237,10 @@ export default function Register() {
   const roleExists = allPositions?.some((pos) => pos._id === selectedRole);
   const superExists = allSuper?.some((sup) => sup._id === selectedManager);
   const squadExists = allSquads?.some((squad) => squad._id === selectedSquad);
-  
+
   return (
     <form onSubmit={handleSubmit} className="relative">
-      {userExists && <Breadcrumb/>}
+      {userExists && <Breadcrumb />}
       <div className="w-[95%] lg:w-[90%] m-auto overflow-x-hidden lg:overflow-x-visible h-dvh">
         <h1 className="text-3xl font-semibold mt-5">Informações pessoais</h1>
         <div className="flex flex-col gap-3 relative">
@@ -342,21 +342,23 @@ export default function Register() {
               </div>
             </div>
           </div>
-          <div>
-            <h1 className="text-3xl font-semibold mt-4">Squad</h1>
+          {squadExists && (
+            <div>
+              <h1 className="text-3xl font-semibold mt-4">Squad</h1>
 
-            <div className="relative mt-5">
-              {allSquads?.map((squad) => (
-                <CheckBox
-                  key={squad._id}
-                  isChecked={selectedSquad?.includes(squad._id)}
-                  onChange={() => handleChangeSquad(squad._id)}
-                  id={squad._id}
-                  title={squad.name}
-                />
-              ))}
+              <div className="relative mt-5">
+                {allSquads?.map((squad) => (
+                  <CheckBox
+                    key={squad._id}
+                    isChecked={selectedSquad?.includes(squad._id)}
+                    onChange={() => handleChangeSquad(squad._id)}
+                    id={squad._id}
+                    title={squad.name}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div className="Horario">
             <div className="flex flex-col ">
               <label htmlFor="horario" className="text-3xl font-semibold mt-4">

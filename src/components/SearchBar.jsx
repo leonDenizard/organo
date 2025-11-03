@@ -18,7 +18,7 @@ export default function SearchBar({handleInputName}) {
           </svg>
         </div>
         <input onChange={handleInputName} className="bg-secundary-color lg:h-[60px] p-3 px-8 w-full rounded-full outline-none border-2 border-border-color text-lg leading-none caret-custom
-            placeholder:text-white placeholder:font-semibold placeholder:tracking-wider placeholder:text-lg placeholder:px-3" type="text" placeholder="Pesquisa Ai..." />
+            placeholder:text-white/80 placeholder:font-thin placeholder:tracking-wider placeholder:text-lg placeholder:px-3" type="text" placeholder="Pesquisar..." />
       </div>
     </div>
   );
