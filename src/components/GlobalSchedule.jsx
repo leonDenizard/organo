@@ -188,9 +188,9 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                           <div className="relative h-full flex flex-col justify-center items-center group-hover:opacity-90 transition">
                             <div className="flex gap-2 justify-center items-center">
                               <p
-                                className={`text-sm font-semibold tracking-wider ${
+                                className={`text-sm font-normal tracking-wider truncate w-[100px] ${
                                   isCompact
-                                    ? "truncate w-[55px]"
+                                    ? "truncate w-[40px]"
                                     : "mt-7 group-hover:mt-0 transition-all duration-200"
                                 }`}
                               >

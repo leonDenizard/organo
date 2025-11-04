@@ -5,44 +5,38 @@ import { useNavigate } from "react-router-dom";
 import logoGoogle from "../../../public/google.png";
 
 export default function Signin() {
-
   const navigate = useNavigate();
 
   function getEmail(email) {
     const parts = email.split("@");
     return parts.length === 2 ? parts[1] : null;
-
   }
 
-
-
-
   async function signInWithGoogle() {
-
     try {
       const provider = new GoogleAuthProvider();
 
       provider.setCustomParameters({
-        prompt: "select_account"
-      })
-      const result = await signInWithPopup(auth, provider)
+        prompt: "select_account",
+      });
+      const result = await signInWithPopup(auth, provider);
 
-      const user = result.user
+      const user = result.user;
       const email = user.email;
       const domain = getEmail(email);
 
-      const exists = await checkUserExists(user.uid)
+      console.log(user)
 
-        if(exists){
-          navigate('/dashboard')
-        }else{
-          navigate('/register')  
-        }
+      const exists = await checkUserExists(user.uid);
 
+      if (exists) {
+        navigate("/dashboard");
+      } else {
+        navigate("/register");
+      }
     } catch (error) {
       console.log("Erro ao fazer login com Google:", error);
     }
-
   }
   return (
     <div className="relative flex items-center justify-center md:min-h-screen">
@@ -57,6 +51,7 @@ export default function Signin() {
                         border-2 border-border-color rounded-lg flex justify-center items-center"
         >
           <button
+            id="btn-login"
             onClick={signInWithGoogle}
             className="bg-button-color text-xl font-medium font-popp tracking-widest p-4 px-4 rounded-full flex justify-center items-center gap-4 shadow-shadow-button hover:bg-button-hover
                             transition duration-300 ease-in-out hover:translate-y-1 hover:border-2 hover:border-border-color hover:shadow-shadow-button-hover"
