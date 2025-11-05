@@ -24,9 +24,10 @@ export default function GlobalSchedule({ showButtonSend = true }) {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [selectedShift, setSelectedShift] = useState({});
   const [selectedDay, setSelectedDay] = useState("");
+  const [isLoadingFetch, setIsloadingFetch] = useState(true)
 
   const { allUsers, workShifts, allStatus } = useParameterization();
-  const { allSchedule, isLoading, fetchGlobalSchedule } =
+  const { allSchedule, fetchGlobalSchedule } =
     useGlobalScheduleContext();
 
   const { isAdmin } = useAuth();
@@ -34,6 +35,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     if (!allSchedule || allSchedule.length === 0) {
       setSchedule([]); // limpa a tela
       setDateHeader(""); // limpa o header
+      setIsloadingFetch(false)
       return;
     }
 
@@ -55,9 +57,11 @@ export default function GlobalSchedule({ showButtonSend = true }) {
     } else {
       setDateHeader(""); // caso contrário, limpa
     }
+
+    setIsloadingFetch(false)
   }, [allSchedule]);
 
-  if (isLoading) return <Loader />;
+  if (isLoadingFetch) return <Loader />;
 
   const openModal = (type) => {
     setModalType(type);
@@ -190,7 +194,7 @@ export default function GlobalSchedule({ showButtonSend = true }) {
                               <p
                                 className={`text-sm font-normal tracking-wider truncate w-[100px] ${
                                   isCompact
-                                    ? "truncate w-[40px]"
+                                    ? "truncate w-[60px]"
                                     : "mt-7 group-hover:mt-0 transition-all duration-200"
                                 }`}
                               >
